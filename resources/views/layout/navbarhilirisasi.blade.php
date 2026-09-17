@@ -161,7 +161,7 @@
                     <li><a class="hover:text-yellow-400"
                             href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
                     <li><a class="hover:text-yellow-400"
-                            href="{{ route('hackaton.info') }}">Hackaton UNJ</a></li>
+                            href="{{ route('hackaton.info') }}">Hackathon UNJ</a></li>
                 </ul>
             </li>
 
@@ -309,7 +309,7 @@
                             class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Innovator
                             Award</a></li>
                     <li><a href="{{ route('hackaton.info') }}"
-                            class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Hackaton
+                            class="block text-white py-3 px-8 hover:bg-[#0e4c46] transition-colors duration-200 border-l-2 border-transparent hover:border-yellow-400">Hackathon
                             UNJ</a></li>
                 </ul>
             </li>

@@ -326,7 +326,7 @@
                     <button type="button" @click="editModalOpen = false" class="text-gray-500 hover:text-black text-lg">✕</button>
                 </div>
 
-                <form :action="'{{ url('admin-hackaton/fields') }}/' + editingField.id" method="POST" class="space-y-4">
+                <form :action="'{{ url('admin-hackathon/fields') }}/' + editingField.id" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
 

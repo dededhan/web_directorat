@@ -15,23 +15,32 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Hackaton Routes
+| Hackathon Routes
 |--------------------------------------------------------------------------
 */
 
 // ── Public Info & Registration ──────────────────────────────────────────
-Route::view('subdirektorat-inovasi/hackaton', 'subdirektorat-inovasi.hackaton.index')
+Route::view('subdirektorat-inovasi/hackathon', 'subdirektorat-inovasi.hackaton.index')
     ->name('hackaton.info');
+Route::redirect('subdirektorat-inovasi/hackaton', '/subdirektorat-inovasi/hackathon', 301);
 
-Route::prefix('hackaton/register')
+Route::get('hackathon', function () {
+    return redirect()->route('hackaton.info');
+});
+Route::get('hackaton', function () {
+    return redirect()->route('hackaton.info');
+});
+
+Route::prefix('hackathon/register')
     ->name('hackaton.register.')
     ->group(function () {
         Route::get('/', [RegistrationController::class, 'showForm'])->name('form');
         Route::post('/', [RegistrationController::class, 'register'])->name('submit');
     });
+Route::redirect('hackaton/register', '/hackathon/register', 301);
 
-// ── Admin Hackaton Panel ────────────────────────────────────────────────
-Route::prefix('admin-hackaton')
+// ── Admin Hackathon Panel ────────────────────────────────────────────────
+Route::prefix('admin-hackathon')
     ->name('admin_hackaton.')
     ->middleware(['auth', 'role:admin_hackaton'])
     ->group(function () {
@@ -126,10 +135,14 @@ Route::prefix('admin-hackaton')
             ->name('accounts.destroy');
     });
 
+// Fallback redirects for legacy admin URL
+Route::redirect('admin-hackaton', '/admin-hackathon', 301);
+Route::redirect('admin-hackaton/{any}', '/admin-hackathon/{any}', 301)->where('any', '.*');
+
 // ── Portal Terpadu Semua Role Peserta & Reviewer ────────────────────────
 $allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_pppk,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge';
 
-Route::prefix('hackaton')
+Route::prefix('hackathon')
     ->name('hackaton.')
     ->middleware(['auth', "role:{$allParticipantAndReviewerRoles}"])
     ->group(function () {
@@ -209,3 +222,6 @@ Route::prefix('hackaton')
                 ->name('assignments.review');
         });
     });
+
+// Fallback redirects for legacy participant/portal URLs
+Route::redirect('hackaton/{any}', '/hackathon/{any}', 301)->where('any', '.*');

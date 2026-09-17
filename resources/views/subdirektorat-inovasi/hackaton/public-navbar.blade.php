@@ -1,9 +1,9 @@
 <header class="border-b-2 border-gray-950 bg-white">
-    <nav class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-5 sm:px-8 lg:px-12" aria-label="Navigasi Hackaton">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-5 sm:px-8 lg:px-12" aria-label="Navigasi Hackathon">
         <a href="{{ route('hackaton.info') }}" class="flex min-w-0 items-center gap-3 text-gray-950">
             <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" alt="Logo Universitas Negeri Jakarta" class="h-11 w-11 shrink-0">
             <span class="min-w-0">
-                <span class="block text-lg font-black leading-tight">Hackaton UNJ</span>
+                <span class="block text-lg font-black leading-tight">Hackathon UNJ</span>
                 <span class="block text-xs font-bold uppercase tracking-[0.14em] text-gray-600">Program inovasi</span>
             </span>
         </a>

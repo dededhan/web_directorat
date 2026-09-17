@@ -141,7 +141,7 @@
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.ekosisteminovasi') }}">Ekosistem Inovasi
                             UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.inkubator.inovasiaward') }}">Innovator Award</a></li>
-                    <li><a href="{{ route('hackaton.info') }}">Hackaton UNJ</a></li>
+                    <li><a href="{{ route('hackaton.info') }}">Hackathon UNJ</a></li>
                 </ul>
             </li>
 
@@ -179,7 +179,7 @@
                             Inovasi UNJ</a></li>
                     <li><a href="{{ route('subdirektorat-inovasi.innovation_challange.index') }}">Innovation
                             Challenge</a></li>
-                        <li><a href="{{ route('hackaton.info') }}">Hackaton UNJ</a></li>
+                        <li><a href="{{ route('hackaton.info') }}">Hackathon UNJ</a></li>
                 </ul>
             </li>
 
@@ -356,7 +356,7 @@
                         </li>
                         <li>
                             <a href="{{ route('hackaton.info') }}" class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Hackaton UNJ
+                                Hackathon UNJ
                             </a>
                         </li>
                     </ul>
@@ -433,7 +433,7 @@
                         <li>
                             <a href="{{ route('hackaton.info') }}"
                                 class="block text-white py-3 px-6 hover:bg-[#0e4c46]">
-                                Hackaton UNJ
+                                Hackathon UNJ
                             </a>
                         </li>
                     </ul>
