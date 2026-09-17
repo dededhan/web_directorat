@@ -6,20 +6,14 @@
     <div class="space-y-6">
 
         {{-- Header Banner --}}
-        <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg border border-gray-800 relative overflow-hidden">
-            <div class="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
+        <div class="border-b-4 border-gray-950 pb-8">
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <div class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 mb-2 border border-amber-500/30">
-                        <i class="fas fa-star mr-1.5 text-[10px]"></i> PANEL REVIEWER HACKATON
-                    </div>
-                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Selamat Datang, {{ auth()->user()->name }}</h1>
-                    <p class="text-gray-300 text-sm mt-1">Kelola dan berikan evaluasi serta penilaian objektif untuk proposal tim Hackaton.</p>
+                    <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-emerald-700">Panel reviewer Hackaton</p>
+                    <h1 class="text-4xl font-black tracking-tight text-gray-950 sm:text-5xl">Selamat datang, {{ auth()->user()->name }}.</h1>
+                    <p class="mt-3 max-w-2xl text-lg text-gray-700">Kelola dan berikan evaluasi objektif untuk proposal tim Hackaton.</p>
                 </div>
-                <a href="{{ route('hackaton.reviewer.assignments.index') }}"
-                    class="inline-flex items-center justify-center px-5 py-3 bg-amber-500 hover:bg-amber-400 text-gray-900 font-bold text-sm rounded-xl transition shadow">
-                    <i class="fas fa-clipboard-check mr-2"></i> Mulai Penilaian
-                </a>
+                <a href="{{ route('hackaton.reviewer.assignments.index') }}" class="inline-flex min-h-12 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800">Mulai penilaian <span aria-hidden="true" class="ml-2">→</span></a>
             </div>
         </div>
 
@@ -32,7 +26,7 @@
                     <p class="text-3xl font-extrabold text-gray-900 mt-2">{{ $assigned }}</p>
                     <p class="text-xs text-gray-500 mt-1">Proposal yang dialokasikan ke Anda</p>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                <div class="w-14 h-14 border-2 border-gray-950 bg-gray-100 text-gray-950 flex items-center justify-center text-xl">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
             </div>

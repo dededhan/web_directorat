@@ -5,37 +5,19 @@
 @section('content_hackaton')
     <div class="space-y-6" x-data="{ activeTab: '{{ $pendingInvitations->count() > 0 ? 'participations' : 'biodata' }}' }">
         {{-- Hero Welcome Banner --}}
-        <section class="rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 p-6 sm:p-8 text-gray-950 shadow-md">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/30 text-3xl shrink-0">
-                        <i class="fas {{ $roleIcon }}"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase tracking-wider bg-black/10 px-2.5 py-0.5 rounded-full text-amber-950">
-                                Program Hackaton UNJ
-                            </span>
-                            <span class="text-xs font-bold bg-white/40 px-2 py-0.5 rounded-full">
-                                Role: {{ $roleLabel }}
-                            </span>
-                        </div>
-                        <h1 class="text-2xl sm:text-3xl font-black mt-1">Halo, {{ $user->name }}!</h1>
-                        <p class="mt-1 text-xs sm:text-sm text-amber-950 font-medium">
-                            Selamat datang di dashboard peserta & kolaborator Hackaton.
-                        </p>
-                    </div>
+        <section class="border-b-4 border-gray-950 pb-8">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-emerald-700">Program Hackaton UNJ</p>
+                    <h1 class="text-4xl font-black leading-tight text-gray-950 sm:text-5xl">Halo, {{ $user->name }}.</h1>
+                    <p class="mt-3 max-w-2xl text-lg text-gray-700">Selamat datang di dashboard peserta dan kolaborator Hackaton. Role Anda: <strong class="text-gray-950">{{ $roleLabel }}</strong>.</p>
                 </div>
 
                 {{-- Action Quick Button --}}
                 @if ($isPengusul)
-                    <a href="{{ route('hackaton.sessions.index') }}" class="inline-flex items-center justify-center px-5 py-3 bg-gray-950 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition shadow">
-                        <i class="fas fa-plus mr-2"></i> Daftar Sesi Baru
-                    </a>
+                    <a href="{{ route('hackaton.sessions.index') }}" class="inline-flex min-h-12 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800">Daftar Sesi Baru <span aria-hidden="true" class="ml-2">→</span></a>
                 @elseif ($isReviewer)
-                    <a href="{{ route('hackaton.reviewer.assignments.index') }}" class="inline-flex items-center justify-center px-5 py-3 bg-gray-950 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition shadow">
-                        <i class="fas fa-clipboard-check mr-2"></i> Mulai Penilaian
-                    </a>
+                    <a href="{{ route('hackaton.reviewer.assignments.index') }}" class="inline-flex min-h-12 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800">Mulai Penilaian <span aria-hidden="true" class="ml-2">→</span></a>
                 @endif
             </div>
         </section>
