@@ -7,7 +7,13 @@
     <div class="flex min-h-24 flex-shrink-0 items-end border-b border-white px-6 pb-5">
         <div>
             <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">UNJ / 2026</p>
-            <span class="editorial-serif text-2xl font-semibold">Peserta<br>HackAthon</span>
+            <span class="editorial-serif text-2xl font-semibold">
+                @if(in_array(auth()->user()->role ?? '', ['reviewer_hackaton', 'reviewer_inovchalenge']))
+                    Reviewer<br>HackAthon
+                @else
+                    Peserta<br>HackAthon
+                @endif
+            </span>
         </div>
     </div>
 

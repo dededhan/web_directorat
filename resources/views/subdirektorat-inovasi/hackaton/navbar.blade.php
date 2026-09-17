@@ -5,7 +5,13 @@
             <span aria-hidden="true">☰</span>
         </button>
         <div class="hidden border-l border-black pl-5 sm:block">
-            <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500">Ruang peserta</p>
+            <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500">
+                @if(in_array(auth()->user()->role ?? '', ['reviewer_hackaton', 'reviewer_inovchalenge']))
+                    Ruang reviewer
+                @else
+                    Ruang peserta
+                @endif
+            </p>
             <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em]">Program HackAthon UNJ</p>
         </div>
         @if(in_array(auth()->user()->role ?? '', ['dosen', 'tendik']))

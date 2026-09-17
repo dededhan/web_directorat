@@ -10,7 +10,7 @@
                 <div>
                     <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-emerald-700">Program HackAthon UNJ</p>
                     <h1 class="text-4xl font-black leading-tight text-gray-950 sm:text-5xl">Halo, {{ $user->name }}.</h1>
-                    <p class="mt-3 max-w-2xl text-lg text-gray-700">Selamat datang di dashboard peserta dan kolaborator HackAthon. Role Anda: <strong class="text-gray-950">{{ $roleLabel }}</strong>.</p>
+                    <p class="mt-3 max-w-2xl text-lg text-gray-700">Selamat datang di dashboard {{ $isReviewer ? 'reviewer' : 'peserta dan kolaborator' }} HackAthon. Role Anda: <strong class="text-gray-950">{{ $roleLabel }}</strong>.</p>
                 </div>
 
                 {{-- Action Quick Button --}}
@@ -71,8 +71,8 @@
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm lg:col-span-2 space-y-6">
                     <div class="border-b border-gray-100 pb-4 flex items-center justify-between">
                         <div>
-                            <h2 class="text-base font-bold text-gray-900">Perbarui Biodata Peserta</h2>
-                            <p class="text-xs text-gray-500 mt-0.5">Informasi profil untuk verifikasi keikutsertaan tim HackAthon.</p>
+                            <h2 class="text-base font-bold text-gray-900">Perbarui Biodata {{ $isReviewer ? 'Reviewer' : 'Peserta' }}</h2>
+                            <p class="text-xs text-gray-500 mt-0.5">Informasi profil untuk verifikasi akun HackAthon.</p>
                         </div>
                     </div>
 

@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\HackatonRegistration;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -59,6 +57,7 @@ return new class extends Migration
         'fakultas',
         'prodi',
         'dosen',
+        'tendik',
         'kepala_sub_direktorat',
         'wr3',
         'mahasiswa',
@@ -75,6 +74,13 @@ return new class extends Migration
         'peneliti',
         'dudi',
         'pppk',
+        'hackaton_dosen',
+        'hackaton_tendik',
+        'hackaton_alumni',
+        'hackaton_peneliti',
+        'hackaton_dudi',
+        'hackaton_pppk',
+        'hackaton_mahasiswa',
     ];
 
     public function up(): void
@@ -82,34 +88,10 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role', $this->newRoles)->default('registered_user')->change();
         });
-
-        // Migrate approved Hackaton participants created earlier to the prefixed roles
-        $approvedRegistrations = HackatonRegistration::where('status', 'approved')->get();
-        foreach ($approvedRegistrations as $reg) {
-            $targetRole = 'hackaton_' . $reg->role;
-            if (in_array($targetRole, $this->newRoles, true)) {
-                User::where('email', $reg->email)->update(['role' => $targetRole]);
-            }
-        }
     }
 
     public function down(): void
     {
-        $hackatonRoles = [
-            'hackaton_dosen',
-            'hackaton_tendik',
-            'hackaton_alumni',
-            'hackaton_peneliti',
-            'hackaton_dudi',
-            'hackaton_pppk',
-            'hackaton_mahasiswa',
-        ];
-
-        foreach ($hackatonRoles as $role) {
-            $baseRole = str_replace('hackaton_', '', $role);
-            User::where('role', $role)->update(['role' => $baseRole]);
-        }
-
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role', $this->previousRoles)->default('registered_user')->change();
         });

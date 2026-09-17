@@ -53,6 +53,7 @@ class LoginController extends Controller
                 'admin_inovasi' => 'admin_inovasi.dashboard',
                 'admin_inovchalenge' => 'admin_inovchalenge.dashboard',
                 'admin_hackaton' => 'admin_hackaton.dashboard',
+                'reviewer_hackaton' => 'hackaton.reviewer.dashboard',
                 'hackaton_dosen',
                 'hackaton_tendik',
                 'hackaton_alumni',
