@@ -58,8 +58,9 @@ gantt
 ### Sprint 2: Portal Cross-Bridge & Navigation
 **Goal**: Enable smooth navigation between the Master Dosen Portal and the Unified Hackathon Portal.
 
-- [x] **Task 2.1 — Dosen Sidebar Navigation**:
+- [x] **Task 2.1 — Dosen & Tendik Sidebar Navigation**:
   - Added dedicated **Hackathon UNJ** accordion menu in `resources/views/subdirektorat-inovasi/dosen/sidebar.blade.php`.
+  - Added dedicated **Hackathon UNJ** accordion menu in `resources/views/subdirektorat-inovasi/tendik/sidebar.blade.php`.
   - Linked to `route('hackaton.dashboard')`, `route('hackaton.sessions.index')`, and `route('hackaton.submissions.index')`.
 - [x] **Task 2.2 — Dosen Dashboard Widget**:
   - Added Hackathon UNJ to `$cardConfig` and counted submissions in `app/Http/Controllers/Dosen/DashboardController.php`.
