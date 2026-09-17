@@ -37,6 +37,14 @@
                 <span class="text-gray-400 font-medium uppercase tracking-wider block mb-1">Skema &amp; Bidang</span>
                 <p class="text-gray-800 font-semibold">{{ $submission->identitas->skema_inovasi ?? '—' }}</p>
                 <p class="text-gray-500 mt-0.5">{{ $submission->identitas->bidang_utama_produk ?? '—' }}</p>
+                @if ($submission->tema)
+                    <div class="mt-1.5">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
+                            <i class="fas {{ str_contains($submission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1 text-[8px]"></i>
+                            {{ $submission->tema_label ?? $submission->tema }}
+                        </span>
+                    </div>
+                @endif
             </div>
             <div>
                 <span class="text-gray-400 font-medium uppercase tracking-wider block mb-1">Total Anggota Tim</span>

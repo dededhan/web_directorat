@@ -1,8 +1,8 @@
-@extends('subdirektorat-inovasi.Hackathon DeepTech.public-layout')
+@extends('subdirektorat-inovasi.hackaton.public-layout')
 
 @section('title', 'Hackathon DeepTech UNJ | Direktorat Inovasi')
 
-@section('content_public_Hackathon DeepTech')
+@section('content_public_hackaton')
     <div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
         <section class="border-b-4 border-gray-950 pb-12 lg:pb-16">
             <div class="grid gap-10 lg:grid-cols-[1.25fr_.75fr] lg:items-end">
@@ -11,8 +11,8 @@
                     <h1 class="max-w-5xl text-5xl font-black leading-[0.98] tracking-tight text-gray-950 sm:text-6xl lg:text-7xl">Hackathon DeepTech UNJ</h1>
                     <p class="mt-7 max-w-3xl text-xl leading-relaxed text-gray-700">Ruang kolaborasi untuk mengubah ide kreatif menjadi solusi inovatif yang menjawab tantangan nyata.</p>
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                        <a href="{{ route('Hackathon DeepTech.register.form') }}" class="inline-flex min-h-12 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800">Daftar sekarang <span aria-hidden="true" class="ml-3">→</span></a>
-                        <a href="{{ route('Hackathon DeepTech.dashboard') }}" class="inline-flex min-h-12 items-center justify-center border-2 border-gray-950 bg-white px-6 py-3 text-base font-black text-gray-950 hover:bg-gray-100">{{ auth()->check() ? 'Buka dashboard' : 'Masuk peserta' }}</a>
+                        <a href="{{ route('hackaton.register.form') }}" class="inline-flex min-h-12 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800">Daftar sekarang <span aria-hidden="true" class="ml-3">→</span></a>
+                        <a href="{{ route('hackaton.dashboard') }}" class="inline-flex min-h-12 items-center justify-center border-2 border-gray-950 bg-white px-6 py-3 text-base font-black text-gray-950 hover:bg-gray-100">{{ auth()->check() ? 'Buka dashboard' : 'Masuk peserta' }}</a>
                     </div>
                 </div>
                 <div class="border-2 border-gray-950 bg-white p-6 lg:p-8">
@@ -62,7 +62,7 @@
                 <h2 class="mt-3 text-3xl font-black text-gray-950 sm:text-4xl">Siap membawa ide Anda lebih jauh?</h2>
                 <p class="mt-3 max-w-2xl text-base leading-relaxed text-gray-700">Buat akun Hackathon DeepTech sekarang. Informasi event, ketentuan, dan jadwal lengkap akan mengikuti pembukaan program.</p>
             </div>
-            <a href="{{ route('Hackathon DeepTech.register.form') }}" class="mt-7 inline-flex min-h-12 shrink-0 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800 lg:mt-0">Mulai pendaftaran <span aria-hidden="true" class="ml-3">→</span></a>
+            <a href="{{ route('hackaton.register.form') }}" class="mt-7 inline-flex min-h-12 shrink-0 items-center justify-center bg-emerald-700 px-6 py-3 text-base font-black text-white hover:bg-emerald-800 lg:mt-0">Mulai pendaftaran <span aria-hidden="true" class="ml-3">→</span></a>
         </section>
     </div>
 @endsection

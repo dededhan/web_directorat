@@ -83,6 +83,17 @@
                         <span class="font-bold text-gray-500 uppercase tracking-wider text-[10px]">Skema</span>
                         <p class="font-medium text-gray-800 mt-0.5">{{ $submission->identitas?->skema_inovasi ?? '— Belum dipilih —' }}</p>
                     </div>
+                    @if ($submission->tema)
+                        <div>
+                            <span class="font-bold text-gray-500 uppercase tracking-wider text-[10px]">Fokus Tema Inovasi</span>
+                            <div class="mt-1">
+                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
+                                    <i class="fas {{ str_contains($submission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1.5"></i>
+                                    {{ $submission->tema_label ?? $submission->tema }}
+                                </span>
+                            </div>
+                        </div>
+                    @endif
                     <div>
                         <span class="font-bold text-gray-500 uppercase tracking-wider text-[10px]">Bidang Utama</span>
                         <p class="font-medium text-gray-800 mt-0.5">{{ $submission->identitas?->bidang_utama_produk ?? '— Belum diisi —' }}</p>

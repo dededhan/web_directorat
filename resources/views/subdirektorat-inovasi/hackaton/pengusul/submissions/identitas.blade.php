@@ -57,6 +57,19 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="sm:col-span-2">
+                        <label class="block font-bold text-gray-700 mb-1">Tema Inovasi Hackaton <span class="text-rose-600">*</span></label>
+                        <select name="tema" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-500 focus:ring-amber-500 font-semibold bg-amber-50/40">
+                            <option value="D-FARM (DeepTech Food Acceleration Research to Market)" {{ old('tema', $submission->tema) === 'D-FARM (DeepTech Food Acceleration Research to Market)' ? 'selected' : '' }}>
+                                D-FARM (DeepTech Food Acceleration Research to Market)
+                            </option>
+                            <option value="D-MARC (DeepTack Medical Acceleraton Research to Challenge)" {{ old('tema', $submission->tema) === 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)' ? 'selected' : '' }}>
+                                D-MARC (DeepTack Medical Acceleraton Research to Challenge)
+                            </option>
+                        </select>
+                        <p class="text-[11px] text-gray-500 mt-1">Fokus tema yang Anda pilih saat mendaftarkan proposal.</p>
+                    </div>
+
+                    <div class="sm:col-span-2">
                         <label class="block font-bold text-gray-700 mb-1">Nama Produk / Karya Inovasi <span class="text-rose-600">*</span></label>
                         <input type="text" name="nama_produk" value="{{ old('nama_produk', $submission->identitas?->nama_produk) }}" required
                             class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-500 focus:ring-amber-500"
@@ -65,19 +78,19 @@
 
                     <div>
                         <label class="block font-bold text-gray-700 mb-1">Ketua Tim (Pengusul)</label>
-                        <input type="text" value="{{ $ketuaName }}" disabled class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-600 font-semibold">
+                        <input type="text" value="{{ $ketuaName ?? $submission->user?->name ?? 'Ketua' }}" disabled class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-600 font-semibold">
                     </div>
 
                     <div>
                         <label class="block font-bold text-gray-700 mb-1">Fakultas / Program Studi</label>
-                        <input type="text" value="{{ $fakultasName }} / {{ $prodiName }}" disabled class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-600">
+                        <input type="text" value="{{ $fakultasName ?? '-' }} / {{ $prodiName ?? '-' }}" disabled class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-600">
                     </div>
 
                     <div>
                         <label class="block font-bold text-gray-700 mb-1">Skema Hackaton <span class="text-rose-600">*</span></label>
                         <select name="skema_inovasi" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-500 focus:ring-amber-500 font-medium">
                             <option value="">— Pilih Skema Inovasi —</option>
-                            @foreach ($skemaOptions as $skema)
+                            @foreach ($skemaOptions ?? ['Hilirisasi Produk Riset Inovasi', 'Hilirisasi Produk Kolaborasi Dosen dan Alumni', 'Hibah Komersialisasi Produk / Jasa Kepakaran Dosen (Income generating)', 'Kolaborasi DUDI (Industri)'] as $skema)
                                 <option value="{{ $skema }}" {{ old('skema_inovasi', $submission->identitas?->skema_inovasi) === $skema ? 'selected' : '' }}>
                                     {{ $skema }}
                                 </option>
@@ -108,7 +121,7 @@
                     <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
                         <i class="fas fa-users text-amber-500"></i> Anggota Tim Hackaton
                         <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                            {{ $currentCount }} / {{ $maxAnggota }} Orang
+                            {{ $currentCount ?? $submission->members->count() }} / {{ $maxAnggota ?? ($submission->session?->max_anggota ?? 4) }} Orang
                         </span>
                     </h2>
                     <p class="text-xs text-gray-500 mt-0.5">
@@ -116,7 +129,7 @@
                     </p>
                 </div>
 
-                @if ($currentCount < $maxAnggota)
+                @if (($currentCount ?? $submission->members->count()) < ($maxAnggota ?? ($submission->session?->max_anggota ?? 4)))
                     <button type="button" @click="showAddMemberForm = !showAddMemberForm"
                         class="inline-flex items-center px-4 py-2 bg-gray-900 text-white font-bold text-xs rounded-xl hover:bg-gray-800 transition">
                         <i class="fas fa-user-plus mr-1.5"></i> Tambah Anggota

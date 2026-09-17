@@ -45,6 +45,8 @@
                 </ul>
             </li>
             <li><a href="{{ route('documents.public.index') }}" class="text-white hover:text-yellow-400 transition-colors">Dokumen</a></li>
+            <li><a href="{{ route('equity') }}" class="text-white hover:text-yellow-400 transition-colors">EQUITY</a></li>
+            <li><a href="{{ route('hackaton.info') }}" class="text-white hover:text-yellow-400 transition-colors">HACKATHON</a></li>
             <li><a href="https://sso.unj.ac.id/login" class="text-white hover:text-yellow-400 transition-colors">SSO</a></li>
             
             {{-- Language Switcher --}}
@@ -169,6 +171,8 @@
             </li>
 
             <li><a href="{{ route('documents.public.index') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-file-alt w-6 mr-2"></i><span>Dokumen</span></a></li>
+            <li><a href="{{ route('equity') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-chart-line w-6 mr-2"></i><span>EQUITY</span></a></li>
+            <li><a href="{{ route('hackaton.info') }}" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-laptop-code w-6 mr-2"></i><span>HACKATHON</span></a></li>
             <li><a href="https://sso.unj.ac.id/login" class="flex items-center text-white py-3 px-4 hover:bg-white/10 rounded-md mx-2"><i class="fas fa-key w-6 mr-2"></i><span>SSO</span></a></li>
             
             {{-- Mobile Language Switcher --}}

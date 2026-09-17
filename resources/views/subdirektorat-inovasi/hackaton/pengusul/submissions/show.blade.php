@@ -22,6 +22,28 @@
             </a>
         </div>
 
+        {{-- Tema Inovasi Terpilih --}}
+        @if ($submission->tema)
+            <div class="bg-gradient-to-r {{ str_contains($submission->tema, 'D-FARM') ? 'from-amber-500/10 via-amber-500/5 to-transparent border-amber-300' : 'from-rose-500/10 via-rose-500/5 to-transparent border-rose-300' }} rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm bg-white">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-xl {{ str_contains($submission->tema, 'D-FARM') ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white' : 'bg-gradient-to-br from-rose-500 to-red-600 text-white' }} flex items-center justify-center text-xl shadow-sm shrink-0">
+                        <i class="fas {{ str_contains($submission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }}"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900' : 'bg-rose-100 text-rose-900' }}">
+                                FOKUS TEMA TERPILIH
+                            </span>
+                        </div>
+                        <h2 class="text-sm font-bold text-gray-900 mt-1">{{ $submission->tema_label ?? $submission->tema }}</h2>
+                    </div>
+                </div>
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }} self-start sm:self-auto">
+                    <i class="fas fa-tag mr-1.5 text-[10px]"></i> {{ str_contains($submission->tema, 'D-FARM') ? 'Kategori D-FARM' : 'Kategori D-MARC' }}
+                </span>
+            </div>
+        @endif
+
         {{-- Gatekeeper: Identitas Tim & Anggota --}}
         <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="flex items-start gap-4">

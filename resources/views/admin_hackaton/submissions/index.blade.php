@@ -81,9 +81,16 @@
                                 </td>
                                 <td class="p-4">
                                     <div class="font-bold text-gray-900">{{ $sub->identitas?->nama_produk ?? '— Belum Diisi —' }}</div>
-                                    <div class="text-xs text-gray-600 mt-0.5">{{ $sub->identitas?->skema_inovasi ?? '-' }}</div>
                                     @if ($sub->identitas?->bidang_utama_produk)
                                         <div class="text-[11px] text-gray-400 mt-0.5">Bidang: {{ $sub->identitas->bidang_utama_produk }}</div>
+                                    @endif
+                                    @if ($sub->tema)
+                                        <div class="mt-1">
+                                            <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold {{ str_contains($sub->tema, 'D-FARM') ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
+                                                <i class="fas {{ str_contains($sub->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1"></i>
+                                                {{ str_contains($sub->tema, 'D-FARM') ? 'D-FARM' : 'D-MARC' }}
+                                            </span>
+                                        </div>
                                     @endif
                                 </td>
                                 <td class="p-4 text-center whitespace-nowrap">

@@ -18,6 +18,17 @@ class HackatonSubmission extends Model
         'status' => HackatonStatusEnum::class,
     ];
 
+    public const TEMAS = [
+        'D-FARM' => 'D-FARM (DeepTech Food Acceleration Research to Market)',
+        'D-MARC' => 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)',
+    ];
+
+    public function getTemaLabelAttribute()
+    {
+        if (!$this->tema) return null;
+        return self::TEMAS[$this->tema] ?? $this->tema;
+    }
+
     public function session()
     {
         return $this->belongsTo(HackatonSession::class, 'hackaton_session_id');

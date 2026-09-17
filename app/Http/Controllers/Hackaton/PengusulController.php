@@ -66,6 +66,12 @@ class PengusulController extends Controller
     {
         abort_if($session->status !== 'active', 404);
 
+        $request->validate([
+            'tema' => 'required|string|max:255',
+        ], [
+            'tema.required' => 'Silakan pilih tema inovasi terlebih dahulu sebelum mendaftarkan proposal.',
+        ]);
+
         $existing = HackatonSubmission::where('hackaton_session_id', $session->id)
             ->where('user_id', Auth::id())
             ->first();
@@ -76,10 +82,11 @@ class PengusulController extends Controller
                 ->with('error', 'Anda sudah memiliki proposal untuk sesi ini.');
         }
 
-        $submission = DB::transaction(function () use ($session) {
+        $submission = DB::transaction(function () use ($session, $request) {
             $submission = HackatonSubmission::create([
                 'hackaton_session_id' => $session->id,
                 'user_id'             => Auth::id(),
+                'tema'                => $request->tema,
                 'status'              => 'draft',
             ]);
 
@@ -169,9 +176,29 @@ class PengusulController extends Controller
     {
         abort_if($submission->user_id !== Auth::id(), 403);
 
-        $submission->load(['session', 'members.user', 'identitas']);
+        $user = Auth::user()->load('profile.fakultas', 'profile.prodi');
+        $submission->load(['session', 'identitas', 'members.user.profile.fakultas', 'members.user.profile.prodi']);
 
-        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.identitas', compact('submission'));
+        $fakultasName = $user->profile?->fakultas?->name ?? '-';
+        $prodiName    = $user->profile?->prodi?->name ?? '-';
+        $ketuaName    = $user->name;
+
+        $session = $submission->session;
+        $minAnggota = $session->min_anggota ?? 1;
+        $maxAnggota = $session->max_anggota ?? 4;
+        $currentCount = $submission->members->count();
+
+        $skemaOptions = [
+            'Hilirisasi Produk Riset Inovasi',
+            'Hilirisasi Produk Kolaborasi Dosen dan Alumni',
+            'Hibah Komersialisasi Produk / Jasa Kepakaran Dosen (Income generating)',
+            'Kolaborasi DUDI (Industri)',
+        ];
+
+        return view(
+            'subdirektorat-inovasi.hackaton.pengusul.submissions.identitas',
+            compact('submission', 'fakultasName', 'prodiName', 'ketuaName', 'skemaOptions', 'minAnggota', 'maxAnggota', 'currentCount')
+        );
     }
 
     /**
@@ -191,6 +218,10 @@ class PengusulController extends Controller
             ['hackaton_submission_id' => $submission->id],
             $validated
         );
+
+        if ($request->filled('tema')) {
+            $submission->update(['tema' => $request->tema]);
+        }
 
         return back()->with('success', 'Identitas inovasi berhasil disimpan.');
     }

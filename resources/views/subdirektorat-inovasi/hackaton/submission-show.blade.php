@@ -80,7 +80,16 @@
                     </h2>
                     <span class="text-xs text-gray-400">Ketua: <strong class="text-gray-700">{{ $submission->user->name ?? '—' }}</strong></span>
                 </div>
-                <div class="px-5 py-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                <div class="px-5 py-4 grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
+                    @if ($submission->tema)
+                        <div>
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Tema Inovasi</p>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
+                                <i class="fas {{ str_contains($submission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1 text-[10px]"></i>
+                                {{ $submission->tema_label ?? $submission->tema }}
+                            </span>
+                        </div>
+                    @endif
                     <div>
                         <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Nama Produk / Karya</p>
                         <p class="text-gray-800 font-semibold">{{ $submission->identitas->nama_produk ?? '—' }}</p>
