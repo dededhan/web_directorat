@@ -7,6 +7,7 @@ use App\Models\ApcSubmission;
 use App\Models\ComdevSubmission;
 use App\Models\FeeEditorReport;
 use App\Models\FeeReviewerReport;
+use App\Models\HackatonSubmission;
 use App\Models\Katsinov;
 use App\Models\MatchmakingSubmission;
 use App\Models\PresentingReport;
@@ -88,7 +89,7 @@ class DashboardController extends Controller
             'fee_editor' => FeeEditorReport::where('user_id', $user->id)->count(),
             'presenting' => PresentingReport::where('user_id', $user->id)->count(),
             'matchmaking' => MatchmakingSubmission::where('user_id', $user->id)->count(),
-            'hackaton' => \App\Models\HackatonSubmission::where('user_id', $user->id)->count(),
+            'hackaton' => HackatonSubmission::where('user_id', $user->id)->count(),
         ];
 
         $summaryCards = $cardConfig
@@ -245,11 +246,11 @@ class DashboardController extends Controller
 
         if ($card = $cardMap->get('hackaton')) {
             $items = $items->merge(
-                \App\Models\HackatonSubmission::where('user_id', $userId)
+                HackatonSubmission::where('user_id', $userId)
                     ->latest()
                     ->limit(5)
                     ->get()
-                    ->map(fn (\App\Models\HackatonSubmission $submission) => $this->makeTimelineItem(
+                    ->map(fn (HackatonSubmission $submission) => $this->makeTimelineItem(
                         $card,
                         $submission->judul_inovasi ?: 'Proposal Hackathon UNJ',
                         $submission->status,
@@ -265,7 +266,7 @@ class DashboardController extends Controller
             ->values();
     }
 
-    private function makeTimelineItem(array $card, string $title, ?string $status, ?string $note, $createdAt): array
+    private function makeTimelineItem(array $card, string $title, mixed $status, ?string $note, $createdAt): array
     {
         $statusLabel = $this->formatStatus($status);
 
@@ -280,13 +281,25 @@ class DashboardController extends Controller
         ];
     }
 
-    private function formatStatus(?string $status): string
+    private function formatStatus(mixed $status): string
     {
         if (!$status) {
             return 'Pengajuan dibuat';
         }
 
-        return Str::headline($status);
+        if (is_object($status)) {
+            if (method_exists($status, 'label')) {
+                return $status->label();
+            }
+            if ($status instanceof \BackedEnum) {
+                return Str::headline((string) $status->value);
+            }
+            if ($status instanceof \UnitEnum) {
+                return Str::headline($status->name);
+            }
+        }
+
+        return Str::headline((string) $status);
     }
 
     private function statusColor(string $status): string
