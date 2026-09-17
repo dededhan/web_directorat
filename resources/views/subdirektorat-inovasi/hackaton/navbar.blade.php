@@ -8,6 +8,12 @@
             <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-gray-500">Ruang peserta</p>
             <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em]">Program HackAthon UNJ</p>
         </div>
+        @if(in_array(auth()->user()->role ?? '', ['dosen', 'tendik']))
+            <a href="{{ auth()->user()->role === 'dosen' ? route('subdirektorat-inovasi.dosen.dashboard') : route('subdirektorat-inovasi.tendik.dashboard') }}"
+                class="hidden md:inline-flex items-center gap-2 border border-black bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-black transition hover:bg-black hover:text-white">
+                <span>←</span> Kembali ke Portal Utama
+            </a>
+        @endif
     </div>
 
     <div class="relative" x-data="{ open: false }">
@@ -27,6 +33,12 @@
                 class="block px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] transition hover:bg-black hover:text-white">
                 Profil & Akun
             </a>
+            @if(in_array(auth()->user()->role ?? '', ['dosen', 'tendik']))
+                <a href="{{ auth()->user()->role === 'dosen' ? route('subdirektorat-inovasi.dosen.dashboard') : route('subdirektorat-inovasi.tendik.dashboard') }}"
+                    class="block border-t border-black px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-emerald-800 transition hover:bg-black hover:text-white">
+                    ← Portal Utama
+                </a>
+            @endif
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="block w-full border-t border-black px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.1em] transition hover:bg-black hover:text-white">

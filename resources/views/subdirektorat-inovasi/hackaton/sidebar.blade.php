@@ -59,6 +59,14 @@
                 <span class="mr-3 text-[10px]">↳</span>
                 <span>Informasi HackAthon</span>
             </a>
+
+            @if(in_array(auth()->user()->role, ['dosen', 'tendik']))
+                <a href="{{ auth()->user()->role === 'dosen' ? route('subdirektorat-inovasi.dosen.dashboard') : route('subdirektorat-inovasi.tendik.dashboard') }}"
+                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-emerald-400 transition-colors hover:bg-white hover:text-black">
+                    <span class="mr-3 text-[10px]">←</span>
+                    <span>Portal Utama</span>
+                </a>
+            @endif
         </div>
     </nav>
 

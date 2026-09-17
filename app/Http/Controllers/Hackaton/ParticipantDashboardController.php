@@ -20,6 +20,8 @@ use Illuminate\Validation\Rule;
 class ParticipantDashboardController extends Controller
 {
     private const ROLE_LABELS = [
+        'dosen'              => 'Dosen',
+        'tendik'             => 'Tendik',
         'hackaton_dosen'     => 'Dosen',
         'hackaton_tendik'    => 'Tendik',
         'hackaton_alumni'    => 'Alumni',
@@ -32,6 +34,8 @@ class ParticipantDashboardController extends Controller
     ];
 
     private const ROLE_ICONS = [
+        'dosen'              => 'fa-chalkboard-teacher',
+        'tendik'             => 'fa-user-tie',
         'hackaton_dosen'     => 'fa-chalkboard-teacher',
         'hackaton_tendik'    => 'fa-user-tie',
         'hackaton_alumni'    => 'fa-user-graduate',

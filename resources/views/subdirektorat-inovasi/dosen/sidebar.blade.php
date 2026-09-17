@@ -16,6 +16,7 @@
     matchmakingOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.matchresearch.*') ? 'true' : 'false' }},
     studentExchangeOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.student_exchange.*') ? 'true' : 'false' }},
     inovChalengeOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.inovchalenge.*') ? 'true' : 'false' }},
+    hackatonOpen: {{ request()->routeIs('hackaton.*') ? 'true' : 'false' }},
     pengaturanOpen: {{ request()->routeIs('subdirektorat-inovasi.dosen.manageprofile.*') ? 'true' : 'false' }},
     init() {
         this.$watch('mobileOpen', value => {
@@ -135,6 +136,35 @@
                         <a href="{{ route('subdirektorat-inovasi.dosen.inovchalenge.team.index') }}"
                             class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('subdirektorat-inovasi.dosen.inovchalenge.team.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i
                                 class='bx bxs-user-detail text-2xl flex-shrink-0'></i><span>Tim Saya</span></a>
+                    </div>
+                </div>
+
+                {{-- Hackathon UNJ --}}
+                <div class="pt-3">
+                    <h3 x-show="open || mobileOpen"
+                        class="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Hackathon</h3>
+                    <button @click="hackatonOpen = !hackatonOpen"
+                        class="flex w-full items-center rounded-lg p-3 transition-colors hover:bg-gray-700 group {{ $isProfileIncomplete ? 'opacity-50 cursor-not-allowed' : '' }}"
+                        :class="open || mobileOpen ? 'justify-between' : 'justify-center'"
+                        :disabled="{{ $isProfileIncomplete ? 'true' : 'false' }}"
+                        @if ($isProfileIncomplete) title="Harap lengkapi profil Anda terlebih dahulu." @endif>
+                        <div class="flex items-center space-x-4"><i
+                                class='bx bx-code-alt text-2xl flex-shrink-0 text-amber-400'></i><span x-show="open || mobileOpen"
+                                class="font-medium">Hackathon UNJ</span></div>
+                        <div x-show="open || mobileOpen" class="flex items-center"><i
+                                class='bx bx-chevron-down text-2xl transition-transform'
+                                :class="{ 'rotate-180': hackatonOpen }"></i></div>
+                    </button>
+                    <div x-show="hackatonOpen && (open || mobileOpen)" x-collapse class="mt-2 ml-3 space-y-1">
+                        <a href="{{ route('hackaton.dashboard') }}"
+                            class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('hackaton.dashboard') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i
+                                class='bx bxs-dashboard text-2xl flex-shrink-0'></i><span>Dashboard Hackathon</span></a>
+                        <a href="{{ route('hackaton.sessions.index') }}"
+                            class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('hackaton.sessions.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i
+                                class='bx bxs-grid-alt text-2xl flex-shrink-0'></i><span>Sesi Hackathon</span></a>
+                        <a href="{{ route('hackaton.submissions.index') }}"
+                            class="flex items-center space-x-4 rounded-lg p-3 text-sm transition-colors {{ request()->routeIs('hackaton.submissions.*') ? 'bg-teal-600 font-semibold text-white shadow-md' : 'hover:bg-gray-700' }} ml-4"><i
+                                class='bx bxs-file-doc text-2xl flex-shrink-0'></i><span>Proposal Saya</span></a>
                     </div>
                 </div>
             </div>

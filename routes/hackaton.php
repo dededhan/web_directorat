@@ -140,7 +140,7 @@ Route::redirect('admin-hackaton', '/admin-hackathon', 301);
 Route::redirect('admin-hackaton/{any}', '/admin-hackathon/{any}', 301)->where('any', '.*');
 
 // ── Portal Terpadu Semua Role Peserta & Reviewer ────────────────────────
-$allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_pppk,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge';
+$allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_pppk,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge,dosen,tendik';
 
 Route::prefix('hackathon')
     ->name('hackaton.')
@@ -166,7 +166,7 @@ Route::prefix('hackathon')
             ->name('team.tahap');
 
         // ── Khusus Pengusul (Dosen & Tendik) ────────────────────────────
-        Route::middleware(['role:hackaton_dosen,hackaton_tendik'])->group(function () {
+        Route::middleware(['role:hackaton_dosen,hackaton_tendik,dosen,tendik'])->group(function () {
             // Sessions browsing
             Route::get('sessions', [PengusulController::class, 'sessions'])
                 ->name('sessions.index');

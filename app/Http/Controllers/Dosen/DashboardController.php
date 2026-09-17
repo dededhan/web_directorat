@@ -71,6 +71,13 @@ class DashboardController extends Controller
                 'route' => route('subdirektorat-inovasi.dosen.matchresearch.manajemen'),
                 'description' => 'Awasi kolaborasi riset.',
             ],
+            [
+                'key' => 'hackaton',
+                'label' => 'Hackathon UNJ',
+                'icon' => 'bx-code-alt',
+                'route' => route('hackaton.dashboard'),
+                'description' => 'Ajang kompetisi inovasi & teknologi UNJ.',
+            ],
         ]);
 
         $counts = [
@@ -81,6 +88,7 @@ class DashboardController extends Controller
             'fee_editor' => FeeEditorReport::where('user_id', $user->id)->count(),
             'presenting' => PresentingReport::where('user_id', $user->id)->count(),
             'matchmaking' => MatchmakingSubmission::where('user_id', $user->id)->count(),
+            'hackaton' => \App\Models\HackatonSubmission::where('user_id', $user->id)->count(),
         ];
 
         $summaryCards = $cardConfig
@@ -230,6 +238,22 @@ class DashboardController extends Controller
                         $submission->judul_proposal ?: 'Pengajuan Matchmaking',
                         $submission->status,
                         $submission->rejection_note,
+                        $submission->created_at
+                    ))
+            );
+        }
+
+        if ($card = $cardMap->get('hackaton')) {
+            $items = $items->merge(
+                \App\Models\HackatonSubmission::where('user_id', $userId)
+                    ->latest()
+                    ->limit(5)
+                    ->get()
+                    ->map(fn (\App\Models\HackatonSubmission $submission) => $this->makeTimelineItem(
+                        $card,
+                        $submission->judul_inovasi ?: 'Proposal Hackathon UNJ',
+                        $submission->status,
+                        null,
                         $submission->created_at
                     ))
             );
