@@ -78,11 +78,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            z-index: 1;
+            z-index: 10;
         }
         .header-carousel-slides {
             width: 100%;
             height: 100%;
+            position: relative;
         }
         .header-slide {
             position: absolute;
@@ -91,10 +92,26 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
+            z-index: 1;
         }
         .header-slide.active {
             opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            z-index: 5;
+        }
+        .header-slide a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 6;
+            cursor: pointer;
         }
         .header-slide img {
             width: 100%;
@@ -108,7 +125,7 @@
             transform: translateX(-50%);
             display: flex;
             gap: 12px;
-            z-index: 10;
+            z-index: 30;
         }
         .header-carousel-dot {
             width: 12px;
@@ -571,7 +588,7 @@
     {{-- Header Section --}}
     <header class="relative h-[50vh] md:h-[60vh] lg:h-screen bg-gray-800">
         {{-- The carousel will be injected here by JavaScript, replacing any static image. --}}
-        <div class="absolute inset-0 bg-teal-900/60 flex flex-col justify-center items-start p-6 md:p-12 z-[5]">
+        <div class="absolute inset-0 bg-teal-900/60 flex flex-col justify-center items-start p-6 md:p-12 z-[5] pointer-events-none">
         </div>
     </header>
 
@@ -1062,13 +1079,33 @@ document.addEventListener('DOMContentLoaded', function () {
         const slidesContainer = document.createElement("div");
         slidesContainer.className = "header-carousel-slides";
 
-        images.forEach((imgSrc, index) => {
+        images.forEach((item, index) => {
             const slide = document.createElement("div");
             slide.className = `header-slide ${index === 0 ? "active" : ""}`;
+            
+            const imgSrc = typeof item === "string" ? item : item.src;
+            const imgLink = (typeof item === "object" && item.link) ? item.link : null;
+
             const img = document.createElement("img");
             img.src = imgSrc;
             img.alt = `UNJ Campus View ${index + 1}`;
-            slide.appendChild(img);
+
+            if (imgLink) {
+                const link = document.createElement("a");
+                link.href = imgLink;
+                link.className = "header-slide-link";
+                link.style.cssText = "display: block; width: 100%; height: 100%; position: absolute; inset: 0; z-index: 6; cursor: pointer;";
+                link.appendChild(img);
+                slide.appendChild(link);
+                slide.style.cursor = "pointer";
+                slide.addEventListener("click", function(e) {
+                    if (e.target.closest(".header-carousel-dots")) return;
+                    window.location.href = imgLink;
+                });
+            } else {
+                slide.appendChild(img);
+                slide.style.cursor = "default";
+            }
             slidesContainer.appendChild(slide);
         });
 
@@ -1084,12 +1121,7 @@ document.addEventListener('DOMContentLoaded', function () {
         carouselContainer.appendChild(slidesContainer);
         carouselContainer.appendChild(dotsContainer);
 
-        const overlay = header.querySelector(".absolute.inset-0");
-        if (overlay) {
-            header.insertBefore(carouselContainer, overlay);
-        } else {
-            header.appendChild(carouselContainer);
-        }
+        header.appendChild(carouselContainer);
 
         let currentSlide = 0;
         const totalSlides = images.length;
@@ -1137,7 +1169,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            const galleryImages = data.map(item => "/storage/" + item.image);
+            const galleryImages = data.map(item => ({
+                src: "/storage/" + item.image,
+                link: item.link || null
+            }));
             if (galleryImages.length > 0) {
                 initHeaderCarousel(galleryImages);
             } else {
