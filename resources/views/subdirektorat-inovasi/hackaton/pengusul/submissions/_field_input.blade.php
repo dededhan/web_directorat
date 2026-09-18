@@ -31,7 +31,7 @@
         @if ($field->template_url || $field->template_file)
             <div class="flex flex-wrap items-center gap-2">
                 @if ($field->template_file)
-                    <a href="{{ asset('storage/' . $field->template_file) }}" target="_blank" download
+                    <a href="{{ route('hackaton.templates.download', $field) }}" target="_blank"
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-semibold transition">
                         <i class="fas fa-file-download text-amber-600"></i>
                         <span>{{ $field->template_file_name ?: 'Unduh Template' }}</span>

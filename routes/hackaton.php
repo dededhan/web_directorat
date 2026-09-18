@@ -154,6 +154,8 @@ Route::prefix('hackathon')
         // Dashboard Terpadu (Dinamis Menyesuaikan Role)
         Route::get('dashboard', [ParticipantDashboardController::class, 'index'])
             ->name('dashboard');
+        Route::get('templates/{field}/download', [PengusulController::class, 'downloadTemplate'])
+            ->name('templates.download');
         Route::put('dashboard/profile', [ParticipantDashboardController::class, 'updateProfile'])
             ->name('profile.update');
 

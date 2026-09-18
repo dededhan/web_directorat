@@ -9,12 +9,14 @@ use App\Models\HackatonSubmissionIdentitas;
 use App\Models\HackatonSubmissionMember;
 use App\Models\HackatonSubmissionTahap;
 use App\Models\HackatonSubmissionFieldValue;
+use App\Models\HackatonTahapField;
 use App\Models\HackatonStatusLog;
 use App\Models\HackatonProgressLog;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PengusulController extends Controller
@@ -269,6 +271,28 @@ class PengusulController extends Controller
             'totalTahap',
             'tahapCompletionPercentage'
         ));
+    }
+
+    /**
+     * Download an admin-provided stage template using its configured display name.
+     */
+    public function downloadTemplate(HackatonTahapField $field)
+    {
+        abort_unless($field->template_file, 404);
+
+        $disk = Storage::disk('public');
+        abort_unless($disk->exists($field->template_file), 404);
+
+        $downloadName = $field->template_file_name ?: basename($field->template_file);
+        $extension = pathinfo($field->template_file, PATHINFO_EXTENSION);
+
+        if ($extension && !Str::endsWith(strtolower($downloadName), '.' . strtolower($extension))) {
+            $downloadName .= '.' . $extension;
+        }
+
+        $downloadName = preg_replace('/[^\pL\pN\s._-]+/u', '', $downloadName) ?: basename($field->template_file);
+
+        return response()->download($disk->path($field->template_file), $downloadName);
     }
 
     /**

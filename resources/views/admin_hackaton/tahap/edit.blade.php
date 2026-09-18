@@ -245,7 +245,7 @@
                                             </a>
                                         @endif
                                         @if ($field->template_file)
-                                            <a href="{{ asset('storage/' . $field->template_file) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
+                                            <a href="{{ route('hackaton.templates.download', $field) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
                                                 <i class="fas fa-file-download text-[10px]"></i> Template: {{ $field->template_file_name ?: basename($field->template_file) }}
                                             </a>
                                         @endif
@@ -379,7 +379,7 @@
                                         </a>
                                     @endif
                                     @if ($field->template_file)
-                                        <a href="{{ asset('storage/' . $field->template_file) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
+                                        <a href="{{ route('hackaton.templates.download', $field) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
                                             <i class="fas fa-file-download text-[10px]"></i> Template: {{ $field->template_file_name ?: basename($field->template_file) }}
                                         </a>
                                     @endif
