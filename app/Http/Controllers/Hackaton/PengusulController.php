@@ -10,6 +10,7 @@ use App\Models\HackatonSubmissionMember;
 use App\Models\HackatonSubmissionTahap;
 use App\Models\HackatonSubmissionFieldValue;
 use App\Models\HackatonStatusLog;
+use App\Models\HackatonProgressLog;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -224,6 +225,132 @@ class PengusulController extends Controller
         ];
 
         return view('subdirektorat-inovasi.hackaton.pengusul.submissions.show', compact('submission', 'hasReviewer', 'lembarPengesahanInitial'));
+    }
+
+    /**
+     * Display the progress logbook for the submission owner.
+     */
+    public function progressLogs(HackatonSubmission $submission)
+    {
+        $this->ensureProgressLogOwner($submission);
+
+        $submission->load(['session', 'identitas', 'progressLogs.user', 'progressLogs.tahap']);
+
+        return view('subdirektorat-inovasi.hackaton.pengusul.progress-logs.index', compact('submission'));
+    }
+
+    /**
+     * Store a progress log. The percentage cannot decrease from the
+     * highest percentage already recorded for the submission.
+     */
+    public function storeProgressLog(Request $request, HackatonSubmission $submission)
+    {
+        $this->ensureProgressLogOwner($submission);
+
+        $highestProgress = (int) ($submission->progressLogs()->max('capaian_persen') ?? 0);
+        $validated = $request->validate([
+            'nama_kegiatan'     => 'required|string|max:255',
+            'tanggal'           => 'required|date',
+            'capaian_persen'    => ['required', 'integer', 'min:' . max(1, $highestProgress), 'max:100'],
+            'hackaton_tahap_id' => 'nullable|exists:hackaton_tahap,id',
+        ], [
+            'capaian_persen.min' => "Capaian tidak boleh lebih rendah dari {$highestProgress}% sebelumnya.",
+        ]);
+
+        $this->ensureTahapBelongsToSubmission($submission, $validated['hackaton_tahap_id'] ?? null);
+
+        $submission->progressLogs()->create([
+            ...$validated,
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()
+            ->route('hackaton.submissions.progress_logs.index', $submission)
+            ->with('success', 'Progress log berhasil ditambahkan.');
+    }
+
+    /**
+     * Display the edit form for a progress log.
+     */
+    public function editProgressLog(HackatonSubmission $submission, HackatonProgressLog $progressLog)
+    {
+        $this->ensureProgressLogOwner($submission);
+        $this->ensureProgressLogBelongsToSubmission($submission, $progressLog);
+
+        $submission->load(['session', 'identitas']);
+
+        return view('subdirektorat-inovasi.hackaton.pengusul.progress-logs.edit', compact('submission', 'progressLog'));
+    }
+
+    /**
+     * Update a progress log without allowing its percentage to decrease.
+     */
+    public function updateProgressLog(Request $request, HackatonSubmission $submission, HackatonProgressLog $progressLog)
+    {
+        $this->ensureProgressLogOwner($submission);
+        $this->ensureProgressLogBelongsToSubmission($submission, $progressLog);
+
+        $highestOtherProgress = (int) ($submission->progressLogs()
+            ->where('id', '!=', $progressLog->id)
+            ->max('capaian_persen') ?? 0);
+        $minimumProgress = max((int) $progressLog->capaian_persen, $highestOtherProgress, 1);
+
+        $validated = $request->validate([
+            'nama_kegiatan'     => 'required|string|max:255',
+            'tanggal'           => 'required|date',
+            'capaian_persen'    => ['required', 'integer', 'min:' . $minimumProgress, 'max:100'],
+            'hackaton_tahap_id' => 'nullable|exists:hackaton_tahap,id',
+        ], [
+            'capaian_persen.min' => "Capaian tidak boleh lebih rendah dari {$minimumProgress}% yang sudah tercatat.",
+        ]);
+
+        $this->ensureTahapBelongsToSubmission($submission, $validated['hackaton_tahap_id'] ?? null);
+
+        $progressLog->update($validated);
+
+        return redirect()
+            ->route('hackaton.submissions.progress_logs.index', $submission)
+            ->with('success', 'Progress log berhasil diperbarui.');
+    }
+
+    /**
+     * Delete a progress log owned by the current user.
+     */
+    public function destroyProgressLog(HackatonSubmission $submission, HackatonProgressLog $progressLog)
+    {
+        $this->ensureProgressLogOwner($submission);
+        $this->ensureProgressLogBelongsToSubmission($submission, $progressLog);
+
+        $progressLog->delete();
+
+        return redirect()
+            ->route('hackaton.submissions.progress_logs.index', $submission)
+            ->with('success', 'Progress log berhasil dihapus.');
+    }
+
+    private function ensureProgressLogOwner(HackatonSubmission $submission): void
+    {
+        abort_if($submission->user_id !== Auth::id(), 403, 'Hanya Ketua Tim yang dapat mengelola logbook.');
+    }
+
+    private function ensureProgressLogBelongsToSubmission(HackatonSubmission $submission, HackatonProgressLog $progressLog): void
+    {
+        abort_if($progressLog->hackaton_submission_id !== $submission->id, 404);
+    }
+
+    private function ensureTahapBelongsToSubmission(HackatonSubmission $submission, ?int $tahapId): void
+    {
+        if ($tahapId === null) {
+            return;
+        }
+
+        abort_unless(
+            $submission->session()
+                ->whereHas('tahap', fn ($query) => $query->whereKey($tahapId))
+                ->exists(),
+            422,
+            'Tahap tidak sesuai dengan sesi proposal ini.'
+        );
     }
 
     /**

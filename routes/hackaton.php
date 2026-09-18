@@ -184,6 +184,18 @@ Route::prefix('hackathon')
                 ->name('submissions.store');
             Route::get('submissions/{submission}', [PengusulController::class, 'showSubmission'])
                 ->name('submissions.show');
+
+            // Logbook kegiatan/progres Ketua Tim
+            Route::get('submissions/{submission}/progress-logs', [PengusulController::class, 'progressLogs'])
+                ->name('submissions.progress_logs.index');
+            Route::post('submissions/{submission}/progress-logs', [PengusulController::class, 'storeProgressLog'])
+                ->name('submissions.progress_logs.store');
+            Route::get('submissions/{submission}/progress-logs/{progressLog}/edit', [PengusulController::class, 'editProgressLog'])
+                ->name('submissions.progress_logs.edit');
+            Route::put('submissions/{submission}/progress-logs/{progressLog}', [PengusulController::class, 'updateProgressLog'])
+                ->name('submissions.progress_logs.update');
+            Route::delete('submissions/{submission}/progress-logs/{progressLog}', [PengusulController::class, 'destroyProgressLog'])
+                ->name('submissions.progress_logs.destroy');
             Route::get('submissions/{submission}/lembar-pengesahan', [PengusulController::class, 'showLembarPengesahan'])
                 ->name('submissions.lembar_pengesahan');
             Route::match(['get', 'post'], 'submissions/{submission}/lembar-pengesahan/pdf', [PengusulController::class, 'generateLembarPengesahanPdf'])

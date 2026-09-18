@@ -18,6 +18,9 @@
                 <p class="mt-1 text-xs text-gray-500">Sesi: <strong>{{ $submission->session->nama_sesi }}</strong></p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('hackaton.submissions.progress_logs.index', $submission) }}" class="inline-flex items-center px-4 py-2 bg-black hover:bg-emerald-800 text-xs font-bold rounded-xl text-white transition shadow-sm">
+                    <i class="fas fa-book mr-1.5 text-sm"></i> Logbook Kegiatan
+                </a>
                 <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="inline-flex items-center px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-xs font-bold rounded-xl text-white transition shadow-sm border border-emerald-800">
                     <i class="fas fa-file-signature mr-1.5 text-sm"></i> Lembar Pengesahan
                 </a>

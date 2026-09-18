@@ -76,6 +76,13 @@ class HackatonSubmission extends Model
             ->orderByDesc('created_at');
     }
 
+    public function progressLogs()
+    {
+        return $this->hasMany(HackatonProgressLog::class, 'hackaton_submission_id')
+            ->orderByDesc('tanggal')
+            ->orderByDesc('created_at');
+    }
+
     public function identitasIsComplete(): bool
     {
         return $this->identitas !== null
