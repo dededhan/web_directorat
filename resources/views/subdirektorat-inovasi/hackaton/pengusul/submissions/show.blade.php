@@ -130,9 +130,31 @@
 
         {{-- Tahap Cards --}}
         <div class="space-y-4">
-            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <i class="fas fa-tasks text-amber-500"></i> Progres Pengisian & Evaluasi Tahapan ({{ $submission->submissionTahap->count() }} Tahap)
-            </h2>
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-tasks text-amber-500"></i> Progres Pengisian & Evaluasi Tahapan ({{ $totalTahap }} Tahap)
+                </h2>
+                <span class="text-xs font-bold text-gray-600">
+                    {{ $completedTahap }}/{{ $totalTahap }} tahap selesai ({{ $tahapCompletionPercentage }}%)
+                </span>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <div>
+                        <p class="text-xs font-bold text-gray-900">Progres keseluruhan</p>
+                        <p class="text-[11px] text-gray-500 mt-0.5">Tahap dihitung selesai setelah formulir disubmit.</p>
+                    </div>
+                    <span class="text-sm font-black text-amber-600">{{ $tahapCompletionPercentage }}%</span>
+                </div>
+                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden" role="progressbar"
+                    aria-label="Progres keseluruhan tahapan"
+                    aria-valuenow="{{ $tahapCompletionPercentage }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all"
+                        style="width: {{ $tahapCompletionPercentage }}%"></div>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-2">{{ $completedTahap }} dari {{ $totalTahap }} tahap telah diselesaikan.</p>
+            </div>
 
             <div class="space-y-4">
                 @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
@@ -152,7 +174,23 @@
                                 </span>
                                 <div>
                                     <h3 class="font-bold text-gray-900 text-base">Tahap {{ $tk }}: {{ $st->tahap->nama_tahap }}</h3>
-                                    <p class="text-xs text-gray-500">{{ $st->tahap->fields->count() }} Isian Form</p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ $st->filled_fields_count }}/{{ $st->total_fields_count }} Isian Form terisi
+                                        <span class="font-bold text-amber-600">({{ $st->fields_completion_percentage }}%)</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="w-full sm:w-32">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-gray-500 mb-1">
+                                    <span>Progres isian</span>
+                                    <span>{{ $st->fields_completion_percentage }}%</span>
+                                </div>
+                                <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden" role="progressbar"
+                                    aria-label="Progres isian Tahap {{ $tk }}"
+                                    aria-valuenow="{{ $st->fields_completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="h-full bg-amber-400 rounded-full transition-all"
+                                        style="width: {{ $st->fields_completion_percentage }}%"></div>
                                 </div>
                             </div>
 

@@ -163,7 +163,7 @@ class PengusulController extends Controller
 
         $submission->load([
             'session',
-            'submissionTahap.tahap',
+            'submissionTahap.tahap.fields',
             'members.user.profile.fakultas',
             'members.user.profile.prodi',
             'identitas',
@@ -175,6 +175,43 @@ class PengusulController extends Controller
             'statusLogs.tahap',
             'statusLogs.causer',
         ]);
+
+        $fieldValuesByTahap = HackatonSubmissionFieldValue::where('hackaton_submission_id', $submission->id)
+            ->get()
+            ->groupBy('hackaton_tahap_id');
+
+        $isFilledFieldValue = static function ($value): bool {
+            if ($value === null) {
+                return false;
+            }
+
+            $value = is_string($value) ? trim($value) : $value;
+
+            return $value !== '' && $value !== '[]' && $value !== '{}';
+        };
+
+        foreach ($submission->submissionTahap as $submissionTahap) {
+            $totalFields = $submissionTahap->tahap?->fields->count() ?? 0;
+            $filledFields = ($fieldValuesByTahap->get($submissionTahap->hackaton_tahap_id) ?? collect())
+                ->filter(fn ($fieldValue) => $isFilledFieldValue($fieldValue->value))
+                ->count();
+
+            $submissionTahap->setAttribute('total_fields_count', $totalFields);
+            $submissionTahap->setAttribute('filled_fields_count', $filledFields);
+            $submissionTahap->setAttribute(
+                'fields_completion_percentage',
+                $totalFields > 0 ? (int) round(($filledFields / $totalFields) * 100) : 0
+            );
+        }
+
+        $totalTahap = $submission->submissionTahap->count();
+        $completedTahap = $submission->submissionTahap->filter(
+            fn ($submissionTahap) => $submissionTahap->submitted_at
+                || in_array($submissionTahap->admin_status, ['disetujui', 'selesai'])
+        )->count();
+        $tahapCompletionPercentage = $totalTahap > 0
+            ? (int) round(($completedTahap / $totalTahap) * 100)
+            : 0;
 
         $hasReviewer = $submission->reviewers->isNotEmpty();
 
@@ -224,7 +261,14 @@ class PengusulController extends Controller
             'ketua_ttd_nip' => $defaultKetuaNik,
         ];
 
-        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.show', compact('submission', 'hasReviewer', 'lembarPengesahanInitial'));
+        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.show', compact(
+            'submission',
+            'hasReviewer',
+            'lembarPengesahanInitial',
+            'completedTahap',
+            'totalTahap',
+            'tahapCompletionPercentage'
+        ));
     }
 
     /**
