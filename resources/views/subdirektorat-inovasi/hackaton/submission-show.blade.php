@@ -74,6 +74,10 @@
                     class="inline-flex items-center px-4 py-2 bg-emerald-700 text-white font-medium text-sm rounded-xl hover:bg-emerald-800 transition shadow-sm">
                     <i class="fas fa-file-signature mr-2"></i> Lembar Pengesahan
                 </a>
+                <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}"
+                    class="inline-flex items-center px-4 py-2 bg-indigo-700 text-white font-medium text-sm rounded-xl hover:bg-indigo-800 transition shadow-sm">
+                    <i class="fas fa-file-contract mr-2"></i> Pakta Integritas
+                </a>
                 <a href="{{ route('hackaton.dashboard') }}"
                     class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium text-sm rounded-xl hover:bg-gray-200 transition">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard

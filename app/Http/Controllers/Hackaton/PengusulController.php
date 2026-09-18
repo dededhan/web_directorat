@@ -422,6 +422,148 @@ class PengusulController extends Controller
     }
 
     /**
+     * Show dedicated Pakta Integritas page.
+     */
+    public function showPaktaIntegritas(HackatonSubmission $submission)
+    {
+        $user = Auth::user();
+        $isOwner = $submission->user_id === $user->id;
+        $isMember = $submission->members()->where('user_id', $user->id)->exists();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+        $isReviewer = $submission->reviewers()->where('users.id', $user->id)->exists();
+
+        abort_unless($isOwner || $isMember || $isAdmin || $isReviewer, 403, 'Anda tidak memiliki akses ke proposal ini.');
+
+        $submission->load([
+            'session',
+            'members.user.profile.fakultas',
+            'members.user.profile.prodi',
+            'identitas',
+            'user.profile.fakultas',
+            'user.profile.prodi',
+        ]);
+
+        $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
+
+        $defaultNama = $ketuaMember?->nama_lengkap ?? $submission->user?->name ?? '';
+        $defaultNik = $ketuaMember?->nik_nim_nip ?? $submission->user?->profile?->identifier_number ?? '';
+
+        $defaultInstansi = $ketuaMember?->institusi_fakultas;
+        if (empty($defaultInstansi) && $submission->user?->profile) {
+            $prodi = $submission->user->profile->prodi?->name;
+            $fakultas = $submission->user->profile->fakultas?->name;
+            $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
+            $defaultInstansi = implode(' / ', $parts);
+        }
+        if (empty($defaultInstansi)) {
+            $defaultInstansi = 'Universitas Negeri Jakarta';
+        }
+
+        $defaultNamaTim = !empty($submission->identitas?->nama_produk)
+            ? ('Tim ' . Str::limit($submission->identitas->nama_produk, 30))
+            : ('Tim ' . ($defaultNama ?: 'Pengusul'));
+
+        $defaultJudul = $submission->identitas?->nama_produk ?? ('Proposal: ' . ($submission->session?->nama_sesi ?? 'Inovasi'));
+        $defaultTahun = date('Y');
+
+        $paktaInitial = [
+            'tahun' => $defaultTahun,
+            'nama_lengkap' => $defaultNama,
+            'nik_nim_nip' => $defaultNik,
+            'institusi' => $defaultInstansi,
+            'nama_tim' => $defaultNamaTim,
+            'judul_inovasi' => $defaultJudul,
+            'tanggal_tempat' => 'Jakarta, ' . \Carbon\Carbon::now()->translatedFormat('d F Y'),
+            'penandatangan_nama' => $defaultNama,
+            'penandatangan_nik' => $defaultNik,
+        ];
+
+        return view('subdirektorat-inovasi.hackaton.pengusul.submissions.pakta_integritas', compact('submission', 'paktaInitial'));
+    }
+
+    /**
+     * Generate Pakta Integritas as PDF.
+     */
+    public function generatePaktaIntegritasPdf(Request $request, HackatonSubmission $submission)
+    {
+        $user = Auth::user();
+        $isOwner = $submission->user_id === $user->id;
+        $isMember = $submission->members()->where('user_id', $user->id)->exists();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+        $isReviewer = $submission->reviewers()->where('users.id', $user->id)->exists();
+
+        abort_unless($isOwner || $isMember || $isAdmin || $isReviewer, 403, 'Anda tidak memiliki akses ke dokumen submission ini.');
+
+        $submission->load([
+            'session',
+            'identitas',
+            'user.profile.fakultas',
+            'user.profile.prodi',
+            'members.user.profile.fakultas',
+            'members.user.profile.prodi',
+        ]);
+
+        $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
+
+        $defaultNama = $ketuaMember?->nama_lengkap ?? $submission->user?->name ?? '';
+        $defaultNik = $ketuaMember?->nik_nim_nip ?? $submission->user?->profile?->identifier_number ?? '';
+
+        $defaultInstansi = $ketuaMember?->institusi_fakultas;
+        if (empty($defaultInstansi) && $submission->user?->profile) {
+            $prodi = $submission->user->profile->prodi?->name;
+            $fakultas = $submission->user->profile->fakultas?->name;
+            $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
+            $defaultInstansi = implode(' / ', $parts);
+        }
+        if (empty($defaultInstansi)) {
+            $defaultInstansi = 'Universitas Negeri Jakarta';
+        }
+
+        $defaultNamaTim = !empty($submission->identitas?->nama_produk)
+            ? ('Tim ' . Str::limit($submission->identitas->nama_produk, 30))
+            : ('Tim ' . ($defaultNama ?: 'Pengusul'));
+
+        $defaultJudul = $submission->identitas?->nama_produk ?? ('Proposal: ' . ($submission->session?->nama_sesi ?? 'Inovasi'));
+        $defaultTahun = date('Y');
+
+        $tahun = $request->input('tahun', $defaultTahun);
+        $nama_lengkap = $request->input('nama_lengkap', $defaultNama);
+        $nik_nim_nip = $request->input('nik_nim_nip', $defaultNik);
+        $institusi = $request->input('institusi', $defaultInstansi);
+        $nama_tim = $request->input('nama_tim', $defaultNamaTim);
+        $judul_inovasi = $request->input('judul_inovasi', $defaultJudul);
+
+        $tanggal_tempat = $request->input('tanggal_tempat', 'Jakarta, ' . \Carbon\Carbon::now()->translatedFormat('d F Y'));
+        $penandatangan_nama = $request->input('penandatangan_nama', $nama_lengkap);
+        $penandatangan_nik = $request->input('penandatangan_nik', $nik_nim_nip);
+
+        $data = compact(
+            'submission',
+            'tahun',
+            'nama_lengkap',
+            'nik_nim_nip',
+            'institusi',
+            'nama_tim',
+            'judul_inovasi',
+            'tanggal_tempat',
+            'penandatangan_nama',
+            'penandatangan_nik'
+        );
+
+        $pdf = Pdf::loadView('subdirektorat-inovasi.hackaton.pengusul.submissions.pakta_integritas_pdf', $data);
+        $pdf->setPaper('a4', 'portrait');
+
+        $safeTitle = Str::slug($judul_inovasi ?: 'Proposal-Hackathon', '-');
+        $filename = 'Pakta-Integritas-' . ($safeTitle ?: 'Hackathon') . '.pdf';
+
+        if ($request->has('download') && $request->input('download') == '1') {
+            return $pdf->download($filename);
+        }
+
+        return $pdf->stream($filename);
+    }
+
+    /**
      * Show identitas tim page.
      */
     public function showIdentitas(HackatonSubmission $submission)

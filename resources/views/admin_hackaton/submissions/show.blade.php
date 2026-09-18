@@ -33,6 +33,9 @@
                 <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="border-2 border-emerald-800 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
                     <i class="fas fa-file-signature mr-1.5"></i> Lembar Pengesahan
                 </a>
+                <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}" class="border-2 border-indigo-800 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
+                    <i class="fas fa-file-contract mr-1.5"></i> Pakta Integritas
+                </a>
                 <a href="{{ route('admin_hackaton.submissions.index', $session) }}" class="border-2 border-gray-950 bg-white hover:bg-gray-100 text-gray-950 text-xs font-bold uppercase tracking-wider px-4 py-2.5">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali ke Daftar
                 </a>

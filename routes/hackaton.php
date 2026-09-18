@@ -189,6 +189,11 @@ Route::prefix('hackathon')
             Route::match(['get', 'post'], 'submissions/{submission}/lembar-pengesahan/pdf', [PengusulController::class, 'generateLembarPengesahanPdf'])
                 ->name('submissions.lembar_pengesahan.pdf');
 
+            Route::get('submissions/{submission}/pakta-integritas', [PengusulController::class, 'showPaktaIntegritas'])
+                ->name('submissions.pakta_integritas');
+            Route::match(['get', 'post'], 'submissions/{submission}/pakta-integritas/pdf', [PengusulController::class, 'generatePaktaIntegritasPdf'])
+                ->name('submissions.pakta_integritas.pdf');
+
             // Identitas Tim (Gate step)
             Route::get('submissions/{submission}/identitas', [PengusulController::class, 'showIdentitas'])
                 ->name('submissions.identitas');

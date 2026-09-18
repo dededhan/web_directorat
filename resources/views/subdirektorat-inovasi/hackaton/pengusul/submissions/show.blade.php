@@ -21,6 +21,9 @@
                 <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="inline-flex items-center px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-xs font-bold rounded-xl text-white transition shadow-sm border border-emerald-800">
                     <i class="fas fa-file-signature mr-1.5 text-sm"></i> Lembar Pengesahan
                 </a>
+                <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}" class="inline-flex items-center px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-xs font-bold rounded-xl text-white transition shadow-sm border border-indigo-800">
+                    <i class="fas fa-file-contract mr-1.5 text-sm"></i> Pakta Integritas
+                </a>
                 <a href="{{ route('hackaton.submissions.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-xs font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition shadow-sm">
                     <i class="fas fa-arrow-left mr-1.5"></i> Kembali
                 </a>
@@ -97,6 +100,28 @@
 
             <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="inline-flex items-center px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow shrink-0">
                 <i class="fas fa-file-signature mr-2"></i> Template Lembar Pengesahan
+            </a>
+        </div>
+
+        {{-- Pakta Integritas Card --}}
+        <div class="bg-white rounded-2xl border border-indigo-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-indigo-50/40 via-white to-white">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-800 flex items-center justify-center text-xl shrink-0 border border-indigo-300">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-base font-bold text-gray-900">Lembar Pakta Integritas</h2>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-300">Template PDF Resmi</span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Ketik dan sesuaikan isian Nama Lengkap, NIM/NIP/NIK, Institusi, Nama Tim, Judul Inovasi, serta tanda tangan Materai Rp10.000 untuk mencetak Lembar Pakta Integritas ke dalam format PDF resmi.
+                    </p>
+                </div>
+            </div>
+
+            <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}" class="inline-flex items-center px-5 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold rounded-xl transition shadow shrink-0">
+                <i class="fas fa-file-contract mr-2"></i> Template Pakta Integritas
             </a>
         </div>
 
