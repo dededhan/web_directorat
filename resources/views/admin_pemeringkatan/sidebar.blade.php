@@ -11,17 +11,42 @@
     x-cloak>
 
 
-    <div class="h-16 flex items-center justify-center bg-gray-900 shadow-md">
-        <i class="fas  text-white text-2xl mr-3"></i>
-        <span class="text-white text-lg font-semibold">Admin Pemeringkatan</span>
+    <div class="h-16 flex items-center justify-center bg-gray-900 shadow-md px-4">
+        <i class="fas fa-chart-line text-teal-400 text-xl mr-2.5"></i>
+        <span class="text-white text-base font-semibold truncate">
+            @if(Auth::check() && Auth::user()->isProdi())
+                QS Campaign Prodi
+            @elseif(Auth::check() && Auth::user()->isFakultas())
+                QS Campaign Fakultas
+            @else
+                Admin Pemeringkatan
+            @endif
+        </span>
     </div>
 
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-        <a href="{{ route('admin_pemeringkatan.dashboard') }}" 
-           class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.dashboard') ? 'bg-teal-600 text-white' : 'hover:bg-gray-700 hover:text-white' }}">
-            <i class="fas fa-home fa-fw w-6 text-center"></i>
-            <span class="ml-4">Dashboard</span>
-        </a>
+        @if(Auth::check() && !Auth::user()->isDirectorateAdmin())
+            {{-- Non-directorate (Prodi & Fakultas): Only show QS Campaign --}}
+            <div class="px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Menu Utama
+            </div>
+            <a href="{{ route('admin_pemeringkatan.qs-sessions.index') }}" 
+               class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.qs-sessions.*') ? 'bg-teal-600 text-white shadow-xs' : 'hover:bg-gray-700 hover:text-white' }}">
+                <i class="fas fa-bullhorn fa-fw w-6 text-center text-teal-400"></i>
+                <span class="ml-4 font-medium">QS Campaign (Sesi)</span>
+            </a>
+            <a href="{{ route('admin_pemeringkatan.reports.index') }}" 
+               class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.reports.*') ? 'bg-teal-600 text-white shadow-xs' : 'hover:bg-gray-700 hover:text-white' }}">
+                <i class="fas fa-chart-pie fa-fw w-6 text-center text-teal-400"></i>
+                <span class="ml-4 font-medium">Laporan & Analitik</span>
+            </a>
+        @else
+            {{-- Directorate Admin: Show all menus --}}
+            <a href="{{ route('admin_pemeringkatan.dashboard') }}" 
+               class="flex items-center px-4 py-2.5 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin_pemeringkatan.dashboard') ? 'bg-teal-600 text-white' : 'hover:bg-gray-700 hover:text-white' }}">
+                <i class="fas fa-home fa-fw w-6 text-center"></i>
+                <span class="ml-4">Dashboard</span>
+            </a>
          {{-- Content Management / CMS Dropdown --}}
         <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.berita.*') || 
                                  request()->routeIs('admin_pemeringkatan.alumni-berdampak.*') || 
@@ -94,7 +119,37 @@
                 </a>
             </div>
         </div>
-          {{-- Data Tables Dropdown --}}
+
+        {{-- QS Campaign & Responden Bank --}}
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.qs-sessions.*') || request()->routeIs('admin_pemeringkatan.responden-bank.*') || request()->routeIs('admin_pemeringkatan.reports.*') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
+                <div class="flex items-center">
+                    <i class="fas fa-bullhorn fa-fw w-6 text-center text-teal-400"></i>
+                    <span class="ml-4 font-medium">QS Campaign (Sesi)</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{'rotate-180': open}"></i>
+            </button>
+            <div x-show="open" x-transition class="mt-2 pl-8 space-y-2" x-cloak>
+                <a href="{{ route('admin_pemeringkatan.qs-sessions.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.qs-sessions.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-calendar-alt fa-xs mr-2"></i>
+                    QS Sessions
+                </a>
+                <a href="{{ route('admin_pemeringkatan.responden-bank.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.responden-bank.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-database fa-xs mr-2"></i>
+                    Responden Bank
+                </a>
+                <a href="{{ route('admin_pemeringkatan.reports.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.reports.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-chart-pie fa-xs mr-2"></i>
+                    Laporan & Analitik
+                </a>
+            </div>
+        </div>
+
+        {{-- Data Tables Dropdown --}}
         <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.responden.*') || request()->routeIs('admin_pemeringkatan.qsresponden.*') || request()->routeIs('admin_pemeringkatan.email.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
@@ -211,10 +266,21 @@
             <i class="fas fa-project-diagram fa-fw w-6 text-center"></i>
             <span class="ml-4">Struktur Organisasi</span>
         </a>
+        @endif
   
     </nav>
 
     <div class="p-4 border-t border-gray-700">
+        @if(Auth::check())
+            <div class="px-3.5 py-2.5 text-xs text-gray-300 bg-gray-900/80 rounded-xl mb-3 border border-gray-700/80">
+                <div class="text-gray-400 uppercase text-[10px] font-bold tracking-wider">Unit / Tingkat:</div>
+                <div class="text-teal-300 font-bold truncate mt-0.5 text-[11px] flex items-center gap-1.5">
+                    <i class="fas fa-user-circle text-teal-400 text-xs"></i>
+                    {{ Auth::user()->unit_label }}
+                </div>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="w-full flex items-center px-4 py-2.5 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-200">

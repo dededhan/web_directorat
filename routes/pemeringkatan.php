@@ -28,6 +28,11 @@ use App\Http\Controllers\SejarahContentController;
 use App\Http\Controllers\Pemeringkatan\SdgInitiativeController;
 use App\Http\Controllers\Pemeringkatan\AdminMataKuliahController;
 use App\Http\Controllers\StructureOrganizationController;
+use App\Http\Controllers\Pemeringkatan\Admin\QsSessionController;
+use App\Http\Controllers\Pemeringkatan\Admin\QsSessionRespondentController;
+use App\Http\Controllers\Pemeringkatan\Admin\RespondenBankController;
+use App\Http\Controllers\Pemeringkatan\Admin\ReportController;
+use App\Http\Controllers\ConsentController;
 
 //public routes
 Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
@@ -111,12 +116,14 @@ Route::prefix('the-ir-initiatives')->name('the-ir.')->group(function () {
 //admin routes
 
 Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
-    ->middleware(['auth', 'role:admin_pemeringkatan'])
+    ->middleware(['auth', 'role:admin_pemeringkatan,fakultas,prodi'])
     ->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('admin_pemeringkatan.dashboard');
-        })->name('dashboard');
+        // Directorate Admin only features (hidden and restricted from fakultas & prodi)
+        Route::middleware('role:admin_pemeringkatan')->group(function () {
+            Route::get('/dashboard', function () {
+                return view('admin_pemeringkatan.dashboard');
+            })->name('dashboard');
 
         //the
         Route::prefix('the-impact-cms')->name('the-impact-cms.')->group(function () {
@@ -310,6 +317,71 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::put('/manageuser/{user}/toggle-status', 
             [\App\Http\Controllers\Pemeringkatan\Admin\ManageUserController::class, 'toggleStatus'])
             ->name('manageuser.toggleStatus');
+        }); // End of Directorate Admin only features
+
+        // QS Sessions (Accessible by admin_pemeringkatan, fakultas, prodi)
+        Route::resource('/qs-sessions', QsSessionController::class)->parameters([
+            'qs-sessions' => 'qs_session'
+        ]);
+
+        // Session Respondent Management
+        Route::prefix('/qs-sessions/{session}')->name('qs-sessions.')->group(function () {
+            Route::post('/assign', [QsSessionRespondentController::class, 'assign'])->name('assign');
+            Route::delete('/unassign/{respondent}', [QsSessionRespondentController::class, 'unassign'])->name('unassign');
+            Route::post('/respondents', [QsSessionRespondentController::class, 'storeRespondent'])->name('respondents.store');
+            Route::put('/respondents/{respondent}', [QsSessionRespondentController::class, 'updateRespondent'])->name('respondents.update');
+            Route::post('/bulk-delete', [QsSessionRespondentController::class, 'bulkDelete'])->name('bulk-delete');
+            Route::post('/custom-fields-schema', [QsSessionRespondentController::class, 'updateCustomFieldsSchema'])->name('custom-fields-schema.update');
+            Route::post('/form-schema', [QsSessionRespondentController::class, 'updateFormSchema'])->name('form-schema.update');
+            Route::get('/respondents/{respondent}', [QsSessionRespondentController::class, 'showRespondent'])->name('respondents.show');
+            Route::get('/respondents/{respondent}/answers', [QsSessionRespondentController::class, 'showAnswers'])->name('respondents.answers');
+            Route::get('/export', [QsSessionRespondentController::class, 'export'])->name('export');
+            Route::get('/template', [QsSessionRespondentController::class, 'downloadTemplate'])->name('template');
+            Route::get('/answered', [QsSessionRespondentController::class, 'answeredTable'])->name('answered');
+            Route::post('/import', [QsSessionRespondentController::class, 'import'])->name('import');
+            Route::post('/send-email', [QsSessionRespondentController::class, 'sendEmail'])->name('send-email');
+            Route::post('/resend/{respondent}', [QsSessionRespondentController::class, 'resend'])->name('resend');
+            Route::get('/available-respondents', [QsSessionRespondentController::class, 'availableRespondents'])->name('available-respondents');
+            Route::get('/check-respondent', [QsSessionRespondentController::class, 'checkRespondentAvailability'])->name('check-respondent');
+        });
+
+        // Reports (Accessible by admin_pemeringkatan, fakultas, prodi)
+        Route::prefix('/reports')->name('reports.')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::get('/legacy-data', [ReportController::class, 'legacyData'])->name('legacy-data');
+            Route::get('/session-overview', [ReportController::class, 'sessionOverview'])->name('session-overview');
+            Route::get('/session-detail/{session}', [ReportController::class, 'sessionDetail'])->name('session-detail');
+            Route::get('/export-legacy', [ReportController::class, 'exportLegacy'])->name('export-legacy');
+            Route::get('/export-session', [ReportController::class, 'exportSession'])->name('export-session');
+        });
+
+        // Directorate Admin only: Responden Bank
+        Route::middleware('role:admin_pemeringkatan')->group(function () {
+            Route::resource('/responden-bank', RespondenBankController::class)->parameters([
+                'responden-bank' => 'responden_bank'
+            ]);
+            Route::post('/responden-bank-import', [RespondenBankController::class, 'import'])->name('responden-bank.import');
+            Route::get('/responden-bank-export', [RespondenBankController::class, 'export'])->name('responden-bank.export');
+        });
+    });
+
+    // Public Consent Routes (no auth)
+    Route::prefix('consent')->name('consent.')->group(function () {
+        Route::get('/already-submitted', function () {
+            return view('consent.already_submitted');
+        })->name('already_submitted');
+
+        Route::get('/thank-you', function () {
+            return view('consent.thank_you');
+        })->name('thank_you');
+
+        Route::get('/expired', function () {
+            return view('consent.expired');
+        })->name('expired');
+
+        Route::get('/{token}', [ConsentController::class, 'show'])->name('show');
+        Route::post('/{token}/agree', [ConsentController::class, 'agree'])->name('agree');
+        Route::post('/{token}/submit-form', [ConsentController::class, 'submitForm'])->name('submit_form');
     });
 
 //exam

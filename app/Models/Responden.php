@@ -9,6 +9,26 @@ class Responden extends Model
 {
     /** @use HasFactory<\Database\Factories\RespondenFactory> */
     use HasFactory;
+
+    protected static function booted()
+    {
+        static::created(function (Responden $responden) {
+            if (!empty($responden->email)) {
+                RespondenBank::firstOrCreate(
+                    ['email' => strtolower(trim($responden->email))],
+                    [
+                        'first_name' => $responden->fullname ?? 'Unknown',
+                        'institution' => $responden->instansi ?? null,
+                        'category' => RespondenBank::normalizeCategory($responden->category),
+                        'phone' => $responden->phone_responden ?? null,
+                        'source' => 'manual',
+                        'source_user_id' => $responden->user_id ?? null,
+                    ]
+                );
+            }
+        });
+    }
+
     protected $fillable = [
         'title',
         'fullname',
