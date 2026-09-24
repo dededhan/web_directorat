@@ -360,12 +360,19 @@
 
                 {{-- Status Filter --}}
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Status Selesai</label>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
                     <select x-model="legacyFilters.status" @change="loadLegacyData(1)"
                             class="w-full px-3 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
                         <option value="all">Semua Status</option>
-                        <option value="done">Selesai (Done / Agreed Sesi)</option>
-                        <option value="belum">Belum Selesai (Pending)</option>
+                        <optgroup label="Status Akhir (Pengisian Form)">
+                            <option value="selesai">Selesai (Form Terisi)</option>
+                            <option value="belum_selesai">Belum Selesai</option>
+                        </optgroup>
+                        <optgroup label="Status Pengiriman Email">
+                            <option value="belum">Belum di-email</option>
+                            <option value="done">Sudah di-email</option>
+                            <option value="dones">Follow up done</option>
+                        </optgroup>
                     </select>
                 </div>
 
@@ -399,9 +406,9 @@
 
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Selesai (Done / Agreed)</p>
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Selesai (Form Terisi)</p>
                     <p class="text-2xl font-bold text-emerald-600 mt-1" x-text="legacyStats.finished"></p>
-                    <p class="text-xs text-gray-500 mt-0.5">Sudah mengisi / setuju</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Sudah mengisi form survey</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-xs">
                     <i class="fas fa-check-circle text-xl"></i>
@@ -410,9 +417,9 @@
 
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Belum Selesai (Pending)</p>
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Belum Selesai</p>
                     <p class="text-2xl font-bold text-amber-500 mt-1" x-text="legacyStats.pending"></p>
-                    <p class="text-xs text-gray-500 mt-0.5">Belum merespon</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Belum mengisi form survey</p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shadow-xs">
                     <i class="fas fa-clock text-xl"></i>
@@ -441,7 +448,7 @@
             <div class="p-5 border-b border-gray-100 flex items-center justify-between">
                 <div>
                     <h2 class="text-base font-bold text-gray-800">Daftar Arsip Responden</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Data calon responden dari tabel legacy dengan indikator status akhir</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Data responden dari tabel legacy dengan indikator status email dan status pengisian form (Status Akhir)</p>
                 </div>
                 <div x-show="loadingLegacy" class="text-teal-600 text-xs font-medium flex items-center gap-1.5">
                     <i class="fas fa-spinner fa-spin"></i> Memuat data...
@@ -457,6 +464,7 @@
                             <th class="px-5 py-3.5">Instansi & Jabatan</th>
                             <th class="px-4 py-3.5 text-center">Fakultas</th>
                             <th class="px-4 py-3.5 text-center">Kategori</th>
+                            <th class="px-4 py-3.5 text-center">Status Email</th>
                             <th class="px-5 py-3.5 text-center">Status Akhir</th>
                             <th class="px-4 py-3.5 text-center">Tahun</th>
                         </tr>
@@ -485,16 +493,38 @@
                                           :class="item.category === 'academic' ? 'bg-indigo-50 text-indigo-700' : 'bg-amber-50 text-amber-700'"
                                           x-text="item.category ? item.category.toUpperCase() : '-'"></span>
                                 </td>
-                                <td class="px-5 py-3.5 text-center">
-                                    <template x-if="item.is_finished == 1 || item.status === 'done'">
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                            <i class="fas fa-check-circle mr-1.5 text-emerald-500"></i>
-                                            Selesai (Done)
+                                <td class="px-4 py-3.5 text-center">
+                                    <template x-if="item.status === 'done'">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                            <i class="fas fa-paper-plane mr-1 text-blue-500 text-[10px]"></i> Sudah di-email
                                         </span>
                                     </template>
-                                    <template x-if="item.is_finished != 1 && item.status !== 'done'">
+                                    <template x-if="item.status === 'dones'">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                            <i class="fas fa-envelope-open-text mr-1 text-indigo-500 text-[10px]"></i> Follow up done
+                                        </span>
+                                    </template>
+                                    <template x-if="item.status === 'clear' || item.status === 'selesai'">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            <i class="fas fa-check mr-1 text-emerald-500 text-[10px]"></i> Selesai
+                                        </span>
+                                    </template>
+                                    <template x-if="!['done', 'dones', 'clear', 'selesai'].includes(item.status)">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                            <i class="fas fa-clock mr-1 text-gray-400 text-[10px]"></i> Belum di-email
+                                        </span>
+                                    </template>
+                                </td>
+                                <td class="px-5 py-3.5 text-center">
+                                    <template x-if="item.is_finished == 1 || item.status === 'clear' || item.status === 'selesai'">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                            <i class="fas fa-check-circle mr-1.5 text-emerald-600"></i>
+                                            Selesai
+                                        </span>
+                                    </template>
+                                    <template x-if="item.is_finished != 1 && item.status !== 'clear' && item.status !== 'selesai'">
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                                            <i class="fas fa-clock mr-1.5 text-amber-500"></i>
+                                            <i class="fas fa-hourglass-half mr-1.5 text-amber-500"></i>
                                             Belum Selesai
                                         </span>
                                     </template>
@@ -506,7 +536,7 @@
                         </template>
 
                         <tr x-show="legacyItems.length === 0 && !loadingLegacy">
-                            <td colspan="7" class="text-center py-10 text-gray-400">
+                            <td colspan="8" class="text-center py-10 text-gray-400">
                                 <i class="fas fa-search text-3xl mb-2 block"></i>
                                 Tidak ada data responden legacy yang sesuai dengan filter.
                             </td>

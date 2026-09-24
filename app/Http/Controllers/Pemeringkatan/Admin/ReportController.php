@@ -112,10 +112,20 @@ class ReportController extends Controller
 
         // Apply status filter if specified
         if ($request->filled('status') && $request->status !== 'all') {
-            if ($request->status === 'done' || $request->status === 'finished') {
+            $statusVal = strtolower(trim($request->status));
+            if (in_array($statusVal, ['selesai', 'clear', 'finished'])) {
                 $query->whereRaw("($isFinishedSubquery) = 1");
-            } elseif ($request->status === 'belum' || $request->status === 'pending') {
+            } elseif (in_array($statusVal, ['belum_selesai', 'unfinished'])) {
                 $query->whereRaw("($isFinishedSubquery) = 0");
+            } elseif ($statusVal === 'done') {
+                $query->where(DB::raw('LOWER(respondens.status)'), 'done');
+            } elseif ($statusVal === 'belum') {
+                $query->where(function($q) {
+                    $q->where(DB::raw('LOWER(respondens.status)'), 'belum')
+                      ->orWhereNull('respondens.status');
+                });
+            } elseif ($statusVal === 'dones') {
+                $query->where(DB::raw('LOWER(respondens.status)'), 'dones');
             }
         }
 
@@ -429,10 +439,20 @@ class ReportController extends Controller
         }
 
         if ($request->filled('status') && $request->status !== 'all') {
-            if ($request->status === 'done' || $request->status === 'finished') {
+            $statusVal = strtolower(trim($request->status));
+            if (in_array($statusVal, ['selesai', 'clear', 'finished'])) {
                 $query->whereRaw("($isFinishedSubquery) = 1");
-            } elseif ($request->status === 'belum' || $request->status === 'pending') {
+            } elseif (in_array($statusVal, ['belum_selesai', 'unfinished'])) {
                 $query->whereRaw("($isFinishedSubquery) = 0");
+            } elseif ($statusVal === 'done') {
+                $query->where(DB::raw('LOWER(respondens.status)'), 'done');
+            } elseif ($statusVal === 'belum') {
+                $query->where(function($q) {
+                    $q->where(DB::raw('LOWER(respondens.status)'), 'belum')
+                      ->orWhereNull('respondens.status');
+                });
+            } elseif ($statusVal === 'dones') {
+                $query->where(DB::raw('LOWER(respondens.status)'), 'dones');
             }
         }
 
@@ -578,21 +598,17 @@ class ReportController extends Controller
             return str_starts_with(strtoupper($name), 'FAKULTAS') ? $name : 'Fakultas - ' . strtoupper($name);
         }
 
-        return $user->name ?: 'Direktorat';
+        return 'Direktorat';
     }
 
     /**
-     * Subquery to determine if a legacy respondent is finished.
+     * Subquery to determine if a legacy respondent is finished (replied/fulfilled form).
+     * Any status except 'clear' / 'selesai' is considered unfinished (belum selesai).
      */
     private function getIsFinishedSubquery(): string
     {
         return "CASE 
-            WHEN respondens.status = 'done' THEN 1 
-            WHEN LOWER(respondens.email) IN (
-                SELECT LOWER(rb.email) FROM responden_bank rb 
-                JOIN qs_session_respondents qsr ON rb.id = qsr.responden_bank_id 
-                WHERE qsr.consent_status = 'agreed'
-            ) THEN 1 
+            WHEN LOWER(TRIM(respondens.status)) IN ('clear', 'selesai') THEN 1 
             ELSE 0 
         END";
     }

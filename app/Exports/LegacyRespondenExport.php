@@ -46,7 +46,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             'No. Telepon',
             'Fakultas',
             'Kategori',
-            'Status Database',
+            'Status Email',
             'Status Akhir',
             'Dosen Pengusul',
             'Tahun Dibuat',
@@ -57,8 +57,16 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
     {
         $this->counter++;
 
-        $isFinished = (bool) ($row->is_finished ?? ($row->status === 'done'));
-        $statusAkhir = $isFinished ? 'Selesai (Done / Agreed)' : 'Belum Selesai';
+        $st = strtolower(trim($row->status ?? 'belum'));
+        $statusEmail = match ($st) {
+            'done' => 'Sudah di-email',
+            'dones' => 'Follow up done',
+            'clear', 'selesai' => 'Selesai',
+            default => 'Belum di-email',
+        };
+
+        $isFinished = (bool) ($row->is_finished ?? in_array($st, ['clear', 'selesai']));
+        $statusAkhir = $isFinished ? 'Selesai' : 'Belum Selesai';
         $tahun = $row->created_at ? $row->created_at->format('Y') : '-';
 
         return [
@@ -71,7 +79,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             $row->phone_responden ?? '-',
             strtoupper($row->fakultas ?? '-'),
             ucfirst($row->category ?? '-'),
-            ucfirst($row->status ?? 'belum'),
+            $statusEmail,
             $statusAkhir,
             $row->nama_dosen_pengusul ?? '-',
             $tahun,
