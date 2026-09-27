@@ -19,27 +19,36 @@ class SessionConsentMail extends Mailable
     public RespondenBank $bankRespondent;
     public QsSessionRespondent $sessionRespondent;
     public QsSession $session;
+    public string $languageMode;
 
     public function __construct(
         RespondenBank $bankRespondent,
         QsSessionRespondent $sessionRespondent,
-        QsSession $session
+        QsSession $session,
+        ?string $languageMode = null
     ) {
         $this->bankRespondent = $bankRespondent;
         $this->sessionRespondent = $sessionRespondent;
         $this->session = $session;
+        $this->languageMode = in_array($languageMode, ['bilingual', 'en', 'id']) 
+            ? $languageMode 
+            : $session->getLanguageMode();
     }
 
     public function envelope(): Envelope
     {
         $normalizedCategory = $this->sessionRespondent->category ?? 'employee';
-        $template = EmailTemplate::getTemplate($normalizedCategory, 'en');
+        $template = $this->languageMode === 'id'
+            ? $this->resolveTemplate($normalizedCategory, 'id')
+            : $this->resolveTemplate($normalizedCategory, 'en');
 
         if ($template) {
-            $subject = $template->subject;
+            $subject = is_array($template) ? ($template['subject'] ?? '') : $template->subject;
         } else {
             $categoryName = ucfirst($normalizedCategory);
-            $subject = "Consent Letter for {$categoryName} Respondent Universitas Negeri Jakarta QS World University Ranking";
+            $subject = $this->languageMode === 'id'
+                ? "Surat Persetujuan untuk Responden {$categoryName} Universitas Negeri Jakarta QS World University Ranking"
+                : "Consent Letter for {$categoryName} Respondent Universitas Negeri Jakarta QS World University Ranking";
         }
 
         return new Envelope(subject: $subject);
@@ -51,9 +60,8 @@ class SessionConsentMail extends Mailable
         $displayTitle = $this->normalizeTitle($this->bankRespondent->title);
         $consentLink = route('consent.show', ['token' => $this->sessionRespondent->token]);
 
-        // Get templates from database
-        $templateEn = EmailTemplate::getTemplate($normalizedCategory, 'en');
-        $templateId = EmailTemplate::getTemplate($normalizedCategory, 'id');
+        $templateEn = $this->resolveTemplate($normalizedCategory, 'en');
+        $templateId = $this->resolveTemplate($normalizedCategory, 'id');
 
         return new Content(
             view: 'emails.session-consent-invitation',
@@ -66,8 +74,22 @@ class SessionConsentMail extends Mailable
                 'displayTitle' => $displayTitle,
                 'templateEn' => $templateEn,
                 'templateId' => $templateId,
+                'languageMode' => $this->languageMode,
             ]
         );
+    }
+
+    /**
+     * Resolve template from session override or database.
+     */
+    public function resolveTemplate(string $category, string $lang)
+    {
+        $custom = $this->session->getCustomTemplate($category, $lang);
+        if ($custom) {
+            return (object) $custom;
+        }
+
+        return EmailTemplate::getTemplate($category, $lang);
     }
 
     private function normalizeTitle(?string $title): string

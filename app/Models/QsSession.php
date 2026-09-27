@@ -16,6 +16,7 @@ class QsSession extends Model
         'custom_fields_schema',
         'academic_form_schema',
         'employee_form_schema',
+        'email_settings',
         'status',
         'start_date',
         'end_date',
@@ -28,7 +29,38 @@ class QsSession extends Model
         'custom_fields_schema' => 'array',
         'academic_form_schema' => 'array',
         'employee_form_schema' => 'array',
+        'email_settings' => 'array',
     ];
+
+    /**
+     * Get email settings for this session.
+     */
+    public function getEmailSettings(): array
+    {
+        return is_array($this->email_settings) ? $this->email_settings : [];
+    }
+
+    /**
+     * Get configured language mode ('bilingual', 'en', 'id').
+     */
+    public function getLanguageMode(): string
+    {
+        $settings = $this->getEmailSettings();
+        return $settings['language_mode'] ?? 'bilingual';
+    }
+
+    /**
+     * Get custom template override for category and language, or null if not overridden.
+     */
+    public function getCustomTemplate(string $category, string $language): ?array
+    {
+        $settings = $this->getEmailSettings();
+        $key = "{$category}_{$language}";
+        if (!empty($settings['templates'][$key])) {
+            return $settings['templates'][$key];
+        }
+        return null;
+    }
 
     /**
      * Check if session uses form-based mode.

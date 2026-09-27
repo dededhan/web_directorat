@@ -38,16 +38,32 @@ class EmailTemplate extends Model
     /**
      * Replace placeholders in template text with actual values.
      *
-     * @param string $text
+     * @param string|null $text
      * @param array $data
      * @return string
      */
-    public function replacePlaceholders(string $text, array $data): string
+    public function replacePlaceholders(?string $text, array $data): string
     {
+        return self::renderText($text, $data);
+    }
+
+    /**
+     * Static helper to replace placeholders in any text.
+     *
+     * @param string|null $text
+     * @param array $data
+     * @return string
+     */
+    public static function renderText(?string $text, array $data): string
+    {
+        if (empty($text)) {
+            return '';
+        }
+
         $placeholders = [
             '{title}' => $data['title'] ?? '',
             '{fullname}' => $data['fullname'] ?? '',
-            '{surveyLink}' => $data['surveyLink'] ?? '#',
+            '{surveyLink}' => $data['surveyLink'] ?? ($data['consentLink'] ?? '#'),
         ];
 
         return str_replace(array_keys($placeholders), array_values($placeholders), $text);

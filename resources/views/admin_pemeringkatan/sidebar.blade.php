@@ -121,7 +121,7 @@
         </div>
 
         {{-- QS Campaign & Responden Bank --}}
-        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.qs-sessions.*') || request()->routeIs('admin_pemeringkatan.responden-bank.*') || request()->routeIs('admin_pemeringkatan.reports.*') ? 'true' : 'false' }} }">
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.qs-sessions.*') || request()->routeIs('admin_pemeringkatan.responden-bank.*') || request()->routeIs('admin_pemeringkatan.reports.*') || request()->routeIs('admin_pemeringkatan.email.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
                 <div class="flex items-center">
@@ -146,11 +146,18 @@
                     <i class="fas fa-chart-pie fa-xs mr-2"></i>
                     Laporan & Analitik
                 </a>
+                @if(Auth::user()->isDirectorateAdmin())
+                <a href="{{ route('admin_pemeringkatan.email.index') }}" 
+                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.email.*') ? 'bg-teal-600 !text-white' : '' }}">
+                    <i class="fas fa-envelope-open-text fa-xs mr-2"></i>
+                    Email Templates
+                </a>
+                @endif
             </div>
         </div>
 
         {{-- Data Tables Dropdown --}}
-        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.responden.*') || request()->routeIs('admin_pemeringkatan.qsresponden.*') || request()->routeIs('admin_pemeringkatan.email.*') ? 'true' : 'false' }} }">
+        <div x-data="{ open: {{ request()->routeIs('admin_pemeringkatan.responden.*') || request()->routeIs('admin_pemeringkatan.qsresponden.*') ? 'true' : 'false' }} }">
             <button @click="open = !open" 
                     class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg hover:bg-gray-700 hover:text-white transition-colors duration-200 focus:outline-none">
                 <div class="flex items-center">
@@ -168,10 +175,6 @@
                 <a href="{{ route('admin_pemeringkatan.qsresponden.index') }}" 
                    class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.qsresponden.*') ? 'bg-teal-600 !text-white' : '' }}">
                     QS Responden
-                </a>
-                <a href="{{ route('admin_pemeringkatan.email.index') }}" 
-                   class="block px-4 py-2 text-sm rounded-lg hover:bg-gray-700 hover:text-white {{ request()->routeIs('admin_pemeringkatan.email.*') ? 'bg-teal-600 !text-white' : '' }}">
-                    Email Templates
                 </a>
 
                 <a href="{{ route('admin_pemeringkatan.responden.graph') }}" 

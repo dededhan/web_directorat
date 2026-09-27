@@ -444,8 +444,10 @@ class QsSessionRespondentController extends Controller
             'respondent_ids' => 'nullable|array',
             'respondent_ids.*' => 'exists:qs_session_respondents,id',
             'send_all' => 'nullable|boolean',
+            'language_mode' => 'nullable|in:bilingual,en,id',
         ]);
 
+        $languageMode = $validated['language_mode'] ?? $session->getLanguageMode();
         $query = $session->sessionRespondents()->with('bankRespondent');
 
         if (!empty($validated['send_all'])) {
@@ -475,7 +477,7 @@ class QsSessionRespondentController extends Controller
 
             try {
                 Mail::to($bank->email)->send(
-                    new SessionConsentMail($bank, $sessionRespondent, $session)
+                    new SessionConsentMail($bank, $sessionRespondent, $session, $languageMode)
                 );
 
                 $sessionRespondent->update([
@@ -503,7 +505,7 @@ class QsSessionRespondentController extends Controller
     /**
      * Re-send email to a specific respondent.
      */
-    public function resend(QsSession $session, QsSessionRespondent $respondent)
+    public function resend(Request $request, QsSession $session, QsSessionRespondent $respondent)
     {
         if (!Auth::user()->isDirectorateAdmin()) {
             abort(403, 'Hanya Admin Direktorat yang dapat mengirim email ke responden.');
@@ -524,9 +526,11 @@ class QsSessionRespondentController extends Controller
             $respondent->refresh();
         }
 
+        $languageMode = $request->input('language_mode', $session->getLanguageMode());
+
         try {
             Mail::to($bank->email)->send(
-                new SessionConsentMail($bank, $respondent, $session)
+                new SessionConsentMail($bank, $respondent, $session, $languageMode)
             );
 
             $respondent->update([
@@ -685,6 +689,79 @@ class QsSessionRespondentController extends Controller
             'schema' => $schema,
             'answers' => $respondent->form_answers ?? [],
             'submitted_at' => $respondent->form_submitted_at ? $respondent->form_submitted_at->format('d M Y H:i:s') : null,
+        ]);
+    }
+
+    /**
+     * Update session email settings / custom templates.
+     */
+    public function updateEmailSettings(Request $request, QsSession $session)
+    {
+        if (!Auth::user()->isDirectorateAdmin()) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        if ($request->has('reset_to_default')) {
+            $session->update(['email_settings' => null]);
+            return redirect()->back()->with('success', 'Pengaturan template email sesi berhasil dikembalikan ke default global.');
+        }
+
+        $validated = $request->validate([
+            'language_mode' => 'required|in:bilingual,en,id',
+            'templates' => 'nullable|array',
+        ]);
+
+        $currentSettings = $session->getEmailSettings();
+        $currentSettings['language_mode'] = $validated['language_mode'];
+        if (isset($validated['templates'])) {
+            $currentSettings['templates'] = $validated['templates'];
+        }
+
+        $session->update(['email_settings' => $currentSettings]);
+
+        return redirect()->back()->with('success', 'Pengaturan template email sesi berhasil diperbarui.');
+    }
+
+    /**
+     * Preview email for this session.
+     */
+    public function previewEmail(Request $request, QsSession $session)
+    {
+        $category = $request->query('category', 'academic');
+        $languageMode = $request->query('mode', $session->getLanguageMode());
+
+        $dummyBank = (object)[
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'title' => 'Prof. Dr.'
+        ];
+
+        $dummySessionRespondent = (object)[
+            'category' => $category,
+            'token' => 'session-preview-token',
+        ];
+
+        // Resolve templates using session overrides or global templates
+        $globalEn = \App\Models\EmailTemplate::getTemplate($category, 'en');
+        $globalId = \App\Models\EmailTemplate::getTemplate($category, 'id');
+
+        $customEn = $session->getCustomTemplate($category, 'en');
+        $customId = $session->getCustomTemplate($category, 'id');
+
+        $templateEn = (object)($customEn ?: ($globalEn ? $globalEn->toArray() : []));
+        $templateId = (object)($customId ?: ($globalId ? $globalId->toArray() : []));
+
+        return view('emails.session-consent-invitation', [
+            'bankRespondent' => $dummyBank,
+            'sessionRespondent' => $dummySessionRespondent,
+            'session' => $session,
+            'consentLink' => 'https://unj.ac.id/consent/preview-session',
+            'normalizedCategory' => $category,
+            'displayTitle' => 'Prof. Dr.',
+            'templateEn' => $templateEn,
+            'templateId' => $templateId,
+            'languageMode' => $languageMode,
         ]);
     }
 }

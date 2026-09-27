@@ -272,6 +272,8 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             ->name('email.reset');
         Route::get('/email/{id}/preview', [AdminRespondenEmailController::class, 'preview'])
             ->name('email.preview');
+        Route::post('/email/{id}/send-test', [AdminRespondenEmailController::class, 'sendTest'])
+            ->name('email.send-test');
 
         Route::resource('/qsresponden', RespondenAnswerController::class)->except(['show']);
         Route::get('/qsresponden-export', [RespondenAnswerController::class, 'export'])
@@ -343,6 +345,8 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::post('/resend/{respondent}', [QsSessionRespondentController::class, 'resend'])->name('resend');
             Route::get('/available-respondents', [QsSessionRespondentController::class, 'availableRespondents'])->name('available-respondents');
             Route::get('/check-respondent', [QsSessionRespondentController::class, 'checkRespondentAvailability'])->name('check-respondent');
+            Route::post('/email-settings', [QsSessionRespondentController::class, 'updateEmailSettings'])->name('email-settings.update');
+            Route::get('/preview-email', [QsSessionRespondentController::class, 'previewEmail'])->name('preview-email');
         });
 
         // Reports (Accessible by admin_pemeringkatan, fakultas, prodi)

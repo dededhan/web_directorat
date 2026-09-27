@@ -1144,7 +1144,7 @@
          class="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div @click.away="openEmailModal = false" 
              class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-lg overflow-hidden">
-            <div class="px-6 py-4 bg-blue-600 text-white flex items-center justify-between">
+            <div class="px-6 py-4 bg-teal-700 text-white flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-paper-plane text-lg"></i>
                     <h3 class="font-bold text-lg">Kirim Email Permohonan Consent</h3>
@@ -1158,13 +1158,37 @@
                 @csrf
                 <div class="p-6 space-y-4">
                     <p class="text-sm text-gray-600">
-                        Email undangan persetujuan (consent) akan dikirimkan ke responden dengan tautan persetujuan 1-klik (tanpa formulir pengisian ulang).
+                        Email permohonan persetujuan (consent) akan dikirimkan ke responden secara resmi dari Kantor Pemeringkatan UNJ.
                     </p>
 
+                    <!-- Language Mode Selection -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            <i class="fas fa-language text-teal-600 mr-1"></i> Bahasa Pengiriman Email
+                        </label>
+                        <select name="language_mode" x-model="emailLanguageMode" 
+                                class="w-full text-xs font-semibold px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
+                            <option value="bilingual">Bilingual (English + Indonesia) - Rekomendasi</option>
+                            <option value="en">Hanya English (EN Only)</option>
+                            <option value="id">Hanya Indonesia (ID Only)</option>
+                        </select>
+                        <div class="flex items-center justify-between pt-1 text-[11px] text-slate-500">
+                            <span x-show="emailLanguageMode === 'bilingual'">Responden menerima teks bahasa Inggris & Indonesia.</span>
+                            <span x-show="emailLanguageMode === 'en'">Responden hanya menerima teks dalam bahasa Inggris.</span>
+                            <span x-show="emailLanguageMode === 'id'">Responden hanya menerima teks dalam bahasa Indonesia.</span>
+                            
+                            <button type="button" @click="openSessionPreview()" 
+                                    class="text-teal-600 hover:text-teal-800 font-bold flex items-center gap-1">
+                                <i class="fas fa-eye"></i> Preview Email
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Target Recipient Selection -->
                     <div class="space-y-3">
                         <label class="flex items-start p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition"
-                               :class="emailSendMode === 'selected' ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200'">
-                            <input type="radio" name="email_mode" value="selected" x-model="emailSendMode" class="mt-0.5 text-blue-600 focus:ring-blue-500">
+                               :class="emailSendMode === 'selected' ? 'border-teal-500 bg-teal-50/40' : 'border-gray-200'">
+                            <input type="radio" name="email_mode" value="selected" x-model="emailSendMode" class="mt-0.5 text-teal-600 focus:ring-teal-500">
                             <div class="ml-2.5">
                                 <div class="text-sm font-semibold text-gray-800">
                                     Kirim ke responden terpilih saja
@@ -1174,8 +1198,8 @@
                         </label>
 
                         <label class="flex items-start p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition"
-                               :class="emailSendMode === 'all_unsent' ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200'">
-                            <input type="radio" name="email_mode" value="all_unsent" x-model="emailSendMode" class="mt-0.5 text-blue-600 focus:ring-blue-500">
+                               :class="emailSendMode === 'all_unsent' ? 'border-teal-500 bg-teal-50/40' : 'border-gray-200'">
+                            <input type="radio" name="email_mode" value="all_unsent" x-model="emailSendMode" class="mt-0.5 text-teal-600 focus:ring-teal-500">
                             <div class="ml-2.5">
                                 <div class="text-sm font-semibold text-gray-800">
                                     Kirim massal ke SEMUA yang belum pernah di-email
@@ -1197,6 +1221,20 @@
                             </template>
                         </div>
                     </template>
+
+                    <!-- Session Email Template Customization Link / Button -->
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500">
+                            Template: 
+                            <strong class="text-slate-700">
+                                {{ !empty($qs_session->getEmailSettings()['templates']) ? 'Custom Sesi' : 'Default Global' }}
+                            </strong>
+                        </span>
+                        <button type="button" @click="openEmailModal = false; openSessionEmailModal = true" 
+                                class="text-teal-600 hover:text-teal-800 font-bold flex items-center gap-1">
+                            <i class="fas fa-sliders-h"></i> Atur Template Sesi Ini
+                        </button>
+                    </div>
                 </div>
 
                 <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end space-x-3">
@@ -1206,9 +1244,126 @@
                     </button>
                     <button type="submit" 
                             :disabled="emailSendMode === 'selected' && selectedIds.length === 0"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg shadow-sm transition">
+                            class="px-4 py-2 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg shadow-sm transition">
                         <i class="fas fa-paper-plane mr-1"></i> Mulai Kirim Email
                     </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- MODAL 6B: Session Email Preview Modal --}}
+    <div x-show="openSessionEmailPreviewModal" x-cloak 
+         class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div @click.away="openSessionEmailPreviewModal = false" 
+             class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden">
+            <div class="px-6 py-4 bg-teal-800 text-white flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-eye text-teal-300"></i>
+                    <h3 class="font-bold text-base">Preview Email: {{ $qs_session->name }}</h3>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Category Switcher -->
+                    <div class="flex items-center bg-teal-900/60 rounded-lg p-1 text-xs">
+                        <button type="button" @click="previewCategory = 'academic'; refreshSessionPreviewFrame()" 
+                                :class="previewCategory === 'academic' ? 'bg-teal-600 text-white font-bold' : 'text-teal-200'"
+                                class="px-2.5 py-1 rounded transition">Academic</button>
+                        <button type="button" @click="previewCategory = 'employee'; refreshSessionPreviewFrame()" 
+                                :class="previewCategory === 'employee' ? 'bg-teal-600 text-white font-bold' : 'text-teal-200'"
+                                class="px-2.5 py-1 rounded transition">Employer</button>
+                    </div>
+
+                    <!-- Language Switcher -->
+                    <div class="flex items-center bg-teal-900/60 rounded-lg p-1 text-xs">
+                        <button type="button" @click="emailLanguageMode = 'bilingual'; refreshSessionPreviewFrame()" 
+                                :class="emailLanguageMode === 'bilingual' ? 'bg-teal-600 text-white font-bold' : 'text-teal-200'"
+                                class="px-2 py-1 rounded transition">Bilingual</button>
+                        <button type="button" @click="emailLanguageMode = 'en'; refreshSessionPreviewFrame()" 
+                                :class="emailLanguageMode === 'en' ? 'bg-teal-600 text-white font-bold' : 'text-teal-200'"
+                                class="px-2 py-1 rounded transition">EN</button>
+                        <button type="button" @click="emailLanguageMode = 'id'; refreshSessionPreviewFrame()" 
+                                :class="emailLanguageMode === 'id' ? 'bg-teal-600 text-white font-bold' : 'text-teal-200'"
+                                class="px-2 py-1 rounded transition">ID</button>
+                    </div>
+
+                    <button @click="openSessionEmailPreviewModal = false" class="text-white/80 hover:text-white text-lg">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 bg-slate-100 p-4 overflow-hidden">
+                <iframe id="sessionPreviewIframe" src="about:blank" class="w-full h-full rounded-xl border border-slate-300 bg-white"></iframe>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL 6C: Session Email Template Customization --}}
+    <div x-show="openSessionEmailModal" x-cloak 
+         class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div @click.away="openSessionEmailModal = false" 
+             class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden animate-fade-in">
+            <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-envelope-open-text text-teal-400"></i>
+                    <h3 class="font-bold text-base">Kustomisasi Email Khusus Sesi Ini</h3>
+                </div>
+                <button @click="openSessionEmailModal = false" class="text-white/80 hover:text-white text-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form action="{{ route('admin_pemeringkatan.qs-sessions.email-settings.update', $qs_session) }}" method="POST" class="p-6 space-y-5">
+                @csrf
+                
+                <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 text-xs text-teal-800">
+                    <p class="font-semibold mb-1"><i class="fas fa-info-circle mr-1"></i> Informasi Template Sesi:</p>
+                    <p>Secara default, sesi ini menggunakan template email global. Anda dapat mengatur bahasa default sesi atau mengubah subjek/salam khusus untuk kampanye sesi ini.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Mode Bahasa Pengiriman Bawaan Sesi
+                    </label>
+                    <select name="language_mode" x-model="emailLanguageMode" 
+                            class="w-full text-xs font-semibold px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
+                        <option value="bilingual">Bilingual (English + Indonesia) - Rekomendasi</option>
+                        <option value="en">Hanya English (EN Only)</option>
+                        <option value="id">Hanya Indonesia (ID Only)</option>
+                    </select>
+                </div>
+
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            Template Global vs Kustom
+                        </span>
+                        <a href="{{ route('admin_pemeringkatan.email.index') }}" target="_blank" class="text-xs text-teal-600 hover:text-teal-800 font-bold flex items-center gap-1">
+                            <i class="fas fa-external-link-alt"></i> Kelola Template Global
+                        </a>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Jika Anda ingin kembali menggunakan format standar universitas tanpa pengaturan khusus pada sesi ini, gunakan tombol reset di bawah.
+                    </p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <button type="submit" name="reset_to_default" value="1" 
+                            onclick="return confirm('Kembalikan pengaturan email sesi ke template default global?')"
+                            class="px-4 py-2 border border-rose-300 text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold transition">
+                        <i class="fas fa-undo mr-1"></i> Reset ke Default Global
+                    </button>
+
+                    <div class="flex items-center gap-3">
+                        <button @click="openSessionEmailModal = false" type="button" 
+                                class="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-50 transition">
+                            Tutup
+                        </button>
+                        <button type="submit" 
+                                class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold transition shadow-sm">
+                            <i class="fas fa-save mr-1.5"></i> Simpan Pengaturan
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -1597,6 +1752,22 @@ function sessionManager() {
         openAssignModal: false,
         openImportModal: false,
         openEmailModal: false,
+        openSessionEmailModal: false,
+        openSessionEmailPreviewModal: false,
+        emailLanguageMode: '{{ $qs_session->getLanguageMode() }}',
+        previewCategory: 'academic',
+        openSessionPreview() {
+            this.openSessionEmailPreviewModal = true;
+            this.$nextTick(() => {
+                this.refreshSessionPreviewFrame();
+            });
+        },
+        refreshSessionPreviewFrame() {
+            const frame = document.getElementById('sessionPreviewIframe');
+            if (frame) {
+                frame.src = `{{ route('admin_pemeringkatan.qs-sessions.preview-email', $qs_session) }}?category=${this.previewCategory}&mode=${this.emailLanguageMode}&t=${Date.now()}`;
+            }
+        },
         addForm: {
             email: '',
             phone: '',
