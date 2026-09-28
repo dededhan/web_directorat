@@ -267,16 +267,9 @@
                         </td>
                     </tr>
 
-                    <!-- Institutional Safe Sender Footer -->
+                    <!-- Footer -->
                     <tr>
-                        <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 22px 30px; text-align: center;">
-                            <p style="margin: 0 0 6px 0; font-size: 12px; color: #64748b; line-height: 1.5;">
-                                Official Email from <strong>Kantor Pemeringkatan & Reputasi Internasional</strong><br>
-                                Universitas Negeri Jakarta (UNJ) &bull; Gedung Rektorat UNJ, Rawamangun, Jakarta Timur
-                            </p>
-                            <p style="margin: 0; font-size: 11px; color: #94a3b8;">
-                                Undangan resmi QS akan dikirimkan melalui <strong>rankings@qs.com</strong>. Harap tambahkan ke safe sender list.
-                            </p>
+                        <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 30px; text-align: center;">
                         </td>
                     </tr>
 
