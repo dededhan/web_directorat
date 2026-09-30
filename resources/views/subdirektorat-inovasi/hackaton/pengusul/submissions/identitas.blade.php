@@ -129,11 +129,15 @@
                     </p>
                 </div>
 
-                @if (($currentCount ?? $submission->members->count()) < ($maxAnggota ?? ($submission->session?->max_anggota ?? 4)))
+                @if ($submission->user_id === auth()->id() && ($currentCount ?? $submission->members->count()) < ($maxAnggota ?? ($submission->session?->max_anggota ?? 4)))
                     <button type="button" @click="showAddMemberForm = !showAddMemberForm"
                         class="inline-flex items-center px-4 py-2 bg-gray-900 text-white font-bold text-xs rounded-xl hover:bg-gray-800 transition">
                         <i class="fas fa-user-plus mr-1.5"></i> Tambah Anggota
                     </button>
+                @elseif ($submission->user_id !== auth()->id())
+                    <span class="text-[11px] text-gray-500 italic bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+                        <i class="fas fa-lock text-[10px] mr-1 text-gray-400"></i> Hanya Ketua Tim yang dapat menambah anggota
+                    </span>
                 @endif
             </div>
 
@@ -260,7 +264,7 @@
                                 <i class="{{ $badge['icon'] }} mr-1"></i> {{ $badge['label'] }}
                             </span>
 
-                            @if ($member->peran !== 'Ketua' && $member->approval_status !== 'approved')
+                            @if ($submission->user_id === auth()->id() && $member->peran !== 'Ketua' && $member->approval_status !== 'approved')
                                 <form action="{{ route('hackaton.members.destroy', [$submission, $member]) }}" method="POST" class="inline" onsubmit="return confirm('Hapus anggota ini dari tim?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="text-rose-500 hover:text-rose-700 p-1" title="Hapus Anggota">

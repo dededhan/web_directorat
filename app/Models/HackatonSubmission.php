@@ -105,4 +105,51 @@ class HackatonSubmission extends Model
             && filled($this->identitas->bidang_utama_produk)
             && $this->members()->where('peran', '!=', 'Ketua')->count() >= 1;
     }
+
+    /**
+     * Check if a user is the owner (Ketua) or an active member of this submission.
+     */
+    public function canUserEdit(?int $userId = null): bool
+    {
+        $userId = $userId ?: auth()->id();
+        if (!$userId) {
+            return false;
+        }
+
+        // Owner (Ketua pengusul)
+        if ($this->user_id === $userId) {
+            return true;
+        }
+
+        // Active / approved team member
+        return $this->members()
+            ->where('user_id', $userId)
+            ->whereIn('approval_status', ['approved', 'not_required'])
+            ->exists();
+    }
+
+    /**
+     * Check if a user can view this submission.
+     */
+    public function canUserView(?int $userId = null): bool
+    {
+        $userId = $userId ?: auth()->id();
+        if (!$userId) {
+            return false;
+        }
+
+        if ($this->user_id === $userId) {
+            return true;
+        }
+
+        if ($this->members()->where('user_id', $userId)->exists()) {
+            return true;
+        }
+
+        if ($this->reviewers()->where('users.id', $userId)->exists()) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -247,11 +247,16 @@ class ParticipantDashboardController extends Controller
     }
 
     /**
-     * Show submission read-only for team member.
+     * Show submission for team member or reviewer.
      */
     public function showSubmission(HackatonSubmission $submission)
     {
         $user = Auth::user();
+
+        // If the user has edit rights (Ketua or approved Anggota), direct them to the interactive submission dashboard
+        if ($submission->canUserEdit($user->id)) {
+            return redirect()->route('hackaton.submissions.show', $submission);
+        }
 
         // Must be a member or reviewer
         $isMember = $submission->members()->where('user_id', $user->id)->exists();
@@ -278,11 +283,17 @@ class ParticipantDashboardController extends Controller
     }
 
     /**
-     * Show tahap read-only for team member.
+     * Show tahap read-only for team member or reviewer.
      */
     public function showTahap(HackatonSubmission $submission, $tahapId)
     {
         $user = Auth::user();
+
+        // If the user has edit rights, direct them to the editable tahap form
+        if ($submission->canUserEdit($user->id)) {
+            return redirect()->route('hackaton.submissions.tahap', [$submission, $tahapId]);
+        }
+
         $isMember = $submission->members()->where('user_id', $user->id)->exists();
         $isReviewer = $submission->reviewers()->where('users.id', $user->id)->exists();
 

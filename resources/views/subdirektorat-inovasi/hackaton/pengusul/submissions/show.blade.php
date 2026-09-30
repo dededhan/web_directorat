@@ -8,14 +8,27 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <nav class="flex items-center gap-2 text-xs text-gray-500 mb-1">
-                    <a href="{{ route('hackaton.submissions.index') }}" class="hover:text-amber-600">Proposal Saya</a>
+                    @if ($submission->user_id === auth()->id())
+                        <a href="{{ route('hackaton.submissions.index') }}" class="hover:text-amber-600">Proposal Saya</a>
+                    @else
+                        <a href="{{ route('hackaton.members.team_index') }}" class="hover:text-amber-600">Proposal Tim Lain</a>
+                    @endif
                     <i class="fas fa-chevron-right text-[10px]"></i>
                     <span class="text-gray-800 font-medium">{{ Str::limit($submission->identitas?->nama_produk ?? 'Detail', 30) }}</span>
                 </nav>
-                <h1 class="text-2xl font-bold text-gray-900">
-                    {{ $submission->identitas?->nama_produk ?? 'Proposal: ' . $submission->session->nama_sesi }}
-                </h1>
-                <p class="mt-1 text-xs text-gray-500">Sesi: <strong>{{ $submission->session->nama_sesi }}</strong></p>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        {{ $submission->identitas?->nama_produk ?? 'Proposal: ' . $submission->session->nama_sesi }}
+                    </h1>
+                    @if ($submission->user_id !== auth()->id())
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-900 border border-purple-200">
+                            <i class="fas fa-users mr-1"></i> Anggota Tim (Akses Edit Kolaboratif)
+                        </span>
+                    @endif
+                </div>
+                <p class="mt-1 text-xs text-gray-500">
+                    Sesi: <strong>{{ $submission->session->nama_sesi }}</strong> • Ketua Tim: <strong>{{ $submission->user?->name }}</strong>
+                </p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <a href="{{ route('hackaton.submissions.progress_logs.index', $submission) }}" class="inline-flex items-center px-4 py-2 bg-black hover:bg-emerald-800 text-xs font-bold rounded-xl text-white transition shadow-sm">
@@ -27,7 +40,7 @@
                 <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}" class="inline-flex items-center px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-xs font-bold rounded-xl text-white transition shadow-sm border border-indigo-800">
                     <i class="fas fa-file-contract mr-1.5 text-sm"></i> Pakta Integritas
                 </a>
-                <a href="{{ route('hackaton.submissions.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-xs font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition shadow-sm">
+                <a href="{{ $submission->user_id === auth()->id() ? route('hackaton.submissions.index') : route('hackaton.members.team_index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-xs font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition shadow-sm">
                     <i class="fas fa-arrow-left mr-1.5"></i> Kembali
                 </a>
             </div>
@@ -245,14 +258,27 @@
                         @endif
 
                         {{-- Action Button --}}
-                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
-                            <span class="text-xs text-gray-500">
-                                @if ($st->submitted_at)
-                                    Disubmit: {{ $st->submitted_at->format('d M Y, H:i') }}
-                                @else
-                                    Status: Belum disubmit
+                        <div class="pt-3 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-xs text-gray-500">
+                                    @if ($st->submitted_at)
+                                        Disubmit: {{ $st->submitted_at->format('d M Y, H:i') }}
+                                    @else
+                                        Status: Belum disubmit
+                                    @endif
+                                </span>
+                                @if (!$isLocked && $st->isEditable())
+                                    @if ($st->fields_completion_percentage < 100)
+                                        <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                                            <i class="fas fa-exclamation-circle text-[9px] mr-0.5"></i> {{ $st->total_fields_count - $st->filled_fields_count }} kolom belum lengkap
+                                        </span>
+                                    @else
+                                        <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                            <i class="fas fa-check text-[9px] mr-0.5"></i> Siap Disubmit
+                                        </span>
+                                    @endif
                                 @endif
-                            </span>
+                            </div>
 
                             @if (!$isLocked)
                                 @if ($st->isEditable())

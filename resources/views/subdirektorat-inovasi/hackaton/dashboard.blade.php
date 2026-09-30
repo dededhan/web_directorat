@@ -311,8 +311,8 @@
                                     @endforeach
                                 </div>
 
-                                <a href="{{ route('hackaton.team.show', $sub) }}" class="inline-flex items-center px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl text-xs transition shadow">
-                                    Lihat Berkas <i class="fas fa-arrow-right ml-1.5"></i>
+                                <a href="{{ route('hackaton.submissions.show', $sub) }}" class="inline-flex items-center px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl text-xs transition shadow">
+                                    Buka & Kelola Berkas <i class="fas fa-arrow-right ml-1.5"></i>
                                 </a>
                             </div>
                         </div>

@@ -12,11 +12,23 @@ use Illuminate\Support\Facades\Auth;
 class MemberController extends Controller
 {
     /**
+     * Authorize that the current user is Ketua (or Admin).
+     * Only Ketua Tim can manage team members.
+     */
+    private function authorizeKetua(HackatonSubmission $submission): void
+    {
+        $user = Auth::user();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+
+        abort_unless($submission->user_id === $user->id || $isAdmin, 403, 'Hanya Ketua Tim yang dapat mengelola dan menambah anggota baru.');
+    }
+
+    /**
      * Add a team member.
      */
     public function store(Request $request, HackatonSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeKetua($submission);
 
         $tipeOptions = implode(',', HackatonSubmissionMember::TIPE_OPTIONS);
         $peranIcOptions = implode(',', HackatonSubmissionMember::PERAN_IC_OPTIONS);
@@ -84,7 +96,7 @@ class MemberController extends Controller
      */
     public function update(Request $request, HackatonSubmission $submission, HackatonSubmissionMember $member)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeKetua($submission);
         abort_if($member->hackaton_submission_id !== $submission->id, 404);
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat diubah.');
         abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat diubah oleh Admin.');
@@ -109,7 +121,7 @@ class MemberController extends Controller
      */
     public function destroy(HackatonSubmission $submission, HackatonSubmissionMember $member)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeKetua($submission);
         abort_if($member->hackaton_submission_id !== $submission->id, 404);
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat dihapus.');
         abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat dihapus oleh Admin.');

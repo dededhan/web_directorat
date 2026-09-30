@@ -421,7 +421,7 @@ class PengusulController extends Controller
 
     private function ensureProgressLogOwner(HackatonSubmission $submission): void
     {
-        abort_if($submission->user_id !== Auth::id(), 403, 'Hanya Ketua Tim yang dapat mengelola logbook.');
+        $this->authorizeEdit($submission);
     }
 
     private function ensureProgressLogBelongsToSubmission(HackatonSubmission $submission, HackatonProgressLog $progressLog): void
@@ -782,18 +782,29 @@ class PengusulController extends Controller
     }
 
     /**
+     * Authorize that the current user is Ketua or an approved Anggota (or Admin).
+     */
+    private function authorizeEdit(HackatonSubmission $submission): void
+    {
+        $user = Auth::user();
+        $isAdmin = in_array($user->role ?? '', ['admin_hackaton', 'superadmin']) || ($user->hasRole('admin_hackaton') ?? false);
+
+        abort_unless($submission->canUserEdit($user->id) || $isAdmin, 403, 'Hanya Ketua Tim atau Anggota Tim yang terdaftar yang dapat mengubah proposal ini.');
+    }
+
+    /**
      * Show identitas tim page.
      */
     public function showIdentitas(HackatonSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeEdit($submission);
 
         $user = Auth::user()->load('profile.fakultas', 'profile.prodi');
         $submission->load(['session', 'identitas', 'members.user.profile.fakultas', 'members.user.profile.prodi']);
 
         $fakultasName = $user->profile?->fakultas?->name ?? '-';
         $prodiName    = $user->profile?->prodi?->name ?? '-';
-        $ketuaName    = $user->name;
+        $ketuaName    = $submission->user?->name ?? $user->name;
 
         $session = $submission->session;
         $minAnggota = $session->min_anggota ?? 1;
@@ -818,7 +829,7 @@ class PengusulController extends Controller
      */
     public function saveIdentitas(Request $request, HackatonSubmission $submission)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeEdit($submission);
 
         $validated = $request->validate([
             'nama_produk'         => 'required|string|max:255',
@@ -834,7 +845,7 @@ class PengusulController extends Controller
         if ($request->filled('tema')) {
             $newKategori = str_contains($request->tema, 'D-FARM') ? 'd-farm' : 'd-tech';
             $hasConflict = HackatonSubmission::where('hackaton_session_id', $submission->hackaton_session_id)
-                ->where('user_id', Auth::id())
+                ->where('user_id', $submission->user_id)
                 ->where('id', '!=', $submission->id)
                 ->where('kategori', $newKategori)
                 ->exists();
@@ -857,7 +868,7 @@ class PengusulController extends Controller
      */
     public function showTahap(HackatonSubmission $submission, $tahapId)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeEdit($submission);
 
         $submissionTahap = HackatonSubmissionTahap::where('hackaton_submission_id', $submission->id)
             ->where('hackaton_tahap_id', $tahapId)
@@ -880,7 +891,7 @@ class PengusulController extends Controller
      */
     public function saveTahap(Request $request, HackatonSubmission $submission, $tahapId)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeEdit($submission);
 
         $submissionTahap = HackatonSubmissionTahap::where('hackaton_submission_id', $submission->id)
             ->where('hackaton_tahap_id', $tahapId)
@@ -900,7 +911,7 @@ class PengusulController extends Controller
      */
     public function submitTahap(Request $request, HackatonSubmission $submission, $tahapId)
     {
-        abort_if($submission->user_id !== Auth::id(), 403);
+        $this->authorizeEdit($submission);
 
         $submissionTahap = HackatonSubmissionTahap::where('hackaton_submission_id', $submission->id)
             ->where('hackaton_tahap_id', $tahapId)
@@ -908,7 +919,61 @@ class PengusulController extends Controller
 
         abort_unless($submissionTahap->isEditable(), 403, 'Tahap ini tidak dapat disubmit saat ini.');
 
+        // 1. Simpan input form yang dikirim terlebih dahulu
         $this->persistFieldValues($request, $submission, $tahapId);
+
+        // 2. Validasi Prasyarat: Identitas Tim & Anggota harus lengkap
+        if (!$submission->identitasIsComplete()) {
+            return back()
+                ->withInput()
+                ->with('error', 'Tahap tidak dapat diajukan karena Identitas Tim & Produk belum lengkap. Harap lengkapi data produk dan minimal 1 anggota tim.');
+        }
+
+        // 3. Validasi Prasyarat: Seluruh kolom wajib (is_required) pada tahap ini harus terisi / terunggah
+        $fields = HackatonTahapField::where('hackaton_tahap_id', $tahapId)->get();
+        $savedValues = HackatonSubmissionFieldValue::where('hackaton_submission_id', $submission->id)
+            ->where('hackaton_tahap_id', $tahapId)
+            ->get()
+            ->keyBy('hackaton_tahap_field_id');
+
+        $missingFields = [];
+        $fieldErrors = [];
+
+        foreach ($fields as $field) {
+            if (!$field->is_required) {
+                continue;
+            }
+
+            $key = "field_{$field->id}";
+            $saved = $savedValues->get($field->id);
+            $val = $saved?->value;
+
+            $isFilled = true;
+            if ($val === null) {
+                $isFilled = false;
+            } elseif (is_string($val)) {
+                $trimmed = trim($val);
+                if ($trimmed === '' || $trimmed === '[]' || $trimmed === '{}') {
+                    $isFilled = false;
+                }
+            } elseif (is_array($val) && empty($val)) {
+                $isFilled = false;
+            }
+
+            if (!$isFilled) {
+                $missingFields[] = $field->field_label;
+                $fieldErrors[$key] = "Kolom '{$field->field_label}' wajib diisi atau diunggah sebelum submit.";
+            }
+        }
+
+        if (!empty($missingFields)) {
+            $tahapKe = $submissionTahap->tahap->tahap_ke ?? '?';
+            $msg = "Tahap {$tahapKe} belum dapat disubmit! Harap lengkapi seluruh isian wajib berikut: " . implode(', ', $missingFields) . '.';
+            return back()
+                ->withInput()
+                ->withErrors($fieldErrors)
+                ->with('error', $msg);
+        }
 
         $submissionTahap->update([
             'status'       => 'diajukan',
@@ -919,19 +984,22 @@ class PengusulController extends Controller
         $submission->update(['status' => 'diajukan']);
 
         $tahapKe = $submissionTahap->tahap->tahap_ke ?? '?';
+        $actorName = Auth::user()->name;
+        $actorRole = Auth::id() === $submission->user_id ? 'Ketua Tim' : 'Anggota Tim (' . $actorName . ')';
+
         HackatonStatusLog::logTahapStatus(
             $submission->id,
             $tahapId,
             'draft',
             'diajukan',
-            "Tahap {$tahapKe} diajukan oleh pengusul",
+            "Tahap {$tahapKe} diajukan oleh {$actorRole}",
             Auth::id(),
             Auth::user()->role
         );
 
         return redirect()
             ->route('hackaton.submissions.show', $submission)
-            ->with('success', "Tahap {$tahapKe} berhasil diajukan.");
+            ->with('success', "Tahap {$tahapKe} berhasil diajukan! Seluruh persyaratan telah terpenuhi.");
     }
 
     /**
@@ -1000,10 +1068,14 @@ class PengusulController extends Controller
     }
 
     /**
-     * Read-only view for member.
+     * View for member - redirect to interactive editor if approved.
      */
     public function showMemberSubmission(HackatonSubmission $submission)
     {
+        if ($submission->canUserEdit(Auth::id())) {
+            return redirect()->route('hackaton.submissions.show', $submission);
+        }
+
         $member = HackatonSubmissionMember::where('hackaton_submission_id', $submission->id)
             ->where('user_id', Auth::id())
             ->where('peran', '!=', 'Ketua')
@@ -1031,10 +1103,14 @@ class PengusulController extends Controller
     }
 
     /**
-     * Show a tahap read-only for member.
+     * Show a tahap for member - redirect to editable form if approved.
      */
     public function showMemberTahap(HackatonSubmission $submission, $tahapId)
     {
+        if ($submission->canUserEdit(Auth::id())) {
+            return redirect()->route('hackaton.submissions.tahap', [$submission, $tahapId]);
+        }
+
         $member = HackatonSubmissionMember::where('hackaton_submission_id', $submission->id)
             ->where('user_id', Auth::id())
             ->where('peran', '!=', 'Ketua')

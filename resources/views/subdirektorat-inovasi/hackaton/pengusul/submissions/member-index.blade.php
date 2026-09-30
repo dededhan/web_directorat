@@ -43,8 +43,8 @@
                             <i class="{{ $badge['icon'] }} mr-1"></i> {{ $badge['label'] }}
                         </span>
 
-                        <a href="{{ route('hackaton.team.show', $sub) }}" class="inline-flex items-center px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold rounded-xl transition shadow">
-                            Lihat Berkas Tim <i class="fas fa-arrow-right ml-1.5"></i>
+                        <a href="{{ route('hackaton.submissions.show', $sub) }}" class="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 text-gray-900 text-xs font-bold rounded-xl transition shadow">
+                            <i class="fas fa-edit mr-1.5"></i> Buka & Edit Proposal <i class="fas fa-arrow-right ml-1.5"></i>
                         </a>
                     </div>
                 </div>

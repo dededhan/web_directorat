@@ -31,6 +31,36 @@
         </div>
 
         {{-- Status Notification --}}
+        @if (session('error'))
+            <div class="p-4 bg-rose-50 border border-rose-300 text-rose-900 rounded-2xl text-xs flex items-start gap-3">
+                <i class="fas fa-exclamation-circle text-base text-rose-600 mt-0.5 shrink-0"></i>
+                <div>
+                    <p class="font-bold">Pengajuan Belum Dapat Diproses</p>
+                    <p class="mt-0.5 text-rose-800">{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="p-4 bg-rose-50 border border-rose-300 text-rose-900 rounded-2xl text-xs space-y-1.5">
+                <p class="font-bold flex items-center gap-1.5 text-rose-700">
+                    <i class="fas fa-exclamation-triangle text-base"></i> Mohon lengkapi seluruh persyaratan wajib berikut sebelum melakukan submit:
+                </p>
+                <ul class="list-disc list-inside space-y-0.5 mt-1 text-rose-800">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="p-4 bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-2xl text-xs flex items-center gap-2">
+                <i class="fas fa-check-circle text-base text-emerald-600"></i>
+                <p class="font-bold">{{ session('success') }}</p>
+            </div>
+        @endif
+
         @if (!$isEditable)
             <div class="p-4 bg-gray-50 border border-gray-300 text-gray-700 rounded-2xl text-xs flex items-center gap-3">
                 <i class="fas fa-lock text-base text-gray-500"></i>
@@ -116,13 +146,13 @@
             {{-- Action Buttons --}}
             @if ($isEditable)
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-                    <button type="submit" formaction="{{ route('hackaton.submissions.tahap.save', [$submission, $submissionTahap->hackaton_tahap_id]) }}"
+                    <button type="submit" formnovalidate formaction="{{ route('hackaton.submissions.tahap.save', [$submission, $submissionTahap->hackaton_tahap_id]) }}"
                         class="inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-gray-800 text-gray-900 font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-gray-50 transition shadow-sm">
                         <i class="fas fa-save mr-1.5"></i> Simpan Sebagai Draft
                     </button>
 
                     <button type="submit" formaction="{{ route('hackaton.submissions.tahap.submit', [$submission, $submissionTahap->hackaton_tahap_id]) }}"
-                        onclick="return confirm('Apakah Anda yakin ingin mengajukan Tahap {{ $tk }}? Berkas yang disubmit akan dikunci untuk proses review.')"
+                        onclick="return confirm('Apakah Anda yakin ingin mengajukan Tahap {{ $tk }}? Pastikan seluruh isian formulir dan dokumen persyaratan telah lengkap karena berkas yang disubmit akan dikunci untuk proses review.')"
                         class="inline-flex items-center justify-center px-8 py-3 bg-amber-500 hover:bg-amber-600 text-gray-900 font-black rounded-xl text-xs uppercase tracking-wider transition shadow">
                         <i class="fas fa-paper-plane mr-1.5"></i> Submit Tahap {{ $tk }}
                     </button>
