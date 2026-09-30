@@ -308,7 +308,14 @@
                     <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-sm">
                         <i class="fas fa-filter"></i>
                     </div>
-                    <span class="font-bold text-gray-800 text-sm">Filter Arsip Responden</span>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="font-bold text-gray-800 text-sm">Filter Arsip Responden</span>
+                        @if(Auth::user()->isProdi())
+                            <span class="text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                                <i class="fas fa-user-lock text-[10px]"></i> Responden Inputan Akun Anda
+                            </span>
+                        @endif
+                    </div>
                 </div>
                 <div class="flex items-center gap-2">
                     <button @click="resetLegacyFilters()" 
@@ -369,13 +376,20 @@
                 {{-- Fakultas Filter --}}
                 <div>
                     <label class="block text-xs font-medium text-gray-500 mb-1">Fakultas</label>
-                    <select x-model="legacyFilters.fakultas" @change="loadLegacyData(1)"
-                            class="w-full px-3 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
-                        <option value="all">Semua Fakultas</option>
-                        @foreach($legacyFaculties as $fak)
-                            <option value="{{ strtolower($fak) }}">{{ $fak }}</option>
-                        @endforeach
-                    </select>
+                    @if(Auth::user()->isProdi())
+                        <div class="w-full px-3 py-2 text-xs bg-gray-100 border border-gray-200 rounded-xl text-gray-600 flex items-center justify-between" title="Dibatasi hanya data responden yang Anda input">
+                            <span class="font-medium truncate">{{ $legacyFaculties[0] ?? 'Prodi' }}</span>
+                            <span class="text-[10px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded shrink-0">Terkunci</span>
+                        </div>
+                    @else
+                        <select x-model="legacyFilters.fakultas" @change="loadLegacyData(1)"
+                                class="w-full px-3 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                            <option value="all">Semua Fakultas</option>
+                            @foreach($legacyFaculties as $fak)
+                                <option value="{{ strtolower($fak) }}">{{ $fak }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 </div>
 
                 {{-- Kategori Filter --}}

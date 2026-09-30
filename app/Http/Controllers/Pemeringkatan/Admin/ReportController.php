@@ -28,18 +28,21 @@ class ReportController extends Controller
         $sessions = QsSession::orderBy('created_at', 'desc')->get();
 
         // 2. Legacy filters metadata
-        $legacyYears = Responden::selectRaw('YEAR(created_at) as yr')
-            ->whereNotNull('created_at')
-            ->distinct()
-            ->orderBy('yr', 'desc')
-            ->pluck('yr')
-            ->filter()
-            ->values();
+        $yearsQuery = Responden::selectRaw('YEAR(created_at) as yr')
+            ->whereNotNull('created_at');
 
         // Scope faculties for non-directorate
-        $facultyCode = $this->getUserFacultyCode($user);
-        if ($facultyCode !== null) {
-            $userCanonical = self::normalizeFacultyCode($facultyCode);
+        if ($user->isProdi()) {
+            $yearsQuery->where('user_id', $user->id);
+            $facultyCode = $this->getUserFacultyCode($user);
+            $userCanonical = $facultyCode ? self::normalizeFacultyCode($facultyCode) : null;
+            $legacyFaculties = $userCanonical ? [$userCanonical] : [];
+        } elseif ($user->isFakultas()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            if ($facultyCode !== null) {
+                $yearsQuery->whereIn(DB::raw('LOWER(fakultas)'), $this->getFacultyAliases($facultyCode));
+            }
+            $userCanonical = $facultyCode ? self::normalizeFacultyCode($facultyCode) : null;
             $legacyFaculties = $userCanonical ? [$userCanonical] : [];
         } else {
             $rawFaculties = Responden::selectRaw('DISTINCT LOWER(fakultas) as fak')
@@ -63,6 +66,12 @@ class ReportController extends Controller
             sort($legacyFaculties);
         }
 
+        $legacyYears = $yearsQuery->distinct()
+            ->orderBy('yr', 'desc')
+            ->pluck('yr')
+            ->filter()
+            ->values();
+
         return view('admin_pemeringkatan.reports.index', compact(
             'sessions',
             'legacyYears',
@@ -82,10 +91,14 @@ class ReportController extends Controller
         $query = Responden::selectRaw("respondens.*, ($isFinishedSubquery) as is_finished");
 
         // Role-based scoping
-        $facultyCode = $this->getUserFacultyCode($user);
-        if ($facultyCode !== null) {
-            $allowedFakultas = $this->getFacultyAliases($facultyCode);
-            $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
+        if ($user->isProdi()) {
+            $query->where('respondens.user_id', $user->id);
+        } elseif ($user->isFakultas()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            if ($facultyCode !== null) {
+                $allowedFakultas = $this->getFacultyAliases($facultyCode);
+                $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
+            }
         }
 
         // Apply filters
@@ -107,7 +120,7 @@ class ReportController extends Controller
             $query->whereYear('respondens.created_at', $request->year);
         }
 
-        if ($request->filled('fakultas') && $request->fakultas !== 'all') {
+        if (!$user->isProdi() && $request->filled('fakultas') && $request->fakultas !== 'all') {
             $selectedAliases = $this->getFacultyAliases(strtolower($request->fakultas));
             $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $selectedAliases);
         }
@@ -447,10 +460,14 @@ class ReportController extends Controller
         $query = Responden::selectRaw("respondens.*, ($isFinishedSubquery) as is_finished");
 
         // Role-based scoping
-        $facultyCode = $this->getUserFacultyCode($user);
-        if ($facultyCode !== null) {
-            $allowedFakultas = $this->getFacultyAliases($facultyCode);
-            $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
+        if ($user->isProdi()) {
+            $query->where('respondens.user_id', $user->id);
+        } elseif ($user->isFakultas()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            if ($facultyCode !== null) {
+                $allowedFakultas = $this->getFacultyAliases($facultyCode);
+                $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
+            }
         }
 
         // Apply filters
@@ -472,7 +489,7 @@ class ReportController extends Controller
             $query->whereYear('respondens.created_at', $request->year);
         }
 
-        if ($request->filled('fakultas') && $request->fakultas !== 'all') {
+        if (!$user->isProdi() && $request->filled('fakultas') && $request->fakultas !== 'all') {
             $selectedAliases = $this->getFacultyAliases(strtolower($request->fakultas));
             $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $selectedAliases);
         }
