@@ -176,6 +176,10 @@ class QsSessionRespondentController extends Controller
      */
     public function unassign(Request $request, QsSession $session, QsSessionRespondent $respondent)
     {
+        if (Auth::user()->isProdi() || Auth::user()->isFakultas() || !Auth::user()->isDirectorateAdmin()) {
+            abort(403, 'Role Prodi dan Fakultas tidak memiliki izin untuk menghapus responden.');
+        }
+
         if ($respondent->qs_session_id !== $session->id) {
             return redirect()->back()->with('error', 'Responden tidak ditemukan di sesi ini.');
         }
@@ -203,6 +207,10 @@ class QsSessionRespondentController extends Controller
      */
     public function bulkDelete(Request $request, QsSession $session)
     {
+        if (Auth::user()->isProdi() || Auth::user()->isFakultas() || !Auth::user()->isDirectorateAdmin()) {
+            abort(403, 'Role Prodi dan Fakultas tidak memiliki izin untuk menghapus responden.');
+        }
+
         $validated = $request->validate([
             'respondent_ids' => 'required|array|min:1',
             'respondent_ids.*' => 'exists:qs_session_respondents,id',

@@ -206,6 +206,7 @@
         </div>
     </div>
 
+    @if(Auth::user()->isDirectorateAdmin())
     {{-- Bulk Action Floating Banner (appears when rows are selected) --}}
     <div x-show="selectedIds.length > 0" x-transition x-cloak
          class="bg-teal-50 border border-teal-200 rounded-xl p-3.5 flex items-center justify-between shadow-sm">
@@ -219,12 +220,10 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            @if(Auth::user()->isDirectorateAdmin())
             <button @click="openEmailModal = true; emailSendMode = 'selected'" 
                     class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
                 <i class="fas fa-paper-plane"></i> Kirim Email
             </button>
-            @endif
             <button @click="confirmBulkDelete()" 
                     class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
                 <i class="fas fa-trash-alt"></i> Hapus Terpilih
@@ -234,6 +233,7 @@
             </button>
         </div>
     </div>
+    @endif
 
     {{-- Filter & Search Form --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
@@ -292,10 +292,12 @@
             <table class="min-w-full divide-y divide-gray-200 text-sm">
                 <thead class="bg-gray-50/80 text-gray-500 uppercase text-[11px] font-semibold tracking-wider">
                     <tr>
+                        @if(Auth::user()->isDirectorateAdmin())
                         <th scope="col" class="px-4 py-3 text-center w-12">
                             <input type="checkbox" @change="toggleSelectAll($event)" 
                                    class="rounded border-gray-300 text-teal-600 focus:ring-teal-500 h-4 w-4">
                         </th>
+                        @endif
                         <th scope="col" class="px-4 py-3 text-left">Responden</th>
                         <th scope="col" class="px-4 py-3 text-left">Institusi / Perusahaan</th>
                         <th scope="col" class="px-4 py-3 text-left">Kategori</th>
@@ -315,11 +317,13 @@
                             $customData = is_array($resp->custom_fields) ? $resp->custom_fields : [];
                         @endphp
                         <tr class="hover:bg-gray-50/60 transition">
+                            @if(Auth::user()->isDirectorateAdmin())
                             <td class="px-4 py-3 text-center">
                                 <input type="checkbox" value="{{ $resp->id }}" 
                                        x-model="selectedIds"
                                        class="rounded border-gray-300 text-teal-600 focus:ring-teal-500 h-4 w-4">
                             </td>
+                            @endif
                             <td class="px-4 py-3">
                                 <div class="font-medium text-gray-900">
                                     <a href="{{ route('admin_pemeringkatan.qs-sessions.respondents.show', [$qs_session, $resp]) }}" class="hover:text-teal-600 hover:underline transition">
@@ -457,6 +461,7 @@
                                 </form>
                                 @endif
 
+                                @if(Auth::user()->isDirectorateAdmin())
                                 {{-- Single Delete Button --}}
                                 <form id="delete-form-{{ $resp->id }}" action="{{ route('admin_pemeringkatan.qs-sessions.unassign', [$qs_session, $resp]) }}" method="POST" class="inline">
                                     @csrf
@@ -468,11 +473,12 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ count($schema) > 0 ? 8 : 7 }}" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="{{ (count($schema) > 0 ? 8 : 7) - (Auth::user()->isDirectorateAdmin() ? 0 : 1) }}" class="px-6 py-12 text-center text-gray-500">
                                 <div class="w-12 h-12 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-3">
                                     <i class="fas fa-users text-xl"></i>
                                 </div>

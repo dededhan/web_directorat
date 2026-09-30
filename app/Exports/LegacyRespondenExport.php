@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Responden;
+use App\Http\Controllers\Pemeringkatan\Admin\ReportController;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -49,7 +50,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             'Status Email',
             'Status Akhir',
             'Dosen Pengusul',
-            'Tahun Dibuat',
+            'Tanggal Dibuat',
         ];
     }
 
@@ -67,7 +68,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
 
         $isFinished = (bool) ($row->is_finished ?? in_array($st, ['clear', 'selesai']));
         $statusAkhir = $isFinished ? 'Selesai' : 'Belum Selesai';
-        $tahun = $row->created_at ? $row->created_at->format('Y') : '-';
+        $tanggalDibuat = $row->created_at ? $row->created_at->format('d/m/Y H:i') : '-';
 
         return [
             $this->counter,
@@ -77,12 +78,12 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             $row->instansi ?? '-',
             $row->email ?? '-',
             $row->phone_responden ?? '-',
-            strtoupper($row->fakultas ?? '-'),
+            ReportController::normalizeFacultyCode($row->fakultas) ?: strtoupper($row->fakultas ?? '-'),
             ucfirst($row->category ?? '-'),
             $statusEmail,
             $statusAkhir,
             $row->nama_dosen_pengusul ?? '-',
-            $tahun,
+            $tanggalDibuat,
         ];
     }
 

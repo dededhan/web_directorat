@@ -322,10 +322,41 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+                {{-- Jenjang Tanggal (Date Created) Filter --}}
+                <div class="sm:col-span-2 lg:col-span-2">
+                    <label class="block text-xs font-medium text-gray-500 mb-1 flex items-center justify-between">
+                        <span class="flex items-center gap-1">
+                            <i class="far fa-calendar-alt text-teal-600"></i>
+                            <span class="font-semibold text-gray-700">Jenjang Tanggal</span>
+                            <span class="text-[10px] text-gray-400 font-normal">(Date Created)</span>
+                        </span>
+                        <template x-if="legacyFilters.start_date || legacyFilters.end_date">
+                            <button type="button" 
+                                    @click="legacyFilters.start_date = ''; legacyFilters.end_date = ''; loadLegacyData(1);" 
+                                    class="text-[10px] text-red-500 hover:text-red-700 font-medium hover:underline flex items-center gap-0.5">
+                                <i class="fas fa-times-circle text-[9px]"></i> Reset Tgl
+                            </button>
+                        </template>
+                    </label>
+                    <div class="flex items-center gap-1.5">
+                        <input type="date" 
+                               x-model="legacyFilters.start_date" 
+                               @change="loadLegacyData(1)"
+                               title="Dari Tanggal (Date Created Mulai)"
+                               class="w-full px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                        <span class="text-xs text-gray-400 font-medium shrink-0">s/d</span>
+                        <input type="date" 
+                               x-model="legacyFilters.end_date" 
+                               @change="loadLegacyData(1)"
+                               title="Sampai Tanggal (Date Created Selesai)"
+                               class="w-full px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                    </div>
+                </div>
+
                 {{-- Year Filter --}}
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Tahun Dibuat</label>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Tahun</label>
                     <select x-model="legacyFilters.year" @change="loadLegacyData(1)"
                             class="w-full px-3 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
                         <option value="all">Semua Tahun</option>
@@ -377,13 +408,13 @@
                 </div>
 
                 {{-- Search Box --}}
-                <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Pencarian</label>
+                <div class="sm:col-span-2 lg:col-span-6">
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Pencarian Cepat</label>
                     <div class="relative">
                         <input type="text" 
                                x-model="legacyFilters.search" 
                                @input.debounce.400ms="loadLegacyData(1)"
-                               placeholder="Nama, email, instansi..."
+                               placeholder="Nama, email, instansi, jabatan, no. telepon..."
                                class="w-full pl-8 pr-3 py-2 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
                         <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
                     </div>
@@ -466,7 +497,7 @@
                             <th class="px-4 py-3.5 text-center">Kategori</th>
                             <th class="px-4 py-3.5 text-center">Status Email</th>
                             <th class="px-5 py-3.5 text-center">Status Akhir</th>
-                            <th class="px-4 py-3.5 text-center">Tahun</th>
+                            <th class="px-4 py-3.5 text-center">Tanggal Dibuat</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -529,8 +560,9 @@
                                         </span>
                                     </template>
                                 </td>
-                                <td class="px-4 py-3.5 text-center text-xs text-gray-500 font-medium" 
-                                    x-text="item.created_at ? new Date(item.created_at).getFullYear() : '-'">
+                                <td class="px-4 py-3.5 text-center text-xs text-gray-600 font-medium whitespace-nowrap">
+                                    <div class="font-semibold text-gray-800" x-text="formatDate(item.created_at)"></div>
+                                    <div class="text-[10px] text-gray-400" x-text="formatTime(item.created_at)"></div>
                                 </td>
                             </tr>
                         </template>
@@ -727,6 +759,8 @@ function reportManager() {
         loadingLegacy: false,
         legacyFilters: {
             year: 'all',
+            start_date: '',
+            end_date: '',
             fakultas: 'all',
             category: 'all',
             status: 'all',
@@ -913,6 +947,8 @@ function reportManager() {
                 params: {
                     page: page,
                     year: this.legacyFilters.year,
+                    start_date: this.legacyFilters.start_date,
+                    end_date: this.legacyFilters.end_date,
                     fakultas: this.legacyFilters.fakultas,
                     category: this.legacyFilters.category,
                     status: this.legacyFilters.status,
@@ -936,6 +972,8 @@ function reportManager() {
         resetLegacyFilters() {
             this.legacyFilters = {
                 year: 'all',
+                start_date: '',
+                end_date: '',
                 fakultas: 'all',
                 category: 'all',
                 status: 'all',
@@ -947,12 +985,28 @@ function reportManager() {
         getLegacyExportUrl() {
             const params = new URLSearchParams({
                 year: this.legacyFilters.year,
+                start_date: this.legacyFilters.start_date || '',
+                end_date: this.legacyFilters.end_date || '',
                 fakultas: this.legacyFilters.fakultas,
                 category: this.legacyFilters.category,
                 status: this.legacyFilters.status,
                 search: this.legacyFilters.search,
             });
             return '{{ route("admin_pemeringkatan.reports.export-legacy") }}?' + params.toString();
+        },
+
+        formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        },
+
+        formatTime(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return '';
+            return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
         }
     };
 }

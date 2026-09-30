@@ -36,17 +36,32 @@ class ReportController extends Controller
             ->filter()
             ->values();
 
-        $legacyFacultiesQuery = Responden::selectRaw('DISTINCT LOWER(fakultas) as fak')
-            ->whereNotNull('fakultas')
-            ->where('fakultas', '!=', '');
-
         // Scope faculties for non-directorate
         $facultyCode = $this->getUserFacultyCode($user);
         if ($facultyCode !== null) {
-            $allowedFakultas = $this->getFacultyAliases($facultyCode);
-            $legacyFacultiesQuery->whereIn(DB::raw('LOWER(fakultas)'), $allowedFakultas);
+            $userCanonical = self::normalizeFacultyCode($facultyCode);
+            $legacyFaculties = $userCanonical ? [$userCanonical] : [];
+        } else {
+            $rawFaculties = Responden::selectRaw('DISTINCT LOWER(fakultas) as fak')
+                ->whereNotNull('fakultas')
+                ->where('fakultas', '!=', '')
+                ->pluck('fak');
+
+            $canonicalList = [];
+            foreach ($rawFaculties as $rawFak) {
+                $canon = self::normalizeFacultyCode($rawFak);
+                if (!empty($canon)) {
+                    $canonicalList[$canon] = true;
+                }
+            }
+            // Ensure standard faculties requested are present in filter options
+            $standardFaculties = ['FBS', 'FEB', 'FIP', 'FISH', 'FMIPA', 'FPB', 'FPSI', 'FT'];
+            foreach ($standardFaculties as $std) {
+                $canonicalList[$std] = true;
+            }
+            $legacyFaculties = array_keys($canonicalList);
+            sort($legacyFaculties);
         }
-        $legacyFaculties = $legacyFacultiesQuery->pluck('fak')->map(fn($f) => strtoupper($f))->sort()->values();
 
         return view('admin_pemeringkatan.reports.index', compact(
             'sessions',
@@ -74,6 +89,20 @@ class ReportController extends Controller
         }
 
         // Apply filters
+        // Date range / Jenjang Tanggal (Date Created)
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('respondens.created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        } elseif ($request->filled('start_date')) {
+            $query->where('respondens.created_at', '>=', $request->start_date . ' 00:00:00');
+        } elseif ($request->filled('end_date')) {
+            $query->where('respondens.created_at', '<=', $request->end_date . ' 23:59:59');
+        } elseif ($request->filled('date')) {
+            $query->whereDate('respondens.created_at', $request->date);
+        }
+
         if ($request->filled('year') && $request->year !== 'all') {
             $query->whereYear('respondens.created_at', $request->year);
         }
@@ -141,6 +170,11 @@ class ReportController extends Controller
 
         $perPage = max(5, min(100, (int) $request->get('per_page', 15)));
         $paginator = $query->paginate($perPage);
+
+        $paginator->getCollection()->transform(function ($item) {
+            $item->fakultas = self::normalizeFacultyCode($item->fakultas) ?: ($item->fakultas ? strtoupper($item->fakultas) : '-');
+            return $item;
+        });
 
         return response()->json([
             'stats' => [
@@ -420,6 +454,20 @@ class ReportController extends Controller
         }
 
         // Apply filters
+        // Date range / Jenjang Tanggal (Date Created)
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('respondens.created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        } elseif ($request->filled('start_date')) {
+            $query->where('respondens.created_at', '>=', $request->start_date . ' 00:00:00');
+        } elseif ($request->filled('end_date')) {
+            $query->where('respondens.created_at', '<=', $request->end_date . ' 23:59:59');
+        } elseif ($request->filled('date')) {
+            $query->whereDate('respondens.created_at', $request->date);
+        }
+
         if ($request->filled('year') && $request->year !== 'all') {
             $query->whereYear('respondens.created_at', $request->year);
         }
@@ -530,6 +578,119 @@ class ReportController extends Controller
     // --- Helper Methods ---
 
     /**
+     * Map any raw faculty name, alias, legacy variation, or user name to its canonical code.
+     * Mappings:
+     * - FAKULTAS BAHASA DAN SENI -> FBS
+     * - FAKULTAS EKONOMI DAN BISNIS -> FEB
+     * - FE -> FEB
+     * - FAKULTAS ILMU PENDIDIKAN -> FIP
+     * - FAKULTAS ILMU SOSIAL -> FISH
+     * - FIS -> FISH
+     * - FAKULTAS MATEMATIKA DAN ILMU PENGETAHUAN ALAM -> FMIPA
+     * - FAKULTAS PSIKOLOGI -> FPSI
+     * - FAKULTAS TEKNIK -> FT
+     * - TEKNIK -> FT
+     * - FPBS -> FPB
+     */
+    public static function normalizeFacultyCode(?string $name): string
+    {
+        if (empty($name)) {
+            return '';
+        }
+
+        $str = strtolower(trim($name));
+
+        // Strip prefixes like "equity fakultas", "equity", "fakultas -"
+        $str = preg_replace('/^(equity\s+fakultas|equity)\s+/i', '', $str);
+        $str = preg_replace('/^fakultas\s*-\s*/i', '', $str);
+        $str = trim($str);
+
+        $directMap = [
+            // FBS
+            'fbs' => 'FBS',
+            'fakultas bahasa dan seni' => 'FBS',
+            'bahasa dan seni' => 'FBS',
+
+            // FEB
+            'feb' => 'FEB',
+            'fe' => 'FEB',
+            'fakultas ekonomi dan bisnis' => 'FEB',
+            'ekonomi dan bisnis' => 'FEB',
+            'fakultas ekonomi' => 'FEB',
+            'ekonomi' => 'FEB',
+
+            // FIP
+            'fip' => 'FIP',
+            'fkip' => 'FIP',
+            'fakultas ilmu pendidikan' => 'FIP',
+            'ilmu pendidikan' => 'FIP',
+            'keguruan dan ilmu pendidikan' => 'FIP',
+
+            // FISH
+            'fish' => 'FISH',
+            'fis' => 'FISH',
+            'fakultas ilmu sosial' => 'FISH',
+            'ilmu sosial' => 'FISH',
+            'fakultas ilmu sosial dan hukum' => 'FISH',
+            'ilmu sosial dan hukum' => 'FISH',
+
+            // FMIPA
+            'fmipa' => 'FMIPA',
+            'mipa' => 'FMIPA',
+            'fakultas matematika dan ilmu pengetahuan alam' => 'FMIPA',
+            'matematika dan ilmu pengetahuan alam' => 'FMIPA',
+
+            // FPSI
+            'fpsi' => 'FPSI',
+            'fppsi' => 'FPSI',
+            'fakultas psikologi' => 'FPSI',
+            'psikologi' => 'FPSI',
+
+            // FT
+            'ft' => 'FT',
+            'teknik' => 'FT',
+            'fakultas teknik' => 'FT',
+
+            // FPB
+            'fpb' => 'FPB',
+            'fpbs' => 'FPB',
+
+            // FIKK
+            'fikk' => 'FIKK',
+            'fik' => 'FIKK',
+            'fakultas ilmu keolahragaan dan kesehatan' => 'FIKK',
+            'ilmu keolahragaan dan kesehatan' => 'FIKK',
+            'fakultas ilmu keolahragaan' => 'FIKK',
+            'ilmu keolahragaan' => 'FIKK',
+
+            // Others
+            'profesi' => 'PROFESI',
+            'program profesi' => 'PROFESI',
+            'profesi ppg' => 'PROFESI',
+            'pascasarjana' => 'PASCASARJANA',
+            'pps' => 'PASCASARJANA',
+            'pss' => 'PASCASARJANA',
+        ];
+
+        if (isset($directMap[$str])) {
+            return $directMap[$str];
+        }
+
+        // Substring pattern matching
+        if (str_contains($str, 'bahasa dan seni') || str_contains($str, 'bahasa & seni')) return 'FBS';
+        if (str_contains($str, 'ekonomi dan bisnis') || str_contains($str, 'ekonomi & bisnis') || str_contains($str, 'ekonomi')) return 'FEB';
+        if (str_contains($str, 'ilmu pendidikan') || str_contains($str, 'keguruan')) return 'FIP';
+        if (str_contains($str, 'ilmu sosial')) return 'FISH';
+        if (str_contains($str, 'matematika dan ilmu pengetahuan alam') || str_contains($str, 'mipa')) return 'FMIPA';
+        if (str_contains($str, 'psikologi')) return 'FPSI';
+        if (str_contains($str, 'teknik')) return 'FT';
+        if (str_contains($str, 'fpbs') || str_contains($str, 'fpb')) return 'FPB';
+        if (str_contains($str, 'keolahragaan')) return 'FIKK';
+
+        return strtoupper($str);
+    }
+
+    /**
      * Get faculty code for the user if they are fakultas or prodi.
      * Returns null for directorate admin (meaning unrestricted).
      */
@@ -540,12 +701,12 @@ class ReportController extends Controller
         }
 
         if ($user->isFakultas()) {
-            return strtolower(trim($user->name));
+            return self::normalizeFacultyCode($user->name);
         }
 
         if ($user->isProdi()) {
             $parts = explode('-', $user->name, 2);
-            return strtolower(trim($parts[0]));
+            return self::normalizeFacultyCode($parts[0]);
         }
 
         return null;
@@ -556,21 +717,28 @@ class ReportController extends Controller
      */
     private function getFacultyAliases(string $code): array
     {
-        $code = strtolower(trim($code));
-        $aliases = [
-            'fmipa' => ['fmipa'],
-            'ft' => ['ft'],
-            'fbs' => ['fbs', 'fpbs'],
-            'fip' => ['fip', 'fkip'],
-            'fppsi' => ['fppsi', 'fpsi'],
-            'fpsi' => ['fppsi', 'fpsi'],
-            'fe' => ['fe', 'feb'],
-            'feb' => ['fe', 'feb'],
-            'fikk' => ['fikk', 'fik'],
-            'fis' => ['fis'],
-            'profesi' => ['profesi'],
+        $canonical = self::normalizeFacultyCode($code);
+
+        $aliasMap = [
+            'FBS' => ['fbs', 'fakultas bahasa dan seni', 'fakultas bahasa & seni', 'bahasa dan seni'],
+            'FEB' => ['feb', 'fe', 'fakultas ekonomi dan bisnis', 'fakultas ekonomi & bisnis', 'fakultas ekonomi', 'ekonomi dan bisnis', 'ekonomi'],
+            'FIP' => ['fip', 'fkip', 'fakultas ilmu pendidikan', 'ilmu pendidikan', 'keguruan dan ilmu pendidikan'],
+            'FISH' => ['fish', 'fis', 'fakultas ilmu sosial dan hukum', 'fakultas ilmu sosial', 'ilmu sosial dan hukum', 'ilmu sosial'],
+            'FMIPA' => ['fmipa', 'mipa', 'fakultas matematika dan ilmu pengetahuan alam', 'matematika dan ilmu pengetahuan alam'],
+            'FPSI' => ['fpsi', 'fppsi', 'fakultas psikologi', 'psikologi'],
+            'FT' => ['ft', 'teknik', 'fakultas teknik'],
+            'FPB' => ['fpb', 'fpbs'],
+            'FIKK' => ['fikk', 'fik', 'fakultas ilmu keolahragaan dan kesehatan', 'fakultas ilmu keolahragaan', 'ilmu keolahragaan'],
+            'PROFESI' => ['profesi', 'program profesi', 'profesi ppg'],
+            'PASCASARJANA' => ['pascasarjana', 'pps', 'pss'],
         ];
-        return $aliases[$code] ?? [$code];
+
+        if (isset($aliasMap[$canonical])) {
+            return $aliasMap[$canonical];
+        }
+
+        $lowerCode = strtolower(trim($code));
+        return array_unique(array_filter([$lowerCode, strtolower($canonical)]));
     }
 
     /**
@@ -589,13 +757,13 @@ class ReportController extends Controller
 
         if ($role === 'prodi') {
             $parts = explode('-', $user->name, 2);
-            $fak = trim($parts[0]);
-            return str_starts_with(strtoupper($fak), 'FAKULTAS') ? $fak : 'Fakultas - ' . strtoupper($fak);
+            $canonical = self::normalizeFacultyCode(trim($parts[0]));
+            return 'Fakultas - ' . ($canonical ?: strtoupper(trim($parts[0])));
         }
 
         if (in_array($role, ['fakultas', 'equity_fakultas'])) {
-            $name = $user->name;
-            return str_starts_with(strtoupper($name), 'FAKULTAS') ? $name : 'Fakultas - ' . strtoupper($name);
+            $canonical = self::normalizeFacultyCode($user->name);
+            return 'Fakultas - ' . ($canonical ?: strtoupper($user->name));
         }
 
         return 'Direktorat';
