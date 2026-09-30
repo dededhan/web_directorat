@@ -25,8 +25,27 @@
         </div>
 
         {{-- Filter & Search --}}
-        <div class="border-2 border-gray-950 bg-white p-5">
+        <div class="border-2 border-gray-950 bg-white p-5 space-y-4">
+            <div class="flex flex-wrap items-center gap-2 border-b border-gray-200 pb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-gray-500 mr-2">Filter Kategori:</span>
+                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'search' => request('search')]) }}"
+                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ !request('kategori') ? 'bg-gray-950 text-white border-gray-950' : 'bg-white text-gray-700 border-gray-300 hover:border-black' }}">
+                    Semua ({{ $session->submissions->count() }})
+                </a>
+                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'kategori' => 'd-farm', 'search' => request('search')]) }}"
+                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ request('kategori') === 'd-farm' ? 'bg-amber-500 text-gray-950 border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:border-amber-400' }}">
+                    <i class="fas fa-wheat-awn mr-1"></i> D-FARM ({{ $dFarmCount ?? 0 }})
+                </a>
+                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'kategori' => 'd-tech', 'search' => request('search')]) }}"
+                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ request('kategori') === 'd-tech' ? 'bg-rose-600 text-white border-rose-700' : 'bg-rose-50 text-rose-900 border-rose-200 hover:border-rose-400' }}">
+                    <i class="fas fa-heart-pulse mr-1"></i> D-TECH ({{ $dTechCount ?? 0 }})
+                </a>
+            </div>
+
             <form method="GET" action="{{ route('admin_hackaton.submissions.index', $session) }}" class="flex flex-col sm:flex-row gap-3">
+                @if (request('kategori'))
+                    <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+                @endif
                 <div class="flex-1">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama pengusul atau ketua..."
                         class="w-full border-2 border-gray-950 px-4 py-2.5 text-sm focus:bg-amber-50 focus:outline-none">
@@ -35,7 +54,7 @@
                     <button type="submit" class="bg-gray-950 text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-gray-800">
                         <i class="fas fa-search mr-1"></i> Cari
                     </button>
-                    @if (request('search'))
+                    @if (request('search') || request('kategori'))
                         <a href="{{ route('admin_hackaton.submissions.index', $session) }}" class="border-2 border-gray-950 bg-white px-4 py-2.5 text-xs font-bold uppercase text-gray-700 hover:bg-gray-100">
                             Reset
                         </a>
@@ -68,6 +87,19 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200 text-sm">
                         @forelse ($submissions as $sub)
+                            @php
+                                $isDFarm = $sub->kategori === 'd-farm' || str_contains($sub->tema ?? '', 'D-FARM');
+                                $roleName = match($sub->user->role ?? '') {
+                                    'hackaton_dosen', 'dosen' => 'Dosen Internal UNJ',
+                                    'hackaton_dosen_eksternal' => 'Dosen Eksternal UNJ',
+                                    'hackaton_tendik', 'tendik' => 'Tendik',
+                                    'hackaton_alumni' => 'Alumni',
+                                    'hackaton_peneliti' => 'Peneliti',
+                                    'hackaton_dudi' => 'DUDI',
+                                    'hackaton_mahasiswa' => 'Mahasiswa',
+                                    default => ucfirst(str_replace('hackaton_', '', $sub->user->role ?? 'Pengusul')),
+                                };
+                            @endphp
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="p-4 text-center text-gray-500 font-semibold">
                                     {{ $loop->iteration + ($submissions->currentPage() - 1) * $submissions->perPage() }}
@@ -76,7 +108,7 @@
                                     <div class="font-bold text-gray-950">{{ $sub->user->name ?? '-' }}</div>
                                     <div class="text-xs text-gray-500">{{ $sub->user->email ?? '-' }}</div>
                                     <span class="inline-block mt-1 text-[10px] font-bold uppercase px-2 py-0.5 border border-gray-300 bg-gray-100 text-gray-700">
-                                        {{ ucfirst(str_replace('hackaton_', '', $sub->user->role ?? 'pengusul')) }}
+                                        {{ $roleName }}
                                     </span>
                                 </td>
                                 <td class="p-4">
@@ -84,14 +116,12 @@
                                     @if ($sub->identitas?->bidang_utama_produk)
                                         <div class="text-[11px] text-gray-400 mt-0.5">Bidang: {{ $sub->identitas->bidang_utama_produk }}</div>
                                     @endif
-                                    @if ($sub->tema)
-                                        <div class="mt-1">
-                                            <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold {{ str_contains($sub->tema, 'D-FARM') ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
-                                                <i class="fas {{ str_contains($sub->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1"></i>
-                                                {{ str_contains($sub->tema, 'D-FARM') ? 'D-FARM' : 'D-MARC' }}
-                                            </span>
-                                        </div>
-                                    @endif
+                                    <div class="mt-1">
+                                        <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-black {{ $isDFarm ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
+                                            <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1"></i>
+                                            {{ $isDFarm ? 'D-FARM' : 'D-TECH' }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="p-4 text-center whitespace-nowrap">
                                     <span class="inline-flex items-center px-2 py-1 text-xs font-bold bg-purple-100 text-purple-900 border border-purple-300">

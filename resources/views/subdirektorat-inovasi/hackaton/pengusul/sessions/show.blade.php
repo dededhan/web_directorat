@@ -53,127 +53,167 @@
                 </div>
             </div>
 
-            {{-- Action Registration --}}
-            <div class="pt-6 border-t border-gray-100">
-                @if ($existingSubmission)
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <span class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl shrink-0">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <div>
-                                <p class="text-xs font-bold text-gray-800">Anda sudah memiliki proposal pada sesi ini.</p>
-                                @if ($existingSubmission->tema)
-                                    <div class="mt-1 flex items-center gap-1.5">
-                                        <span class="text-[10px] text-gray-500 font-semibold">Tema:</span>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold {{ str_contains($existingSubmission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
-                                            <i class="fas {{ str_contains($existingSubmission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1 text-[10px]"></i>
-                                            {{ $existingSubmission->tema_label ?? $existingSubmission->tema }}
-                                        </span>
-                                    </div>
-                                @endif
-                                <p class="text-xs text-gray-500 mt-1">Status: <strong class="text-emerald-700 uppercase">{{ $existingSubmission->status->value ?? $existingSubmission->status }}</strong></p>
-                            </div>
-                        </div>
-                        <a href="{{ route('hackaton.submissions.show', $existingSubmission) }}"
-                            class="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-gray-800 transition shadow">
-                            Buka Detail Proposal <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+            {{-- Action Registration Dual Category (D-FARM & D-TECH) --}}
+            <div class="pt-6 border-t border-gray-100 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-bullseye text-amber-500"></i> Pendaftaran Kategori Proposal Inovasi
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            Setiap peserta dapat mengajukan <strong>1 proposal pada kategori D-FARM</strong> dan <strong>1 proposal pada kategori D-TECH</strong>.
+                        </p>
                     </div>
-                @else
-                    <div x-data="{ selectedTema: '{{ old('tema', '') }}' }" class="space-y-5">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div>
-                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                                    <i class="fas fa-bullseye text-amber-500"></i> Pilih Tema Proposal Inovasi
-                                </h3>
-                                <p class="text-xs text-gray-500 mt-0.5">Silakan pilih salah satu fokus tema inovasi di bawah sebelum mendaftarkan proposal tim Anda.</p>
-                            </div>
-                            <span class="text-[11px] font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200 self-start sm:self-auto">
-                                <i class="fas fa-hand-pointer mr-1"></i> Wajib Pilih 1 Tema
-                            </span>
-                        </div>
+                    <div class="flex items-center gap-2 self-start sm:self-auto">
+                        <span class="inline-flex items-center text-[11px] font-bold px-3 py-1 rounded-full border {{ $submissionDFarm ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-amber-50 text-amber-800 border-amber-200' }}">
+                            <i class="fas {{ $submissionDFarm ? 'fa-check-circle text-emerald-600' : 'fa-circle text-amber-500' }} mr-1.5"></i>
+                            D-FARM: {{ $submissionDFarm ? 'Terdaftar' : 'Belum' }}
+                        </span>
+                        <span class="inline-flex items-center text-[11px] font-bold px-3 py-1 rounded-full border {{ $submissionDTech ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-rose-50 text-rose-800 border-rose-200' }}">
+                            <i class="fas {{ $submissionDTech ? 'fa-check-circle text-emerald-600' : 'fa-circle text-rose-500' }} mr-1.5"></i>
+                            D-TECH: {{ $submissionDTech ? 'Terdaftar' : 'Belum' }}
+                        </span>
+                    </div>
+                </div>
 
-                        <form action="{{ route('hackaton.submissions.store', $session) }}" method="POST">
-                            @csrf
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                {{-- Card Tema D-FARM --}}
-                                <label class="relative flex flex-col p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200"
-                                    :class="selectedTema === 'D-FARM (DeepTech Food Acceleration Research to Market)' ? 'border-amber-500 bg-amber-50/70 ring-2 ring-amber-400 shadow-md' : 'border-gray-200 hover:border-amber-300 bg-white'">
-                                    <input type="radio" name="tema" value="D-FARM (DeepTech Food Acceleration Research to Market)" class="sr-only" x-model="selectedTema" required>
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-xl shadow-sm shrink-0">
-                                                <i class="fas fa-wheat-awn"></i>
-                                            </div>
-                                            <div>
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200/80 text-amber-900 mb-1">
-                                                    TEMA 1
-                                                </span>
-                                                <h4 class="text-base font-bold text-gray-900">D-FARM</h4>
-                                            </div>
-                                        </div>
-                                        <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1"
-                                            :class="selectedTema === 'D-FARM (DeepTech Food Acceleration Research to Market)' ? 'border-amber-600 bg-amber-600 text-white' : 'border-gray-300'">
-                                            <i class="fas fa-check text-[10px]" x-show="selectedTema === 'D-FARM (DeepTech Food Acceleration Research to Market)'"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <p class="text-xs font-bold text-gray-800">DeepTech Food Acceleration Research to Market</p>
-                                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                                            Akselerasi inovasi ketahanan pangan, agritech, dan pengolahan hasil riset pangan berbasis teknologi mendalam (DeepTech) menuju komersialisasi pasar industri.
-                                        </p>
-                                    </div>
-                                </label>
-
-                                {{-- Card Tema D-MARC --}}
-                                <label class="relative flex flex-col p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200"
-                                    :class="selectedTema === 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)' ? 'border-rose-500 bg-rose-50/70 ring-2 ring-rose-400 shadow-md' : 'border-gray-200 hover:border-rose-300 bg-white'">
-                                    <input type="radio" name="tema" value="D-MARC (DeepTack Medical Acceleraton Research to Challenge)" class="sr-only" x-model="selectedTema" required>
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-red-600 text-white flex items-center justify-center text-xl shadow-sm shrink-0">
-                                                <i class="fas fa-heart-pulse"></i>
-                                            </div>
-                                            <div>
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-rose-200/80 text-rose-900 mb-1">
-                                                    TEMA 2
-                                                </span>
-                                                <h4 class="text-base font-bold text-gray-900">D-MARC</h4>
-                                            </div>
-                                        </div>
-                                        <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1"
-                                            :class="selectedTema === 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)' ? 'border-rose-600 bg-rose-600 text-white' : 'border-gray-300'">
-                                            <i class="fas fa-check text-[10px]" x-show="selectedTema === 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)'"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <p class="text-xs font-bold text-gray-800">DeepTack Medical Acceleraton Research to Challenge</p>
-                                        <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                                            Akselerasi riset inovasi teknologi medis, perangkat kesehatan preventif &amp; diagnostik, biomedika, serta penanganan tantangan klinis nyata.
-                                        </p>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-                                <p class="text-xs text-gray-500" x-show="!selectedTema">
-                                    <i class="fas fa-info-circle text-amber-500 mr-1"></i> Klik salah satu tema di atas untuk mengaktifkan tombol pendaftaran.
-                                </p>
-                                <p class="text-xs font-semibold text-emerald-700" x-show="selectedTema" x-cloak>
-                                    <i class="fas fa-check-circle mr-1"></i> Tema dipilih: <span x-text="selectedTema" class="font-bold"></span>
-                                </p>
-
-                                <button type="submit" :disabled="!selectedTema"
-                                    :class="selectedTema ? 'bg-amber-500 hover:bg-amber-400 text-gray-900 shadow-md cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'"
-                                    class="inline-flex items-center justify-center px-7 py-3 font-bold text-xs uppercase tracking-wider rounded-xl transition ml-auto">
-                                    <i class="fas fa-plus mr-2"></i> Daftarkan Proposal &amp; Masuk ke Detail
-                                </button>
-                            </div>
-                        </form>
+                @if ($submissionDFarm && $submissionDTech)
+                    <div class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs font-semibold text-emerald-900 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                            <i class="fas fa-check-double text-sm"></i>
+                        </span>
+                        <span>Kuota proposal Anda untuk sesi ini telah lengkap (1 proposal D-FARM dan 1 proposal D-TECH). Silakan lanjutkan pengisian tahapan pada masing-masing proposal di bawah.</span>
                     </div>
                 @endif
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {{-- ── Card Kategori 1: D-FARM ── --}}
+                    <div class="rounded-2xl border-2 {{ $submissionDFarm ? 'border-emerald-500 bg-white ring-2 ring-emerald-200' : 'border-amber-400 bg-amber-50/30' }} p-6 flex flex-col justify-between transition-all shadow-sm">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-xl shadow-sm shrink-0">
+                                        <i class="fas fa-wheat-awn"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-1.5 mb-1">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900">
+                                                KATEGORI 1
+                                            </span>
+                                            @if ($submissionDFarm)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                    <i class="fas fa-check mr-1 text-[8px]"></i> Terdaftar
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <h4 class="text-lg font-black text-gray-900">D-FARM</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-xs font-bold text-gray-800">DeepTech Food Acceleration Research to Market</p>
+                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                                    Akselerasi inovasi ketahanan pangan, smart agritech, nutrisi unggul, dan pengolahan hasil riset pangan berbasis teknologi mendalam (DeepTech) menuju komersialisasi industri.
+                                </p>
+                            </div>
+
+                            @if ($submissionDFarm)
+                                <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
+                                    <p class="text-[11px] font-semibold text-gray-500">Proposal Anda:</p>
+                                    <p class="text-xs font-bold text-gray-900 line-clamp-1">
+                                        {{ $submissionDFarm->identitas?->nama_produk ?? '— Belum mengisi nama produk —' }}
+                                    </p>
+                                    <p class="text-[11px] text-gray-500">
+                                        Status: <span class="font-bold text-emerald-700 uppercase">{{ $submissionDFarm->status->value ?? $submissionDFarm->status }}</span>
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="pt-5 mt-4 border-t border-gray-200">
+                            @if ($submissionDFarm)
+                                <a href="{{ route('hackaton.submissions.show', $submissionDFarm) }}"
+                                    class="w-full inline-flex items-center justify-center px-5 py-3 bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow">
+                                    <i class="fas fa-folder-open mr-2"></i> Buka / Lanjutkan Proposal D-FARM
+                                </a>
+                            @else
+                                <form action="{{ route('hackaton.submissions.store', $session) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="kategori" value="d-farm">
+                                    <input type="hidden" name="tema" value="D-FARM (DeepTech Food Acceleration Research to Market)">
+                                    <button type="submit"
+                                        class="w-full inline-flex items-center justify-center px-5 py-3 bg-amber-500 hover:bg-amber-400 text-gray-950 font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
+                                        <i class="fas fa-plus mr-2"></i> Ajukan Proposal D-FARM →
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- ── Card Kategori 2: D-TECH ── --}}
+                    <div class="rounded-2xl border-2 {{ $submissionDTech ? 'border-emerald-500 bg-white ring-2 ring-emerald-200' : 'border-rose-400 bg-rose-50/30' }} p-6 flex flex-col justify-between transition-all shadow-sm">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-red-600 text-white flex items-center justify-center text-xl shadow-sm shrink-0">
+                                        <i class="fas fa-heart-pulse"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-1.5 mb-1">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-rose-200 text-rose-900">
+                                                KATEGORI 2
+                                            </span>
+                                            @if ($submissionDTech)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                    <i class="fas fa-check mr-1 text-[8px]"></i> Terdaftar
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <h4 class="text-lg font-black text-gray-900">D-TECH</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-xs font-bold text-gray-800">DeepTech Acceleration Research (MedTech &amp; Teknologi)</p>
+                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                                    Akselerasi riset inovasi teknologi medis, perangkat kesehatan preventif &amp; diagnostik, biomedika, biosensor, IoMT, serta implementasi teknologi mendalam (DeepTech).
+                                </p>
+                            </div>
+
+                            @if ($submissionDTech)
+                                <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
+                                    <p class="text-[11px] font-semibold text-gray-500">Proposal Anda:</p>
+                                    <p class="text-xs font-bold text-gray-900 line-clamp-1">
+                                        {{ $submissionDTech->identitas?->nama_produk ?? '— Belum mengisi nama produk —' }}
+                                    </p>
+                                    <p class="text-[11px] text-gray-500">
+                                        Status: <span class="font-bold text-emerald-700 uppercase">{{ $submissionDTech->status->value ?? $submissionDTech->status }}</span>
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="pt-5 mt-4 border-t border-gray-200">
+                            @if ($submissionDTech)
+                                <a href="{{ route('hackaton.submissions.show', $submissionDTech) }}"
+                                    class="w-full inline-flex items-center justify-center px-5 py-3 bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow">
+                                    <i class="fas fa-folder-open mr-2"></i> Buka / Lanjutkan Proposal D-TECH
+                                </a>
+                            @else
+                                <form action="{{ route('hackaton.submissions.store', $session) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="kategori" value="d-tech">
+                                    <input type="hidden" name="tema" value="D-TECH (DeepTech Acceleration Research to Challenge)">
+                                    <button type="submit"
+                                        class="w-full inline-flex items-center justify-center px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
+                                        <i class="fas fa-plus mr-2"></i> Ajukan Proposal D-TECH →
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

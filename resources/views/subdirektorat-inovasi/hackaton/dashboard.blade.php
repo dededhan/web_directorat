@@ -375,7 +375,12 @@
                         @forelse ($mySubmissions as $sub)
                             <div class="p-5 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs">
                                 <div class="space-y-1">
-                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">{{ $sub->session->nama_sesi }}</span>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">{{ $sub->session->nama_sesi }}</span>
+                                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full {{ ($sub->kategori ?? '') === 'd-tech' ? 'bg-sky-100 text-sky-800 border border-sky-300' : 'bg-emerald-100 text-emerald-800 border border-emerald-300' }}">
+                                            {{ $sub->kategori_label }}
+                                        </span>
+                                    </div>
                                     <h3 class="font-bold text-gray-900 text-sm">{{ $sub->identitas?->nama_produk ?? '— Belum ada nama produk —' }}</h3>
                                     <p class="text-gray-500">{{ $sub->members->count() }} Anggota Tim</p>
                                 </div>

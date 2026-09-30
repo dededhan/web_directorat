@@ -62,8 +62,8 @@
                             <option value="D-FARM (DeepTech Food Acceleration Research to Market)" {{ old('tema', $submission->tema) === 'D-FARM (DeepTech Food Acceleration Research to Market)' ? 'selected' : '' }}>
                                 D-FARM (DeepTech Food Acceleration Research to Market)
                             </option>
-                            <option value="D-MARC (DeepTack Medical Acceleraton Research to Challenge)" {{ old('tema', $submission->tema) === 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)' ? 'selected' : '' }}>
-                                D-MARC (DeepTack Medical Acceleraton Research to Challenge)
+                            <option value="D-TECH (DeepTech Acceleration Research to Challenge)" {{ in_array(old('tema', $submission->tema), ['D-TECH (DeepTech Acceleration Research to Challenge)', 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)']) ? 'selected' : '' }}>
+                                D-TECH (DeepTech Acceleration Research / D-MARC)
                             </option>
                         </select>
                         <p class="text-[11px] text-gray-500 mt-1">Fokus tema yang Anda pilih saat mendaftarkan proposal.</p>
@@ -151,12 +151,12 @@
                             <select name="tipe_anggota" x-model="memberType" @change="resetSearch()" required
                                 class="w-full rounded-xl border border-gray-300 px-3 py-2 bg-white text-sm">
                                 <option value="mahasiswa">Mahasiswa</option>
-                                <option value="dosen">Dosen</option>
+                                <option value="dosen">Dosen Internal UNJ</option>
+                                <option value="dosen_eksternal">Dosen Eksternal UNJ</option>
                                 <option value="DUDI">Mitra DUDI (Industri)</option>
                                 <option value="alumni">Alumni</option>
                                 <option value="tendik">Tendik</option>
                                 <option value="peneliti">Peneliti</option>
-                                <option value="PPPK">PPPK</option>
                             </select>
                         </div>
 

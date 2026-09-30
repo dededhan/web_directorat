@@ -18,10 +18,24 @@ class HackatonSubmission extends Model
         'status' => HackatonStatusEnum::class,
     ];
 
+    public const KATEGORI_DFARM = 'd-farm';
+    public const KATEGORI_DTECH = 'd-tech';
+
+    public const KATEGORI_LABELS = [
+        self::KATEGORI_DFARM => 'D-FARM',
+        self::KATEGORI_DTECH => 'D-TECH',
+    ];
+
     public const TEMAS = [
         'D-FARM' => 'D-FARM (DeepTech Food Acceleration Research to Market)',
-        'D-MARC' => 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)',
+        'D-TECH' => 'D-TECH (DeepTech Acceleration Research to Challenge)',
+        'D-MARC' => 'D-TECH (DeepTech Medical & Technology Acceleration / D-MARC)',
     ];
+
+    public function getKategoriLabelAttribute(): string
+    {
+        return self::KATEGORI_LABELS[$this->kategori] ?? ($this->kategori ? strtoupper($this->kategori) : '-');
+    }
 
     public function getTemaLabelAttribute()
     {

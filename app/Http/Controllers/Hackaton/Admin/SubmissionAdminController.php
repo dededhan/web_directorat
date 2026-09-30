@@ -32,7 +32,28 @@ class SubmissionAdminController extends Controller
             });
         }
 
+        // Filter by category (d-farm / d-tech)
+        if ($request->filled('kategori')) {
+            $kategori = $request->kategori;
+            $query->where(function ($q) use ($kategori) {
+                $q->where('kategori', $kategori);
+                if ($kategori === 'd-farm') {
+                    $q->orWhere('tema', 'like', '%D-FARM%');
+                } else {
+                    $q->orWhere('tema', 'like', '%D-MARC%')
+                      ->orWhere('tema', 'like', '%D-TECH%');
+                }
+            });
+        }
+
         $submissions = $query->latest()->paginate(15)->withQueryString();
+
+        $dFarmCount = HackatonSubmission::where('hackaton_session_id', $session->id)
+            ->where(fn($q) => $q->where('kategori', 'd-farm')->orWhere('tema', 'like', '%D-FARM%'))
+            ->count();
+        $dTechCount = HackatonSubmission::where('hackaton_session_id', $session->id)
+            ->where(fn($q) => $q->where('kategori', 'd-tech')->orWhere('tema', 'like', '%D-TECH%')->orWhere('tema', 'like', '%D-MARC%'))
+            ->count();
 
         $session->load('tahap');
         $hasReviewerMap = [];
@@ -40,7 +61,7 @@ class SubmissionAdminController extends Controller
             $hasReviewerMap[$sub->id] = $sub->reviewers->isNotEmpty();
         }
 
-        return view('admin_hackaton.submissions.index', compact('submissions', 'session', 'hasReviewerMap'));
+        return view('admin_hackaton.submissions.index', compact('submissions', 'session', 'hasReviewerMap', 'dFarmCount', 'dTechCount'));
     }
 
     /**

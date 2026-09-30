@@ -44,11 +44,16 @@ class PengusulController extends Controller
 
         $session->load('tahap.fields');
 
-        $existingSubmission = HackatonSubmission::where('hackaton_session_id', $session->id)
+        $submissions = HackatonSubmission::where('hackaton_session_id', $session->id)
             ->where('user_id', Auth::id())
-            ->first();
+            ->get();
 
-        return view('subdirektorat-inovasi.hackaton.pengusul.sessions.show', compact('session', 'existingSubmission'));
+        $submissionDFarm = $submissions->first(fn($s) => $s->kategori === 'd-farm' || str_contains($s->tema, 'D-FARM'));
+        $submissionDTech = $submissions->first(fn($s) => $s->kategori === 'd-tech' || str_contains($s->tema, 'D-MARC') || str_contains($s->tema, 'D-TECH'));
+
+        $existingSubmission = $submissions->first();
+
+        return view('subdirektorat-inovasi.hackaton.pengusul.sessions.show', compact('session', 'submissions', 'submissionDFarm', 'submissionDTech', 'existingSubmission'));
     }
 
     /**
@@ -72,25 +77,43 @@ class PengusulController extends Controller
         abort_if($session->status !== 'active', 404);
 
         $request->validate([
-            'tema' => 'required|string|max:255',
+            'tema'     => 'required|string|max:255',
+            'kategori' => 'nullable|string|in:d-farm,d-tech',
         ], [
             'tema.required' => 'Silakan pilih tema inovasi terlebih dahulu sebelum mendaftarkan proposal.',
         ]);
 
+        $kategori = $request->kategori;
+        if (!$kategori) {
+            $kategori = str_contains($request->tema, 'D-FARM') ? 'd-farm' : 'd-tech';
+        }
+
+        $kategoriLabel = $kategori === 'd-farm' ? 'D-FARM' : 'D-TECH';
+
         $existing = HackatonSubmission::where('hackaton_session_id', $session->id)
             ->where('user_id', Auth::id())
+            ->where(function ($q) use ($kategori) {
+                $q->where('kategori', $kategori);
+                if ($kategori === 'd-farm') {
+                    $q->orWhere('tema', 'like', '%D-FARM%');
+                } else {
+                    $q->orWhere('tema', 'like', '%D-MARC%')
+                      ->orWhere('tema', 'like', '%D-TECH%');
+                }
+            })
             ->first();
 
         if ($existing) {
             return redirect()
                 ->route('hackaton.submissions.show', $existing)
-                ->with('error', 'Anda sudah memiliki proposal untuk sesi ini.');
+                ->with('error', "Anda sudah memiliki proposal untuk kategori {$kategoriLabel} pada sesi ini.");
         }
 
-        $submission = DB::transaction(function () use ($session, $request) {
+        $submission = DB::transaction(function () use ($session, $request, $kategori, $kategoriLabel) {
             $submission = HackatonSubmission::create([
                 'hackaton_session_id' => $session->id,
                 'user_id'             => Auth::id(),
+                'kategori'            => $kategori,
                 'tema'                => $request->tema,
                 'status'              => 'draft',
             ]);
@@ -137,9 +160,8 @@ class PengusulController extends Controller
                 $submission->id,
                 null,
                 'draft',
-                'Proposal Hackaton baru dibuat',
-                $user->id,
-                $user->role
+                "Proposal Hackaton ({$kategoriLabel}) baru dibuat",
+                Auth::id()
             );
 
             return $submission;
@@ -147,8 +169,9 @@ class PengusulController extends Controller
 
         return redirect()
             ->route('hackaton.submissions.show', $submission)
-            ->with('success', 'Proposal Hackaton berhasil dibuat. Silakan lengkapi identitas tim dan tahapan.');
+            ->with('success', "Proposal Hackaton ({$kategoriLabel}) berhasil dibuat! Silakan lengkapi Identitas Tim dan Tahap 1.");
     }
+
 
     /**
      * Show submission detail with 3-Tahap progress tracker.
@@ -809,7 +832,21 @@ class PengusulController extends Controller
         );
 
         if ($request->filled('tema')) {
-            $submission->update(['tema' => $request->tema]);
+            $newKategori = str_contains($request->tema, 'D-FARM') ? 'd-farm' : 'd-tech';
+            $hasConflict = HackatonSubmission::where('hackaton_session_id', $submission->hackaton_session_id)
+                ->where('user_id', Auth::id())
+                ->where('id', '!=', $submission->id)
+                ->where('kategori', $newKategori)
+                ->exists();
+
+            if ($hasConflict) {
+                return back()->with('error', 'Tidak dapat mengubah tema ke kategori yang sudah Anda daftarkan di sesi ini.');
+            }
+
+            $submission->update([
+                'tema'     => $request->tema,
+                'kategori' => $newKategori,
+            ]);
         }
 
         return back()->with('success', 'Identitas inovasi berhasil disimpan.');

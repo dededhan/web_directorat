@@ -16,13 +16,13 @@ class HackatonRegistration extends Model
     ];
 
     public const ROLE_LABELS = [
-        'dosen' => 'Dosen',
-        'tendik' => 'Tendik',
-        'alumni' => 'Alumni',
-        'peneliti' => 'Peneliti',
-        'dudi' => 'DUDI',
-        'pppk' => 'PPPK',
-        'mahasiswa' => 'Mahasiswa',
+        'dosen'           => 'Dosen Internal UNJ',
+        'dosen_eksternal' => 'Dosen Eksternal UNJ',
+        'tendik'          => 'Tendik',
+        'alumni'          => 'Alumni',
+        'peneliti'        => 'Peneliti',
+        'dudi'            => 'DUDI',
+        'mahasiswa'       => 'Mahasiswa',
     ];
 
     public const STATUS_LABELS = [

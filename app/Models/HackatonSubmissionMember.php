@@ -21,39 +21,39 @@ class HackatonSubmissionMember extends Model
     public const PERAN_IC_OPTIONS = ['Hacker', 'Hustler', 'Hipster'];
 
     /* ── Tipe anggota constants ──────────────────────────────── */
-    public const TIPE_DOSEN     = 'dosen';
-    public const TIPE_ALUMNI    = 'alumni';
-    public const TIPE_DUDI      = 'DUDI';
-    public const TIPE_MAHASISWA = 'mahasiswa';
-    public const TIPE_PPPK      = 'PPPK';
-    public const TIPE_PENELITI  = 'peneliti';
-    public const TIPE_TENDIK    = 'tendik';
+    public const TIPE_DOSEN            = 'dosen';
+    public const TIPE_DOSEN_EKSTERNAL  = 'dosen_eksternal';
+    public const TIPE_ALUMNI           = 'alumni';
+    public const TIPE_DUDI             = 'DUDI';
+    public const TIPE_MAHASISWA        = 'mahasiswa';
+    public const TIPE_PENELITI         = 'peneliti';
+    public const TIPE_TENDIK           = 'tendik';
 
     public const TIPE_OPTIONS = [
         self::TIPE_DOSEN,
+        self::TIPE_DOSEN_EKSTERNAL,
         self::TIPE_ALUMNI,
         self::TIPE_DUDI,
         self::TIPE_MAHASISWA,
-        self::TIPE_PPPK,
         self::TIPE_PENELITI,
         self::TIPE_TENDIK,
     ];
 
     public const TIPE_NEEDS_APPROVAL = [
         self::TIPE_DOSEN,
+        self::TIPE_DOSEN_EKSTERNAL,
         self::TIPE_ALUMNI,
         self::TIPE_DUDI,
         self::TIPE_MAHASISWA,
-        self::TIPE_PPPK,
         self::TIPE_PENELITI,
         self::TIPE_TENDIK,
     ];
 
     public const TIPE_SEARCHABLE = [
         self::TIPE_DOSEN,
+        self::TIPE_DOSEN_EKSTERNAL,
         self::TIPE_ALUMNI,
         self::TIPE_MAHASISWA,
-        self::TIPE_PPPK,
         self::TIPE_PENELITI,
         self::TIPE_DUDI,
         self::TIPE_TENDIK,
@@ -63,13 +63,13 @@ class HackatonSubmissionMember extends Model
      * Map member tipe to user role in Hackaton.
      */
     public const TIPE_TO_ROLE = [
-        'dosen'     => 'hackaton_dosen',
-        'tendik'    => 'hackaton_tendik',
-        'alumni'    => 'hackaton_alumni',
-        'peneliti'  => 'hackaton_peneliti',
-        'DUDI'      => 'hackaton_dudi',
-        'PPPK'      => 'hackaton_pppk',
-        'mahasiswa' => 'hackaton_mahasiswa',
+        'dosen'           => 'hackaton_dosen',
+        'dosen_eksternal' => 'hackaton_dosen_eksternal',
+        'tendik'          => 'hackaton_tendik',
+        'alumni'          => 'hackaton_alumni',
+        'peneliti'        => 'hackaton_peneliti',
+        'DUDI'            => 'hackaton_dudi',
+        'mahasiswa'       => 'hackaton_mahasiswa',
     ];
 
     public function submission()

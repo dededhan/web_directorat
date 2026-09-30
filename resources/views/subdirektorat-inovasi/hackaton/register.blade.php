@@ -20,7 +20,7 @@
                 <p class="mt-4 text-base leading-relaxed text-gray-700">Bergabung dalam ruang kolaborasi untuk membangun solusi deep tech inovatif bersama Hackathon Deep Tech UNJ 2026.</p>
                 <ul class="mt-8 space-y-5 text-base font-bold text-gray-950">
                     <li class="flex items-start gap-3"><span class="text-emerald-700" aria-hidden="true">01</span><span>Kolaborasi tim multidisiplin lintas bidang</span></li>
-                    <li class="flex items-start gap-3"><span class="text-emerald-700" aria-hidden="true">02</span><span>Jawab problem statement nyata mitra (D-MARC & D-FARM)</span></li>
+                    <li class="flex items-start gap-3"><span class="text-emerald-700" aria-hidden="true">02</span><span>Jawab problem statement nyata mitra (D-FARM & D-TECH)</span></li>
                     <li class="flex items-start gap-3"><span class="text-emerald-700" aria-hidden="true">03</span><span>Akselerasi prototype, TKT, hingga hilirisasi</span></li>
                 </ul>
             </aside>

@@ -102,10 +102,12 @@
                     @if ($submission->tema)
                         <div>
                             <span class="font-bold text-gray-500 uppercase tracking-wider text-[10px]">Fokus Tema Inovasi</span>
-                            <div class="mt-1">
-                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
-                                    <i class="fas {{ str_contains($submission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1.5"></i>
-                                    {{ $submission->tema_label ?? $submission->tema }}
+                                @php
+                                    $isDFarm = $submission->kategori === 'd-farm' || str_contains($submission->tema, 'D-FARM');
+                                @endphp
+                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-black {{ $isDFarm ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
+                                    <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1.5"></i>
+                                    {{ $isDFarm ? 'D-FARM' : 'D-TECH' }} — {{ $submission->tema_label ?? $submission->tema }}
                                 </span>
                             </div>
                         </div>
@@ -145,12 +147,12 @@
                                 <label class="block font-bold mb-1">Tipe Anggota *</label>
                                 <select name="tipe_anggota" class="w-full border-2 border-gray-950 px-2.5 py-1.5 bg-white">
                                     <option value="mahasiswa">Mahasiswa</option>
-                                    <option value="dosen">Dosen</option>
+                                    <option value="dosen">Dosen Internal UNJ</option>
+                                    <option value="dosen_eksternal">Dosen Eksternal UNJ</option>
                                     <option value="DUDI">Mitra DUDI (Industri)</option>
                                     <option value="alumni">Alumni</option>
                                     <option value="tendik">Tendik</option>
                                     <option value="peneliti">Peneliti</option>
-                                    <option value="PPPK">PPPK</option>
                                 </select>
                             </div>
                         </div>

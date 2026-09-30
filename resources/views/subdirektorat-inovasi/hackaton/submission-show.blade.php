@@ -46,11 +46,11 @@
     @php
         $roleLabel = $roleLabel ?? (match(auth()->user()->role) {
             'hackaton_mahasiswa' => 'Mahasiswa',
-            'hackaton_dosen' => 'Dosen',
+            'hackaton_dosen' => 'Dosen Internal UNJ',
+            'hackaton_dosen_eksternal' => 'Dosen Eksternal UNJ',
             'hackaton_tendik' => 'Tenaga Kependidikan',
             'hackaton_alumni' => 'Alumni',
             'hackaton_dudi' => 'Mitra DUDI',
-            'hackaton_pppk' => 'PPPK',
             'hackaton_peneliti' => 'Peneliti',
             default => auth()->user()->role,
         });
@@ -118,10 +118,12 @@
                 <div class="px-5 py-4 grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
                     @if ($submission->tema)
                         <div>
-                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Tema Inovasi</p>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
-                                <i class="fas {{ str_contains($submission->tema, 'D-FARM') ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1 text-[10px]"></i>
-                                {{ $submission->tema_label ?? $submission->tema }}
+                            @php
+                                $isDFarm = $submission->kategori === 'd-farm' || str_contains($submission->tema, 'D-FARM');
+                            @endphp
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold {{ $isDFarm ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
+                                <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1 text-[10px]"></i>
+                                {{ $isDFarm ? 'D-FARM' : 'D-TECH' }} — {{ $submission->tema_label ?? $submission->tema }}
                             </span>
                         </div>
                     @endif

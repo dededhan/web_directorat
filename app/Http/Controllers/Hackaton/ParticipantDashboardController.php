@@ -20,31 +20,31 @@ use Illuminate\Validation\Rule;
 class ParticipantDashboardController extends Controller
 {
     private const ROLE_LABELS = [
-        'dosen'              => 'Dosen',
-        'tendik'             => 'Tendik',
-        'hackaton_dosen'     => 'Dosen',
-        'hackaton_tendik'    => 'Tendik',
-        'hackaton_alumni'    => 'Alumni',
-        'hackaton_peneliti'  => 'Peneliti',
-        'hackaton_dudi'      => 'DUDI',
-        'hackaton_pppk'      => 'PPPK',
-        'hackaton_mahasiswa' => 'Mahasiswa',
-        'reviewer_hackaton'  => 'Reviewer',
-        'reviewer_inovchalenge' => 'Reviewer',
+        'dosen'                    => 'Dosen Internal UNJ',
+        'tendik'                   => 'Tendik',
+        'hackaton_dosen'           => 'Dosen Internal UNJ',
+        'hackaton_dosen_eksternal' => 'Dosen Eksternal UNJ',
+        'hackaton_tendik'          => 'Tendik',
+        'hackaton_alumni'          => 'Alumni',
+        'hackaton_peneliti'        => 'Peneliti',
+        'hackaton_dudi'            => 'DUDI',
+        'hackaton_mahasiswa'       => 'Mahasiswa',
+        'reviewer_hackaton'        => 'Reviewer',
+        'reviewer_inovchalenge'    => 'Reviewer',
     ];
 
     private const ROLE_ICONS = [
-        'dosen'              => 'fa-chalkboard-teacher',
-        'tendik'             => 'fa-user-tie',
-        'hackaton_dosen'     => 'fa-chalkboard-teacher',
-        'hackaton_tendik'    => 'fa-user-tie',
-        'hackaton_alumni'    => 'fa-user-graduate',
-        'hackaton_peneliti'  => 'fa-microscope',
-        'hackaton_dudi'      => 'fa-building',
-        'hackaton_pppk'      => 'fa-user-tie',
-        'hackaton_mahasiswa' => 'fa-graduation-cap',
-        'reviewer_hackaton'  => 'fa-clipboard-check',
-        'reviewer_inovchalenge' => 'fa-clipboard-check',
+        'dosen'                    => 'fa-chalkboard-teacher',
+        'tendik'                   => 'fa-user-tie',
+        'hackaton_dosen'           => 'fa-chalkboard-teacher',
+        'hackaton_dosen_eksternal' => 'fa-chalkboard-teacher',
+        'hackaton_tendik'          => 'fa-user-tie',
+        'hackaton_alumni'          => 'fa-user-graduate',
+        'hackaton_peneliti'        => 'fa-microscope',
+        'hackaton_dudi'            => 'fa-building',
+        'hackaton_mahasiswa'       => 'fa-graduation-cap',
+        'reviewer_hackaton'        => 'fa-clipboard-check',
+        'reviewer_inovchalenge'    => 'fa-clipboard-check',
     ];
 
     public function index()
@@ -61,8 +61,20 @@ class ParticipantDashboardController extends Controller
             ->latest()
             ->first();
 
-        // 1. Data for Ketua (Dosen & Tendik)
-        $isPengusul = in_array($role, ['hackaton_dosen', 'hackaton_tendik', 'dosen', 'tendik']);
+        // 1. Data for Ketua (Semua Role Peserta & Admin)
+        $isPengusul = in_array($role, [
+            'hackaton_dosen',
+            'hackaton_dosen_eksternal',
+            'hackaton_tendik',
+            'hackaton_alumni',
+            'hackaton_peneliti',
+            'hackaton_dudi',
+            'hackaton_mahasiswa',
+            'dosen',
+            'tendik',
+            'admin_hackaton',
+            'superadmin',
+        ]);
         $mySubmissions = collect();
         $activeSessions = collect();
         if ($isPengusul) {

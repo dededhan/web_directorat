@@ -26,7 +26,7 @@
                 <span>Dashboard</span>
             </a>
 
-            @if(in_array(auth()->user()->role, ['hackaton_dosen', 'hackaton_tendik', 'dosen', 'tendik']))
+            @if(in_array(auth()->user()->role, ['hackaton_dosen', 'hackaton_dosen_eksternal', 'hackaton_tendik', 'hackaton_alumni', 'hackaton_peneliti', 'hackaton_dudi', 'hackaton_mahasiswa', 'dosen', 'tendik', 'admin_hackaton', 'superadmin']))
                 <a href="{{ route('hackaton.sessions.index') }}"
                     class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.sessions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">02</span>

@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold {{ str_contains($submission->tema, 'D-FARM') ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }} self-start sm:self-auto">
-                    <i class="fas fa-tag mr-1.5 text-[10px]"></i> {{ str_contains($submission->tema, 'D-FARM') ? 'Kategori D-FARM' : 'Kategori D-MARC' }}
+                    <i class="fas fa-tag mr-1.5 text-[10px]"></i> {{ str_contains($submission->tema, 'D-FARM') ? 'Kategori D-FARM' : 'Kategori D-TECH' }}
                 </span>
             </div>
         @endif
