@@ -436,7 +436,7 @@
                     <h2 class="mt-2 text-3xl font-black leading-tight text-gray-950 sm:text-4xl">Jadwal Program</h2>
                     <p class="mt-3 text-lg font-bold text-gray-800">10 Bulan Perjalanan dari Challenge hingga Hilirisasi</p>
                     <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                        Rangkaian waktu September 2026 – Juli 2027 tercantum dalam rencana kegiatan resmi kedua program.
+                        Rangkaian waktu Oktober 2026 – Juli 2027 tercantum dalam rencana kegiatan resmi kedua program.
                     </p>
                     <div class="mt-6 border-l-2 border-gray-950 pl-4 py-1 text-xs text-gray-600">
                         <strong>Catatan:</strong> Tanggal harian dan deadline setiap tahapan mengikuti pengumuman resmi penyelenggara melalui dashboard sistem.
@@ -448,32 +448,60 @@
                     <div class="divide-y-2 divide-gray-950">
                         @php
                             $jadwal = [
-                                ['tahap' => '01', 'waktu' => 'September 2026', 'aktivitas' => 'Persiapan, FGD Problem Statement & sistem Hackathon'],
-                                ['tahap' => '02', 'waktu' => 'Oktober 2026', 'aktivitas' => 'Sosialisasi & Delivery Problem Statement'],
-                                ['tahap' => '03', 'waktu' => 'November 2026', 'aktivitas' => 'Open Call, Seleksi Administrasi & Seleksi Substansi'],
-                                ['tahap' => '04', 'waktu' => 'Desember 2026 – Februari 2027', 'aktivitas' => 'Bootcamp, Workshop, Hackathon & Prototype Development'],
-                                ['tahap' => '05', 'waktu' => 'Maret 2027', 'aktivitas' => 'Demo Day & Awarding'],
-                                ['tahap' => '06', 'waktu' => 'April – Mei 2027', 'aktivitas' => 'Pendampingan & pengembangan lanjutan'],
-                                ['tahap' => '07', 'waktu' => 'Juni 2027', 'aktivitas' => 'Final Dissemination'],
-                                ['tahap' => '08', 'waktu' => 'Juli 2027', 'aktivitas' => 'Evaluasi & Pelaporan'],
+                                [
+                                    'tahap' => '02',
+                                    'waktu' => 'Oktober 2026',
+                                    'aktivitas' => 'Sosialisasi & Delivery Problem Statement',
+                                    'status' => 'Sedang Berlangsung',
+                                ],
                             ];
                         @endphp
 
                         @foreach($jadwal as $item)
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-gray-50 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 bg-emerald-50/40 hover:bg-emerald-50/70 transition">
                                 <div class="flex items-center gap-4">
-                                    <span class="flex h-8 w-8 shrink-0 items-center justify-center bg-gray-950 text-xs font-black text-white">
+                                    <span class="flex h-9 w-9 shrink-0 items-center justify-center bg-gray-950 text-xs font-black text-white">
                                         {{ $item['tahap'] }}
                                     </span>
                                     <div>
-                                        <p class="text-sm font-black text-gray-950">{{ $item['aktivitas'] }}</p>
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <span class="text-xs font-black uppercase tracking-wider text-emerald-800">Tahap {{ $item['tahap'] }}</span>
+                                            <span class="inline-flex items-center gap-1.5 border border-emerald-700 bg-emerald-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-900">
+                                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                                                {{ $item['status'] }}
+                                            </span>
+                                        </div>
+                                        <p class="mt-0.5 text-base font-black text-gray-950">{{ $item['aktivitas'] }}</p>
                                     </div>
                                 </div>
-                                <span class="self-start sm:self-center border border-gray-950 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-900 whitespace-nowrap">
+                                <span class="self-start sm:self-center border-2 border-gray-950 bg-white px-3.5 py-1 text-xs font-black text-gray-950 whitespace-nowrap shadow-[2px_2px_0_0_#030712]">
                                     {{ $item['waktu'] }}
                                 </span>
                             </div>
                         @endforeach
+
+                        {{-- Tahapan Selanjutnya (Tahap 03 - 08) - Coming Soon --}}
+                        <div class="p-4 sm:p-5 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <span class="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-dashed border-gray-400 bg-white text-xs font-black text-gray-500">
+                                    🔒
+                                </span>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <h4 class="text-sm font-black text-gray-900">Tahapan Selanjutnya (Tahap 03 – 08)</h4>
+                                        <span class="border border-gray-950 bg-amber-200 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-gray-950">
+                                            Coming Soon
+                                        </span>
+                                    </div>
+                                    <p class="mt-1 text-xs sm:text-sm text-gray-600">
+                                        Open Call, Seleksi, Bootcamp, Demo Day, hingga Hilirisasi akan diumumkan bertahap sesuai timeline resmi.
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="self-start sm:self-center border border-dashed border-gray-400 bg-white px-3 py-1 text-xs font-bold text-gray-500 whitespace-nowrap">
+                                Segera Hadir
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
