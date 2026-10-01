@@ -156,8 +156,12 @@ class KatsinovAssessmentController extends Controller
             'alamat' => 'nullable|string',
             'kontak' => 'nullable|string|max:255',
             'assessment_date' => 'required|date',
-            'responses' => 'required|array',
+            'responses' => 'nullable|array',
             'notes' => 'nullable|array',
+        ], [
+            'judul_inovasi.required' => 'Nama / Judul Inovasi wajib diisi.',
+            'assessment_date.required' => 'Tanggal pengukuran wajib diisi.',
+            'assessment_date.date' => 'Format tanggal pengukuran tidak valid.',
         ]);
 
         $submission = null;
@@ -166,8 +170,11 @@ class KatsinovAssessmentController extends Controller
             abort_unless($submission->canUserEdit($userId) || $isAdmin, 403, 'Akses ke proposal ini ditolak.');
         }
 
+        $responses = $validated['responses'] ?? [];
+        $notes = $validated['notes'] ?? [];
+
         // Calculate scores using service
-        $calc = HackatonKatsinovService::calculate($validated['responses']);
+        $calc = HackatonKatsinovService::calculate($responses);
 
         $assessment = null;
         if (!empty($validated['assessment_id'])) {
@@ -190,27 +197,50 @@ class KatsinovAssessmentController extends Controller
                 'overall_percentage' => $calc['overall_percentage'],
                 'aspect_scores' => $calc['aspect_scores'],
                 'indicator_scores' => $calc['indicator_scores'],
-                'responses' => $validated['responses'],
-                'notes' => $validated['notes'] ?? [],
+                'responses' => $responses,
+                'notes' => $notes,
             ]);
         } else {
-            $assessment = HackatonKatsinovAssessment::create([
-                'hackaton_submission_id' => $submission?->id,
-                'user_id' => $userId,
-                'judul_inovasi' => $validated['judul_inovasi'],
-                'fokus_bidang' => $validated['fokus_bidang'] ?? null,
-                'nama_tim' => $validated['nama_tim'] ?? null,
-                'institusi' => $validated['institusi'] ?? null,
-                'alamat' => $validated['alamat'] ?? null,
-                'kontak' => $validated['kontak'] ?? null,
-                'assessment_date' => $validated['assessment_date'],
-                'achieved_level' => $calc['achieved_level'],
-                'overall_percentage' => $calc['overall_percentage'],
-                'aspect_scores' => $calc['aspect_scores'],
-                'indicator_scores' => $calc['indicator_scores'],
-                'responses' => $validated['responses'],
-                'notes' => $validated['notes'] ?? [],
-            ]);
+            // Check if assessment already exists for this submission to avoid duplicate records
+            if ($submission) {
+                $assessment = HackatonKatsinovAssessment::where('hackaton_submission_id', $submission->id)->first();
+            }
+
+            if ($assessment) {
+                $assessment->update([
+                    'judul_inovasi' => $validated['judul_inovasi'],
+                    'fokus_bidang' => $validated['fokus_bidang'] ?? null,
+                    'nama_tim' => $validated['nama_tim'] ?? null,
+                    'institusi' => $validated['institusi'] ?? null,
+                    'alamat' => $validated['alamat'] ?? null,
+                    'kontak' => $validated['kontak'] ?? null,
+                    'assessment_date' => $validated['assessment_date'],
+                    'achieved_level' => $calc['achieved_level'],
+                    'overall_percentage' => $calc['overall_percentage'],
+                    'aspect_scores' => $calc['aspect_scores'],
+                    'indicator_scores' => $calc['indicator_scores'],
+                    'responses' => $responses,
+                    'notes' => $notes,
+                ]);
+            } else {
+                $assessment = HackatonKatsinovAssessment::create([
+                    'hackaton_submission_id' => $submission?->id,
+                    'user_id' => $userId,
+                    'judul_inovasi' => $validated['judul_inovasi'],
+                    'fokus_bidang' => $validated['fokus_bidang'] ?? null,
+                    'nama_tim' => $validated['nama_tim'] ?? null,
+                    'institusi' => $validated['institusi'] ?? null,
+                    'alamat' => $validated['alamat'] ?? null,
+                    'kontak' => $validated['kontak'] ?? null,
+                    'assessment_date' => $validated['assessment_date'],
+                    'achieved_level' => $calc['achieved_level'],
+                    'overall_percentage' => $calc['overall_percentage'],
+                    'aspect_scores' => $calc['aspect_scores'],
+                    'indicator_scores' => $calc['indicator_scores'],
+                    'responses' => $responses,
+                    'notes' => $notes,
+                ]);
+            }
         }
 
         if ($request->wantsJson()) {

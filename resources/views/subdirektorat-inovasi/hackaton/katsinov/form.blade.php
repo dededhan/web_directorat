@@ -7,8 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
     @php
-        $initialResponses = $assessment->responses ?: [];
-        $initialNotes = $assessment->notes ?: [];
+        $initialResponses = (object) ($assessment->responses ?: []);
+        $initialNotes = (object) ($assessment->notes ?: []);
         $initialSignature = $assessment->signature_image ?: null;
         $initialShareToken = $assessment->share_token ?: null;
     @endphp
@@ -31,8 +31,8 @@
                 shareUrl: {!! $initialShareToken ? json_encode(route('hackaton.katsinov.show_public', $initialShareToken)) : 'null' !!},
                 downloadUrl: {!! $assessment->id ? json_encode(route('hackaton.katsinov.download_pdf', $assessment->id)) : 'null' !!},
                 isCompleted: {{ $assessment->signed_at ? 'true' : 'false' }},
-                responses: {!! json_encode($initialResponses, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!},
-                notes: {!! json_encode($initialNotes, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!},
+                responses: {!! json_encode($initialResponses, JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!},
+                notes: {!! json_encode($initialNotes, JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!},
 
                 // Config count of questions per indicator
                 indicatorCounts: {
@@ -132,8 +132,8 @@
 
                 // Open Signature Modal
                 async openSignatureModal() {
-                    // First save current responses
-                    const saved = await this.saveAssessmentData();
+                    // First save current responses silently
+                    const saved = await this.saveAssessmentData(false);
                     if (!saved) return;
 
                     this.showSignatureModal = true;
@@ -188,10 +188,18 @@
                 },
 
                 // Save basic form + indicators responses
-                async saveAssessmentData() {
+                async saveAssessmentData(showSuccessToast = true) {
                     this.saving = true;
                     const formElement = document.getElementById('katsinovForm');
                     const formData = new FormData(formElement);
+
+                    // Ensure responses & notes are sent as pure objects to preserve key-value pairs
+                    const safeResponses = (this.responses && typeof this.responses === 'object')
+                        ? Object.assign({}, this.responses)
+                        : {};
+                    const safeNotes = (this.notes && typeof this.notes === 'object')
+                        ? Object.assign({}, this.notes)
+                        : {};
 
                     const payload = {
                         _token: '{{ csrf_token() }}',
@@ -204,8 +212,8 @@
                         alamat: formData.get('alamat'),
                         kontak: formData.get('kontak'),
                         assessment_date: formData.get('assessment_date'),
-                        responses: this.responses,
-                        notes: this.notes
+                        responses: safeResponses,
+                        notes: safeNotes
                     };
 
                     try {
@@ -222,14 +230,34 @@
                         const result = await res.json();
 
                         if (!res.ok) {
+                            if (result.errors) {
+                                const errorList = Object.values(result.errors).flat().join('<br>');
+                                throw new Error(errorList || result.message);
+                            }
                             throw new Error(result.message || 'Gagal menyimpan assessment.');
                         }
 
                         this.assessmentId = result.id;
                         this.downloadUrl = result.download_url;
+
+                        if (showSuccessToast) {
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: result.message || 'Draft assessment berhasil disimpan!',
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                        }
+
                         return true;
                     } catch (err) {
-                        Swal.fire('Gagal Menyimpan', err.message, 'error');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal Menyimpan',
+                            html: err.message
+                        });
                         return false;
                     } finally {
                         this.saving = false;
@@ -661,7 +689,7 @@
 
                 <div class="flex items-center gap-3">
                     <button type="button"
-                        @click="saveAssessmentData()"
+                        @click="saveAssessmentData(true)"
                         :disabled="saving"
                         class="px-4 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
                         <i class="fas" :class="saving ? 'fa-spinner fa-spin' : 'fa-save'"></i>

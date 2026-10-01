@@ -25,17 +25,17 @@
         </div>
 
         {{-- Guide Banner --}}
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-5 rounded-2xl flex items-start gap-4 text-amber-950 shadow-sm">
-            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shrink-0 mt-0.5 shadow-sm">
+        <div class="bg-[#047857] border border-emerald-600 p-5 rounded-2xl flex items-start gap-4 text-white shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center text-lg shrink-0 mt-0.5 shadow-sm">
                 <i class="fas fa-chart-line"></i>
             </div>
-            <div class="text-xs leading-relaxed space-y-1">
-                <strong class="font-bold text-amber-900 text-sm block">Konsep Penilaian Mandiri (Self-Assessment):</strong>
-                <p>
-                    KATSINOV diukur menggunakan <strong>6 fase tingkat kesiapan</strong> dan <strong>7 aspek kunci</strong> (Teknologi, Pasar, Organisasi, Manufaktur, Investasi, Kemitraan, Risiko).
+            <div class="text-xs leading-relaxed space-y-1 text-white">
+                <strong class="font-bold text-white text-sm block">Konsep Penilaian Mandiri (Self-Assessment):</strong>
+                <p class="text-white/95">
+                    KATSINOV diukur menggunakan <strong class="text-white font-bold">6 fase tingkat kesiapan</strong> dan <strong class="text-white font-bold">7 aspek kunci</strong> (Teknologi, Pasar, Organisasi, Manufaktur, Investasi, Kemitraan, Risiko).
                 </p>
-                <p class="text-amber-800">
-                    Sistem ini berjalan <strong>tanpa reviewer</strong>. Peserta mengisi indikator 1 s/d 6 secara bertahap (Passing grade minimal <strong>80.0%</strong> per level). Setelah selesai, Anda dapat langsung mengunduh file <strong>PDF resmi bertanda tangan peserta</strong> untuk diunggah ke form pendaftaran Hackathon Tahap 1 pada field <em>Hasil Katsinov</em>.
+                <p class="text-white/95">
+                    Sistem ini berjalan <strong class="text-white font-bold">tanpa reviewer</strong>. Peserta mengisi indikator 1 s/d 6 secara bertahap (Passing grade minimal <strong class="text-white font-bold">80.0%</strong> per level). Setelah selesai, Anda dapat langsung mengunduh file <strong class="text-white font-bold">PDF resmi bertanda tangan peserta</strong> untuk diunggah ke form pendaftaran Hackathon Tahap 1 pada field <em class="text-white font-semibold underline decoration-white/40">Hasil Katsinov</em>.
                 </p>
             </div>
         </div>

@@ -39,6 +39,11 @@ Route::prefix('hackathon/register')
     });
 Route::redirect('hackaton/register', '/hackathon/register', 301);
 
+// Public shareable link for Katsinov Verification
+Route::get('hackathon/katsinov/share/{token}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'showPublic'])
+    ->name('hackaton.katsinov.show_public');
+Route::redirect('hackaton/katsinov/share/{token}', '/hackathon/katsinov/share/{token}', 301);
+
 // ── Admin Hackathon Panel ────────────────────────────────────────────────
 Route::prefix('admin-hackathon')
     ->name('admin_hackaton.')
@@ -251,9 +256,6 @@ Route::prefix('hackathon')
             });
         });
 
-        // Public shareable link for Katsinov
-        Route::get('katsinov/share/{token}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'showPublic'])
-            ->name('hackaton.katsinov.show_public');
 
         // ── Khusus Reviewer ─────────────────────────────────────────────
         Route::middleware(['role:reviewer_hackaton,reviewer_inovchalenge,admin_hackaton'])->prefix('reviewer')->name('reviewer.')->group(function () {
