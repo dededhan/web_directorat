@@ -124,7 +124,6 @@ class MemberController extends Controller
         $this->authorizeKetua($submission);
         abort_if($member->hackaton_submission_id !== $submission->id, 404);
         abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat dihapus.');
-        abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat dihapus oleh Admin.');
 
         $nama = $member->nama_lengkap;
         $member->delete();

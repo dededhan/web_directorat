@@ -1,3 +1,5 @@
+
+
 @extends('subdirektorat-inovasi.hackaton.layout')
 
 @section('title', 'Form ' . $submissionTahap->tahap->nama_tahap . ' | Hackaton UNJ')
@@ -7,6 +9,34 @@
         $tahap = $submissionTahap->tahap;
         $tk = $tahap->tahap_ke;
         $isEditable = ($isReadOnly ?? false) ? false : $submissionTahap->isEditable();
+
+        // Hitung kelengkapan kolom wajib
+        $allTahapFields = $tahap->sections->flatMap->fields->concat($tahap->unsectionedFields);
+        $totalRequired = 0;
+        $filledRequired = 0;
+        $missingRequiredLabels = [];
+
+        foreach ($allTahapFields as $f) {
+            if ($f->is_required) {
+                $totalRequired++;
+                $fv = $fieldValues[$f->id] ?? null;
+                $val = $fv?->value;
+                $hasVal = false;
+                if ($val !== null) {
+                    $trimmed = is_string($val) ? trim($val) : $val;
+                    if ($trimmed !== '' && $trimmed !== '[]' && $trimmed !== '{}' && $trimmed !== 'null') {
+                        $hasVal = true;
+                    }
+                }
+                if ($hasVal) {
+                    $filledRequired++;
+                } else {
+                    $missingRequiredLabels[] = $f->field_label;
+                }
+            }
+        }
+        $isFormComplete = ($totalRequired === 0) || ($filledRequired >= $totalRequired);
+        $percentRequired = $totalRequired > 0 ? (int) round(($filledRequired / $totalRequired) * 100) : 100;
     @endphp
 
     <div class="max-w-4xl mx-auto space-y-6">
@@ -58,6 +88,59 @@
             <div class="p-4 bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-2xl text-xs flex items-center gap-2">
                 <i class="fas fa-check-circle text-base text-emerald-600"></i>
                 <p class="font-bold">{{ session('success') }}</p>
+            </div>
+        @endif
+
+        {{-- Live Validation Alert Container for Client-Side Check --}}
+        <div id="validationAlert" class="hidden p-4 bg-rose-50 border-2 border-rose-400 text-rose-900 rounded-2xl text-xs space-y-2">
+            <p class="font-bold flex items-center gap-1.5 text-rose-700 text-sm">
+                <i class="fas fa-exclamation-circle text-base"></i> Pengajuan Belum Dapat Disubmit!
+            </p>
+            <p class="text-rose-800">Terdapat kolom/dokumen wajib yang masih kosong. Mohon lengkapi isian bertanda bintang (*) berikut sebelum melakukan submit:</p>
+            <ul id="missingList" class="list-disc list-inside space-y-1 font-semibold text-rose-900 mt-1"></ul>
+        </div>
+
+        {{-- Status Card Kelengkapan Form --}}
+        @if ($isEditable)
+            <div class="bg-white rounded-2xl border {{ $isFormComplete ? 'border-emerald-300 bg-emerald-50/20' : 'border-amber-300 bg-amber-50/20' }} p-5 shadow-sm space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl {{ $isFormComplete ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }} flex items-center justify-center text-lg shrink-0">
+                            <i class="fas {{ $isFormComplete ? 'fa-check-circle' : 'fa-clipboard-list' }}"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-gray-900 text-sm">Status Kelengkapan Form Tahap {{ $tk }}</h3>
+                                @if ($isFormComplete)
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                        <i class="fas fa-check mr-1 text-[9px]"></i> Siap Disubmit
+                                    </span>
+                                @else
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+                                        <i class="fas fa-clock mr-1 text-[9px]"></i> Belum Lengkap
+                                    </span>
+                                @endif
+                            </div>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                {{ $filledRequired }} dari {{ $totalRequired }} isian wajib telah terisi ({{ $percentRequired }}%).
+                                @if (!$isFormComplete)
+                                    <span class="text-amber-800 font-semibold">Tersisa {{ count($missingRequiredLabels) }} isian wajib yang harus dilengkapi.</span>
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-44">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-gray-600 mb-1">
+                            <span>Progres Wajib</span>
+                            <span class="{{ $isFormComplete ? 'text-emerald-700 font-black' : 'text-amber-700' }}">{{ $percentRequired }}%</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full {{ $isFormComplete ? 'bg-emerald-500' : 'bg-amber-500' }} rounded-full transition-all"
+                                style="width: {{ $percentRequired }}%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
 
@@ -128,7 +211,7 @@
             @if ($tahap->unsectionedFields->isNotEmpty())
                 <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
-                        <h2 class="text-sm font-bold text-gray-900">Isian Tambahan</h2>
+                        <h2 class="text-sm font-bold text-gray-900">Isian Tambahan (Umum)</h2>
                     </div>
 
                     <div class="p-6 space-y-5">
@@ -151,8 +234,8 @@
                         <i class="fas fa-save mr-1.5"></i> Simpan Sebagai Draft
                     </button>
 
-                    <button type="submit" formaction="{{ route('hackaton.submissions.tahap.submit', [$submission, $submissionTahap->hackaton_tahap_id]) }}"
-                        onclick="return confirm('Apakah Anda yakin ingin mengajukan Tahap {{ $tk }}? Pastikan seluruh isian formulir dan dokumen persyaratan telah lengkap karena berkas yang disubmit akan dikunci untuk proses review.')"
+                    <button type="submit" id="btnSubmitTahap" formaction="{{ route('hackaton.submissions.tahap.submit', [$submission, $submissionTahap->hackaton_tahap_id]) }}"
+                        onclick="return validateTahapSubmission(event)"
                         class="inline-flex items-center justify-center px-8 py-3 bg-amber-500 hover:bg-amber-600 text-gray-900 font-black rounded-xl text-xs uppercase tracking-wider transition shadow">
                         <i class="fas fa-paper-plane mr-1.5"></i> Submit Tahap {{ $tk }}
                     </button>
@@ -160,4 +243,72 @@
             @endif
         </form>
     </div>
+
+    @if ($isEditable)
+        <script>
+            function validateTahapSubmission(e) {
+                const wrappers = document.querySelectorAll('.field-item-wrapper[data-required="1"]');
+                const missing = [];
+                let firstMissingElem = null;
+
+                // Reset error highlights
+                document.querySelectorAll('.field-item-wrapper').forEach(w => {
+                    w.classList.remove('p-3', 'rounded-xl', 'border-2', 'border-rose-500', 'bg-rose-50/20');
+                });
+
+                wrappers.forEach(w => {
+                    const type = w.dataset.fieldType;
+                    const label = w.dataset.fieldLabel;
+                    const hasUploaded = w.dataset.hasUploaded === '1';
+                    let isFilled = false;
+
+                    if (type === 'file') {
+                        const fileInput = w.querySelector('input[type="file"]');
+                        if (hasUploaded || (fileInput && fileInput.files && fileInput.files.length > 0)) {
+                            isFilled = true;
+                        }
+                    } else if (type === 'checkbox') {
+                        const checked = w.querySelectorAll('input[type="checkbox"]:checked');
+                        if (checked.length > 0) {
+                            isFilled = true;
+                        }
+                    } else {
+                        const input = w.querySelector('input:not([type="checkbox"]):not([type="file"]), textarea, select');
+                        if (input && input.value && input.value.trim() !== '') {
+                            isFilled = true;
+                        }
+                    }
+
+                    if (!isFilled) {
+                        missing.push(label);
+                        w.classList.add('p-3', 'rounded-xl', 'border-2', 'border-rose-500', 'bg-rose-50/20');
+                        if (!firstMissingElem) {
+                            firstMissingElem = w;
+                        }
+                    }
+                });
+
+                if (missing.length > 0) {
+                    e.preventDefault();
+                    const alertBox = document.getElementById('validationAlert');
+                    const listElem = document.getElementById('missingList');
+                    if (alertBox && listElem) {
+                        listElem.innerHTML = '';
+                        missing.forEach(item => {
+                            const li = document.createElement('li');
+                            li.textContent = item;
+                            listElem.appendChild(li);
+                        });
+                        alertBox.classList.remove('hidden');
+                        alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else if (firstMissingElem) {
+                        firstMissingElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return false;
+                }
+
+                return confirm('Apakah Anda yakin ingin mengajukan Tahap ' + @json($tk) + '? Seluruh isian formulir dan dokumen persyaratan telah lengkap. Berkas yang disubmit akan dikunci untuk proses review.');
+            }
+        </script>
+    @endif
 @endsection

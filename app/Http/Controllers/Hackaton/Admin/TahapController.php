@@ -293,6 +293,43 @@ class TahapController extends Controller
         return back()->with('success', 'Field berhasil dipindahkan.');
     }
 
+    public function moveFieldOrder(Request $request, HackatonTahap $tahap, HackatonTahapField $field, string $direction)
+    {
+        abort_if($field->hackaton_tahap_id !== $tahap->id, 404);
+        abort_unless(in_array($direction, ['up', 'down']), 400);
+
+        // Ambil semua field dalam lingkup kontainer yang sama (tanpa seksi / seksi tertentu)
+        $siblingFields = HackatonTahapField::where('hackaton_tahap_id', $tahap->id)
+            ->where('hackaton_tahap_section_id', $field->hackaton_tahap_section_id)
+            ->orderBy('urutan')
+            ->orderBy('id')
+            ->get();
+
+        $currentIndex = $siblingFields->search(fn($f) => $f->id === $field->id);
+        if ($currentIndex === false) {
+            return back();
+        }
+
+        $targetIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
+        if ($targetIndex < 0 || $targetIndex >= $siblingFields->count()) {
+            return back();
+        }
+
+        DB::transaction(function () use ($siblingFields, $currentIndex, $targetIndex) {
+            $ids = $siblingFields->pluck('id')->toArray();
+            $temp = $ids[$currentIndex];
+            $ids[$currentIndex] = $ids[$targetIndex];
+            $ids[$targetIndex] = $temp;
+
+            foreach ($ids as $idx => $id) {
+                HackatonTahapField::where('id', $id)->update(['urutan' => $idx + 1]);
+            }
+        });
+
+        $arah = $direction === 'up' ? 'atas' : 'bawah';
+        return back()->with('success', "Urutan field '{$field->field_label}' berhasil dipindahkan ke {$arah}.");
+    }
+
     // --- Section CRUD ---
 
     public function storeSection(Request $request, HackatonTahap $tahap)

@@ -870,6 +870,14 @@ class PengusulController extends Controller
     {
         $this->authorizeEdit($submission);
 
+        $submission->load(['session', 'identitas', 'members']);
+        if (!$submission->identitasIsComplete()) {
+            $minAnggota = $submission->session?->min_anggota ?: 1;
+            return redirect()
+                ->route('hackaton.submissions.identitas', $submission)
+                ->with('error', "Identitas Tim & Anggota belum lengkap. Harap lengkapi nama produk, skema, bidang inovasi, dan minimal {$minAnggota} anggota tim sebelum mengisi form tahap.");
+        }
+
         $submissionTahap = HackatonSubmissionTahap::where('hackaton_submission_id', $submission->id)
             ->where('hackaton_tahap_id', $tahapId)
             ->firstOrFail();
@@ -881,8 +889,6 @@ class PengusulController extends Controller
             ->get()
             ->keyBy('hackaton_tahap_field_id');
 
-        $submission->load('session');
-
         return view('subdirektorat-inovasi.hackaton.pengusul.submissions.tahap', compact('submission', 'submissionTahap', 'fieldValues'));
     }
 
@@ -892,6 +898,13 @@ class PengusulController extends Controller
     public function saveTahap(Request $request, HackatonSubmission $submission, $tahapId)
     {
         $this->authorizeEdit($submission);
+
+        $submission->load(['session', 'identitas', 'members']);
+        if (!$submission->identitasIsComplete()) {
+            return redirect()
+                ->route('hackaton.submissions.identitas', $submission)
+                ->with('error', 'Tahap tidak dapat disimpan karena Identitas Tim & Anggota belum lengkap.');
+        }
 
         $submissionTahap = HackatonSubmissionTahap::where('hackaton_submission_id', $submission->id)
             ->where('hackaton_tahap_id', $tahapId)
@@ -923,10 +936,12 @@ class PengusulController extends Controller
         $this->persistFieldValues($request, $submission, $tahapId);
 
         // 2. Validasi Prasyarat: Identitas Tim & Anggota harus lengkap
+        $submission->load(['session', 'identitas', 'members']);
         if (!$submission->identitasIsComplete()) {
+            $minAnggota = $submission->session?->min_anggota ?: 1;
             return back()
                 ->withInput()
-                ->with('error', 'Tahap tidak dapat diajukan karena Identitas Tim & Produk belum lengkap. Harap lengkapi data produk dan minimal 1 anggota tim.');
+                ->with('error', "Tahap tidak dapat diajukan karena Identitas Tim & Produk belum lengkap. Harap lengkapi data produk dan minimal {$minAnggota} anggota tim.");
         }
 
         // 3. Validasi Prasyarat: Seluruh kolom wajib (is_required) pada tahap ini harus terisi / terunggah
@@ -1028,7 +1043,7 @@ class PengusulController extends Controller
                 }
             } elseif ($field->field_type === 'checkbox') {
                 $rawVals = $request->input($key, []);
-                $val = is_array($rawVals) ? json_encode(array_values($rawVals)) : null;
+                $val = is_array($rawVals) && !empty($rawVals) ? json_encode(array_values($rawVals)) : null;
 
                 HackatonSubmissionFieldValue::updateOrCreate(
                     [
@@ -1039,14 +1054,18 @@ class PengusulController extends Controller
                     ['value' => $val]
                 );
             } else {
-                if ($request->has($key)) {
+                if ($request->exists($key)) {
+                    $raw = $request->input($key);
+                    $val = is_string($raw) ? trim($raw) : $raw;
+                    $val = ($val === '') ? null : $val;
+
                     HackatonSubmissionFieldValue::updateOrCreate(
                         [
                             'hackaton_submission_id'  => $submission->id,
                             'hackaton_tahap_id'       => $tahapId,
                             'hackaton_tahap_field_id' => $field->id,
                         ],
-                        ['value' => $request->input($key)]
+                        ['value' => $val]
                     );
                 }
             }

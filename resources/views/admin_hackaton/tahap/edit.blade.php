@@ -252,20 +252,48 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center gap-2">
-                                    <button type="button"
-                                        @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }}, {{ json_encode($field->template_url ?? '') }}, {{ json_encode($field->template_file ?? '') }}, {{ json_encode($field->template_file_name ?? '') }})"
-                                        class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-
-                                    <form action="{{ route('admin_hackaton.tahap.fields.destroy', $field) }}" method="POST" class="inline" onsubmit="return confirm('Hapus field ini?')">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="p-2 text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 bg-white" title="Hapus Field">
-                                            <i class="fas fa-trash"></i>
+                            <div class="flex items-center gap-1.5">
+                                {{-- Tombol Urutan Naik / Turun --}}
+                                <div class="flex items-center border border-gray-300 bg-white mr-1 shadow-sm">
+                                    @if (!$loop->first)
+                                        <form action="{{ route('admin_hackaton.tahap.fields.move_order', [$tahap, $field, 'up']) }}" method="POST" class="inline">
+                                            @csrf @method('PATCH')
+                                            <button type="submit" class="p-2 text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100 transition border-r border-gray-200" title="Pindahkan Urutan ke Atas (Naik)">
+                                                <i class="fas fa-arrow-up text-amber-600"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" disabled class="p-2 text-xs font-bold text-gray-300 border-r border-gray-200 bg-gray-50 cursor-not-allowed" title="Posisi paling atas">
+                                            <i class="fas fa-arrow-up"></i>
                                         </button>
-                                    </form>
+                                    @endif
+
+                                    @if (!$loop->last)
+                                        <form action="{{ route('admin_hackaton.tahap.fields.move_order', [$tahap, $field, 'down']) }}" method="POST" class="inline">
+                                            @csrf @method('PATCH')
+                                            <button type="submit" class="p-2 text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100 transition" title="Pindahkan Urutan ke Bawah (Turun)">
+                                                <i class="fas fa-arrow-down text-amber-600"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" disabled class="p-2 text-xs font-bold text-gray-300 bg-gray-50 cursor-not-allowed" title="Posisi paling bawah">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                    @endif
                                 </div>
+
+                                <button type="button"
+                                    @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }}, {{ json_encode($field->template_url ?? '') }}, {{ json_encode($field->template_file ?? '') }}, {{ json_encode($field->template_file_name ?? '') }})"
+                                    class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <form action="{{ route('admin_hackaton.tahap.fields.destroy', $field) }}" method="POST" class="inline" onsubmit="return confirm('Hapus field ini?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="p-2 text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 bg-white" title="Hapus Field">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                             </div>
                         @empty
                             <div class="p-6 text-center text-xs text-gray-400 italic">
@@ -359,34 +387,68 @@
                 <div class="divide-y divide-gray-200">
                     @forelse ($tahap->unsectionedFields as $field)
                         <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition">
-                            <div class="space-y-1">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-bold text-gray-950 text-sm">{{ $field->field_label }}</span>
-                                    @if ($field->is_required)
-                                        <span class="text-[10px] font-black uppercase text-rose-700 bg-rose-50 px-1.5 py-0.5 border border-rose-200">Wajib</span>
-                                    @else
-                                        <span class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-1.5 py-0.5 border border-gray-200">Opsional</span>
-                                    @endif
-                                </div>
-                                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                                    <span><i class="fas fa-tag mr-1 text-[10px]"></i> Tipe: <strong>{{ strtoupper($field->field_type) }}</strong></span>
-                                    @if ($field->field_options)
-                                        <span>Opsi: {{ implode(', ', (array) $field->field_options) }}</span>
-                                    @endif
-                                    @if ($field->template_url)
-                                        <a href="{{ $field->template_url }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 hover:underline">
-                                            <i class="fas fa-link text-[10px]"></i> Link Template
-                                        </a>
-                                    @endif
-                                    @if ($field->template_file)
-                                        <a href="{{ route('hackaton.templates.download', $field) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
-                                            <i class="fas fa-file-download text-[10px]"></i> Template: {{ $field->template_file_name ?: basename($field->template_file) }}
-                                        </a>
-                                    @endif
+                            <div class="flex items-start gap-3">
+                                <span class="w-6 h-6 rounded bg-gray-100 text-gray-700 text-xs font-black flex items-center justify-center border border-gray-300 shrink-0 mt-0.5" title="Urutan ke-{{ $loop->iteration }}">
+                                    {{ $loop->iteration }}
+                                </span>
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-gray-950 text-sm">{{ $field->field_label }}</span>
+                                        @if ($field->is_required)
+                                            <span class="text-[10px] font-black uppercase text-rose-700 bg-rose-50 px-1.5 py-0.5 border border-rose-200">Wajib</span>
+                                        @else
+                                            <span class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-1.5 py-0.5 border border-gray-200">Opsional</span>
+                                        @endif
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                                        <span><i class="fas fa-tag mr-1 text-[10px]"></i> Tipe: <strong>{{ strtoupper($field->field_type) }}</strong></span>
+                                        @if ($field->field_options)
+                                            <span>Opsi: {{ implode(', ', (array) $field->field_options) }}</span>
+                                        @endif
+                                        @if ($field->template_url)
+                                            <a href="{{ $field->template_url }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 hover:underline">
+                                                <i class="fas fa-link text-[10px]"></i> Link Template
+                                            </a>
+                                        @endif
+                                        @if ($field->template_file)
+                                            <a href="{{ route('hackaton.templates.download', $field) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 hover:underline">
+                                                <i class="fas fa-file-download text-[10px]"></i> Template: {{ $field->template_file_name ?: basename($field->template_file) }}
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-1.5">
+                                {{-- Tombol Urutan Naik / Turun --}}
+                                <div class="flex items-center border border-gray-300 bg-white mr-1 shadow-sm">
+                                    @if (!$loop->first)
+                                        <form action="{{ route('admin_hackaton.tahap.fields.move_order', [$tahap, $field, 'up']) }}" method="POST" class="inline">
+                                            @csrf @method('PATCH')
+                                            <button type="submit" class="p-2 text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100 transition border-r border-gray-200" title="Pindahkan Urutan ke Atas (Naik)">
+                                                <i class="fas fa-arrow-up text-amber-600"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" disabled class="p-2 text-xs font-bold text-gray-300 border-r border-gray-200 bg-gray-50 cursor-not-allowed" title="Posisi paling atas">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </button>
+                                    @endif
+
+                                    @if (!$loop->last)
+                                        <form action="{{ route('admin_hackaton.tahap.fields.move_order', [$tahap, $field, 'down']) }}" method="POST" class="inline">
+                                            @csrf @method('PATCH')
+                                            <button type="submit" class="p-2 text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100 transition" title="Pindahkan Urutan ke Bawah (Turun)">
+                                                <i class="fas fa-arrow-down text-amber-600"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" disabled class="p-2 text-xs font-bold text-gray-300 bg-gray-50 cursor-not-allowed" title="Posisi paling bawah">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                    @endif
+                                </div>
+
                                 <button type="button"
                                     @click="openEditModal({{ $field->id }}, {{ json_encode($field->field_label) }}, {{ json_encode($field->field_type) }}, {{ json_encode($field->field_options ?? []) }}, {{ $field->is_required ? 'true' : 'false' }}, {{ json_encode($field->template_url ?? '') }}, {{ json_encode($field->template_file ?? '') }}, {{ json_encode($field->template_file_name ?? '') }})"
                                     class="p-2 text-xs font-bold text-gray-700 hover:text-black border border-gray-300 bg-white" title="Edit Field">

@@ -99,11 +99,13 @@ class HackatonSubmission extends Model
 
     public function identitasIsComplete(): bool
     {
+        $minAnggota = $this->session?->min_anggota ?: 1;
+
         return $this->identitas !== null
             && filled($this->identitas->nama_produk)
             && filled($this->identitas->skema_inovasi)
             && filled($this->identitas->bidang_utama_produk)
-            && $this->members()->where('peran', '!=', 'Ketua')->count() >= 1;
+            && $this->members()->where('peran', '!=', 'Ketua')->count() >= $minAnggota;
     }
 
     /**
@@ -151,5 +153,10 @@ class HackatonSubmission extends Model
         }
 
         return false;
+    }
+
+    public function katsinovAssessment()
+    {
+        return $this->hasOne(HackatonKatsinovAssessment::class, 'hackaton_submission_id');
     }
 }

@@ -40,6 +40,9 @@
                 <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}" class="inline-flex items-center px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-xs font-bold rounded-xl text-white transition shadow-sm border border-indigo-800">
                     <i class="fas fa-file-contract mr-1.5 text-sm"></i> Pakta Integritas
                 </a>
+                <a href="{{ route('hackaton.katsinov.create', ['submission_id' => $submission->id]) }}" class="inline-flex items-center px-4 py-2 bg-amber-600 hover:bg-amber-700 text-xs font-bold rounded-xl text-white transition shadow-sm border border-amber-700">
+                    <i class="fas fa-award mr-1.5 text-sm"></i> KATSINOV
+                </a>
                 <a href="{{ $submission->user_id === auth()->id() ? route('hackaton.submissions.index') : route('hackaton.members.team_index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-xs font-semibold rounded-xl text-gray-700 hover:bg-gray-50 transition shadow-sm">
                     <i class="fas fa-arrow-left mr-1.5"></i> Kembali
                 </a>
@@ -139,6 +142,50 @@
             <a href="{{ route('hackaton.submissions.pakta_integritas', $submission) }}" class="inline-flex items-center px-5 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold rounded-xl transition shadow shrink-0">
                 <i class="fas fa-file-contract mr-2"></i> Template Pakta Integritas
             </a>
+        </div>
+
+        {{-- KATSINOV Self-Assessment Card --}}
+        @php
+            $katsinovAss = $submission->katsinovAssessment;
+        @endphp
+        <div class="bg-white rounded-2xl border border-amber-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-amber-50/40 via-white to-white">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0 border border-amber-300">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-base font-bold text-gray-900">Pengukuran Mandiri KATSINOV</h2>
+                        @if($katsinovAss)
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                Level {{ $katsinovAss->achieved_level }} ({{ number_format($katsinovAss->overall_percentage, 1) }}%)
+                            </span>
+                        @else
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                                Belum Diisi
+                            </span>
+                        @endif
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Ukur tingkat kesiapan inovasi (Level 1 s/d 6) secara mandiri tanpa reviewer untuk menghasilkan dokumen resmi bertanda tangan peserta (diunggah pada form Tahap 1: <em>Hasil Katsinov</em>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                @if($katsinovAss)
+                    <a href="{{ route('hackaton.katsinov.download_pdf', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow">
+                        <i class="fas fa-file-pdf mr-1.5"></i> Unduh PDF
+                    </a>
+                    <a href="{{ route('hackaton.katsinov.edit', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-bold rounded-xl transition shadow-sm">
+                        <i class="fas fa-edit mr-1.5"></i> Edit Assessment
+                    </a>
+                @else
+                    <a href="{{ route('hackaton.katsinov.create', ['submission_id' => $submission->id]) }}" class="inline-flex items-center px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition shadow">
+                        <i class="fas fa-play mr-2"></i> Mulai Self-Assessment
+                    </a>
+                @endif
+            </div>
         </div>
 
         {{-- Tahap Cards --}}

@@ -264,7 +264,7 @@
                                 <i class="{{ $badge['icon'] }} mr-1"></i> {{ $badge['label'] }}
                             </span>
 
-                            @if ($submission->user_id === auth()->id() && $member->peran !== 'Ketua' && $member->approval_status !== 'approved')
+                            @if ($submission->user_id === auth()->id() && $member->peran !== 'Ketua')
                                 <form action="{{ route('hackaton.members.destroy', [$submission, $member]) }}" method="POST" class="inline" onsubmit="return confirm('Hapus anggota ini dari tim?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="text-rose-500 hover:text-rose-700 p-1" title="Hapus Anggota">

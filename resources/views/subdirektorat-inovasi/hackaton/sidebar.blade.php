@@ -26,7 +26,7 @@
                 <span>Dashboard</span>
             </a>
 
-            @if(in_array(auth()->user()->role, ['hackaton_dosen', 'hackaton_dosen_eksternal', 'hackaton_tendik', 'hackaton_alumni', 'hackaton_peneliti', 'hackaton_dudi', 'hackaton_mahasiswa', 'dosen', 'tendik', 'admin_hackaton', 'superadmin']))
+            @if(in_array(auth()->user()?->role ?? '', ['hackaton_dosen', 'hackaton_dosen_eksternal', 'hackaton_tendik', 'hackaton_alumni', 'hackaton_peneliti', 'hackaton_dudi', 'hackaton_mahasiswa', 'dosen', 'tendik', 'admin_hackaton', 'superadmin']))
                 <a href="{{ route('hackaton.sessions.index') }}"
                     class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.sessions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">02</span>
@@ -44,9 +44,15 @@
                     <span class="mr-3 text-[10px]">04</span>
                     <span>Proposal Tim Lain</span>
                 </a>
+
+                <a href="{{ route('hackaton.katsinov.index') }}"
+                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.katsinov.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                    <span class="mr-3 text-[10px]">05</span>
+                    <span>Generator Katsinov</span>
+                </a>
             @endif
 
-            @if(in_array(auth()->user()->role, ['reviewer_hackaton', 'reviewer_inovchalenge']))
+            @if(in_array(auth()->user()?->role ?? '', ['reviewer_hackaton', 'reviewer_inovchalenge']))
                 <a href="{{ route('hackaton.reviewer.dashboard') }}"
                     class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.reviewer.dashboard') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">02</span>
@@ -66,7 +72,7 @@
                 <span>Informasi HackAthon</span>
             </a>
 
-            @if(in_array(auth()->user()->role, ['dosen', 'tendik']))
+            @if(in_array(auth()->user()?->role ?? '', ['dosen', 'tendik']))
                 <a href="{{ auth()->user()->role === 'dosen' ? route('subdirektorat-inovasi.dosen.dashboard') : route('subdirektorat-inovasi.tendik.dashboard') }}"
                     class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-emerald-400 transition-colors hover:bg-white hover:text-black">
                     <span class="mr-3 text-[10px]">←</span>

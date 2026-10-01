@@ -19,12 +19,13 @@
     }
 @endphp
 
-<div>
+<div class="field-item-wrapper" id="wrapper_{{ $fieldKey }}" data-field-key="{{ $fieldKey }}" data-field-label="{{ $field->field_label }}" data-field-type="{{ $field->field_type }}" data-required="{{ $field->is_required ? '1' : '0' }}" data-has-uploaded="{{ ($field->field_type === 'file' && $currentValue) ? '1' : '0' }}">
     <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
         <label for="{{ $fieldKey }}" class="block text-xs font-bold uppercase tracking-wider text-gray-800">
             {{ $field->field_label }}
             @if ($field->is_required)
                 <span class="text-rose-600">*</span>
+                <span class="text-[10px] font-semibold text-rose-500 normal-case">(Wajib)</span>
             @endif
         </label>
 
@@ -35,6 +36,13 @@
                         class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-semibold transition">
                         <i class="fas fa-file-download text-amber-600"></i>
                         <span>{{ $field->template_file_name ?: 'Unduh Template' }}</span>
+                    </a>
+                @endif
+                @if (str_contains(strtolower($field->field_label), 'katsinov') && isset($submission))
+                    <a href="{{ route('hackaton.katsinov.create', ['submission_id' => $submission->id]) }}" target="_blank"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-lg text-xs font-semibold transition">
+                        <i class="fas fa-award text-emerald-600"></i>
+                        <span>Generator Katsinov</span>
                     </a>
                 @endif
                 @if ($field->template_url)

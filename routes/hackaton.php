@@ -82,6 +82,9 @@ Route::prefix('admin-hackathon')
             ->name('tahap.fields.reorder');
         Route::patch('fields/{field}/move', [HackatonAdminTahapController::class, 'moveField'])
             ->name('tahap.fields.move');
+        Route::patch('tahap/{tahap}/fields/{field}/move-order/{direction}', [HackatonAdminTahapController::class, 'moveFieldOrder'])
+            ->name('tahap.fields.move_order')
+            ->where('direction', 'up|down');
 
         Route::post('tahap/{tahap}/sections', [HackatonAdminTahapController::class, 'storeSection'])
             ->name('tahap.sections.store');
@@ -235,7 +238,22 @@ Route::prefix('hackathon')
             // Anggota Tim read-only
             Route::get('my-team-submissions', [PengusulController::class, 'memberSubmissions'])
                 ->name('members.team_index');
+
+            // Katsinov Self-Assessment Generator
+            Route::prefix('katsinov')->name('katsinov.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'index'])->name('index');
+                Route::get('/create', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'create'])->name('create');
+                Route::get('/{katsinov}/edit', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'edit'])->name('edit');
+                Route::post('/store', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'store'])->name('store');
+                Route::post('/{katsinov}/signature', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'saveSignature'])->name('signature.save');
+                Route::get('/{katsinov}/download-pdf', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'downloadPdf'])->name('download_pdf');
+                Route::delete('/{katsinov}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'destroy'])->name('destroy');
+            });
         });
+
+        // Public shareable link for Katsinov
+        Route::get('katsinov/share/{token}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'showPublic'])
+            ->name('hackaton.katsinov.show_public');
 
         // ── Khusus Reviewer ─────────────────────────────────────────────
         Route::middleware(['role:reviewer_hackaton,reviewer_inovchalenge,admin_hackaton'])->prefix('reviewer')->name('reviewer.')->group(function () {

@@ -196,7 +196,7 @@
                                 <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                             </div>
 
-                            @if ($errors->has('g-recaptcha-response'))
+                            @if (isset($errors) && $errors->has('g-recaptcha-response'))
                                 <span class="text-red-500 text-sm block text-center mb-2">
                                     {{ $errors->first('g-recaptcha-response') }}
                                 </span>
