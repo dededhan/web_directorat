@@ -612,7 +612,7 @@
                         <div>
                             <p class="text-sm font-black text-gray-950">Ketentuan Tim:</p>
                             <ul class="mt-1 list-disc list-inside text-xs sm:text-sm text-gray-700 space-y-1">
-                                <li><strong>Minimal 5 peserta</strong> dalam satu tim diperlukan untuk mengikuti tahapan pelaksanaan hackathon.</li>
+                                <li><strong>Minimal 3-5 peserta</strong> dalam satu tim diperlukan untuk mengikuti tahapan pelaksanaan hackathon.</li>
                                 <li>Tidak harus sudah memiliki semua kompetensi secara lengkap sejak awal. Yang paling penting, tim memiliki kombinasi kemampuan yang relevan dengan challenge yang dipilih.</li>
                             </ul>
                         </div>

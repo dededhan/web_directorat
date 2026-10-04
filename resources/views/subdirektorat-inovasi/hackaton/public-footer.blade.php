@@ -39,7 +39,7 @@
         <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-gray-600">
             <div>
                 <p class="font-bold text-gray-900">Direktorat Inovasi dan Hilirisasi Universitas Negeri Jakarta</p>
-                <p class="mt-0.5">Gedung Ki Hajar Dewantara, Kampus A UNJ, Rawamangun, Jakarta Timur</p>
+                <p class="mt-0.5">Gedung M. Syafe'i Lt. 6, Jl. Rawamangun Muka, Jakarta Timur, 13320</p>
             </div>
             <a href="{{ route('subdirektorat-inovasi.landingpage') }}" class="font-bold text-emerald-700 underline-offset-4 hover:text-emerald-800 hover:underline">
                 ← Kembali ke Portal Direktorat Inovasi
