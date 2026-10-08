@@ -312,9 +312,6 @@ class ReportController extends Controller
     /**
      * AJAX endpoint: Detail breakdown per unit/fakultas for a specific session.
      */
-    /**
-     * AJAX endpoint: Detail breakdown per unit/fakultas for a specific session.
-     */
     public function sessionDetail($sessionId)
     {
         $user = Auth::user();

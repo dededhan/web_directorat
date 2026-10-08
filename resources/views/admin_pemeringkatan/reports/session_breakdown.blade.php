@@ -184,8 +184,19 @@
             </div>
             
             <div class="flex items-center gap-3 flex-wrap">
+                {{-- Dropdown Filter for Unit / Fakultas --}}
+                <div class="relative min-w-[200px]" x-show="units && units.length > 1">
+                    <select x-model="selectedUnitFilter" 
+                            class="w-full px-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-gray-700 cursor-pointer">
+                        <option value="">Semua Fakultas / Unit</option>
+                        <template x-for="u in units" :key="'opt-' + u.unit">
+                            <option :value="u.unit" x-text="u.unit + ' (' + (u.prodis ? u.prodis.length : 0) + ' Prodi)'"></option>
+                        </template>
+                    </select>
+                </div>
+
                 {{-- Quick Search Box --}}
-                <div class="relative min-w-[220px]">
+                <div class="relative min-w-[200px]">
                     <input type="text" 
                            x-model="searchQuery" 
                            placeholder="Cari fakultas atau prodi..."
@@ -196,7 +207,7 @@
                 {{-- Toggle Expand/Collapse All --}}
                 <button type="button" 
                         @click="toggleAllUnits()" 
-                        class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-xl transition">
+                        class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-xl transition cursor-pointer">
                     <i class="fas mr-1 text-[10px]" :class="allExpanded ? 'fa-compress-alt' : 'fa-expand-alt'"></i>
                     <span x-text="allExpanded ? 'Tutup Semua Prodi' : 'Buka Semua Prodi'"></span>
                 </button>
@@ -222,104 +233,128 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    <template x-for="unit in filteredUnits" :key="unit.unit">
-                        <!-- Unit row + prodi subrows container -->
-                        <tr class="hover:bg-gray-50/60 transition-colors bg-white">
-                            {{-- Unit Name with Expand toggle --}}
-                            <td class="px-5 py-4">
-                                <div class="flex items-center gap-2.5">
-                                    <button type="button" 
-                                            @click="toggleUnit(unit.unit)"
-                                            class="w-6 h-6 rounded-md flex items-center justify-center text-gray-400 hover:text-teal-600 hover:bg-teal-50 transition shrink-0"
-                                            x-show="unit.prodis && unit.prodis.length > 0">
-                                        <i class="fas fa-chevron-right text-xs transition-transform duration-200"
-                                           :class="{ 'rotate-90 text-teal-600': isUnitExpanded(unit.unit) }"></i>
-                                    </button>
-                                    <div class="w-6 h-6 shrink-0" x-show="!unit.prodis || unit.prodis.length === 0"></div>
-                                    <div>
-                                        <div class="font-bold text-gray-900 text-sm" x-text="unit.unit"></div>
-                                        <div class="text-[11px] text-gray-400 mt-0.5" x-show="unit.prodis && unit.prodis.length > 0">
-                                            <span x-text="unit.prodis.length"></span> Program Studi terdata
+                    <template x-for="row in displayRows" :key="row._key">
+                        <tr :class="row.type === 'unit' 
+                                ? 'hover:bg-gray-50/70 transition-colors bg-white' 
+                                : 'bg-slate-50/80 hover:bg-slate-100/80 transition-colors border-l-4 border-l-teal-500'">
+                            
+                            {{-- Unit / Prodi Name column --}}
+                            <td class="px-5 py-3.5" :class="row.type === 'prodi' ? 'pl-12 py-2.5' : ''">
+                                <template x-if="row.type === 'unit'">
+                                    <div class="flex items-center gap-2.5">
+                                        <button type="button" 
+                                                @click="toggleUnit(row.data.unit)"
+                                                class="w-6 h-6 rounded-md flex items-center justify-center text-gray-400 hover:text-teal-600 hover:bg-teal-50 transition shrink-0 cursor-pointer"
+                                                x-show="row.hasProdis">
+                                            <i class="fas fa-chevron-right text-xs transition-transform duration-200"
+                                               :class="{ 'rotate-90 text-teal-600': row.isExpanded }"></i>
+                                        </button>
+                                        <div class="w-6 h-6 shrink-0" x-show="!row.hasProdis"></div>
+                                        <div>
+                                            <div class="font-bold text-gray-900 text-sm" x-text="row.data.unit"></div>
+                                            <div class="text-[11px] text-gray-400 mt-0.5" x-show="row.hasProdis">
+                                                <span x-text="row.data.prodis.length"></span> Program Studi terdata
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </template>
+                                <template x-if="row.type === 'prodi'">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-graduation-cap text-teal-600/70 text-xs shrink-0"></i>
+                                        <span class="text-xs font-semibold text-gray-800" x-text="row.data.name"></span>
+                                    </div>
+                                </template>
                             </td>
 
                             {{-- Total Responden --}}
-                            <td class="px-4 py-4 text-center font-bold text-gray-900" x-text="unit.total"></td>
+                            <td class="px-4 py-3 text-center" 
+                                :class="row.type === 'unit' ? 'font-bold text-gray-900 text-sm' : 'text-xs font-bold text-gray-700'" 
+                                x-text="row.data.total"></td>
 
-                            {{-- Academic breakdown --}}
-                            <td class="px-4 py-4 text-center bg-indigo-50/20">
-                                <span class="font-semibold text-indigo-700" x-text="unit.academic_total"></span>
-                                <span class="text-xs text-gray-400">/</span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" 
-                                      x-text="unit.academic_agreed"></span>
-                                <span class="text-[10px] text-gray-400 block mt-0.5" x-text="'(' + unit.academic_rate + '%)'"></span>
-                            </td>
-
-                            {{-- Employee breakdown --}}
-                            <td class="px-4 py-4 text-center bg-amber-50/20">
-                                <span class="font-semibold text-amber-700" x-text="unit.employee_total"></span>
-                                <span class="text-xs text-gray-400">/</span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" 
-                                      x-text="unit.employee_agreed"></span>
-                                <span class="text-[10px] text-gray-400 block mt-0.5" x-text="'(' + unit.employee_rate + '%)'"></span>
-                            </td>
-
-                            {{-- Total Agreed --}}
-                            <td class="px-4 py-4 text-center">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800" x-text="unit.agreed"></span>
-                            </td>
-
-                            {{-- Total Pending --}}
-                            <td class="px-4 py-4 text-center">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700" x-text="unit.pending"></span>
-                            </td>
-
-                            {{-- Consent Rate with Progress bar --}}
-                            <td class="px-5 py-4">
-                                <div class="flex items-center gap-2 justify-center">
-                                    <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden max-w-[90px]">
-                                        <div class="bg-teal-600 h-2 rounded-full transition-all" :style="'width: ' + Math.min(unit.rate, 100) + '%'"></div>
+                            {{-- Academic (Total / Setuju) --}}
+                            <td class="px-4 py-3 text-center" 
+                                :class="row.type === 'unit' ? 'bg-indigo-50/20' : 'bg-indigo-50/10 text-xs'">
+                                <template x-if="row.type === 'unit'">
+                                    <div>
+                                        <span class="font-semibold text-indigo-700" x-text="row.data.academic_total"></span>
+                                        <span class="text-xs text-gray-400">/</span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" 
+                                              x-text="row.data.academic_agreed"></span>
+                                        <span class="text-[10px] text-gray-400 block mt-0.5" x-text="'(' + row.data.academic_rate + '%)'"></span>
                                     </div>
-                                    <span class="text-xs font-bold text-gray-800" x-text="unit.rate + '%'"></span>
-                                </div>
+                                </template>
+                                <template x-if="row.type === 'prodi'">
+                                    <div>
+                                        <span class="font-medium text-indigo-700" x-text="row.data.academic_total"></span>
+                                        <span class="text-gray-400">/</span>
+                                        <span class="text-emerald-700 font-semibold" x-text="row.data.academic_agreed"></span>
+                                    </div>
+                                </template>
                             </td>
-                        </tr>
 
-                        <!-- Sub-rows: Prodis under this unit -->
-                        <template x-if="isUnitExpanded(unit.unit)">
-                            <template x-for="prodi in unit.prodis" :key="unit.unit + '-' + prodi.name">
-                                <tr class="bg-slate-50/70 hover:bg-slate-100/70 transition-colors border-l-4 border-l-teal-500">
-                                    <td class="px-5 py-2.5 pl-12">
-                                        <div class="flex items-center gap-2">
-                                            <i class="fas fa-graduation-cap text-gray-400 text-xs"></i>
-                                            <span class="text-xs font-medium text-gray-800" x-text="prodi.name"></span>
+                            {{-- Employee (Total / Setuju) --}}
+                            <td class="px-4 py-3 text-center" 
+                                :class="row.type === 'unit' ? 'bg-amber-50/20' : 'bg-amber-50/10 text-xs'">
+                                <template x-if="row.type === 'unit'">
+                                    <div>
+                                        <span class="font-semibold text-amber-700" x-text="row.data.employee_total"></span>
+                                        <span class="text-xs text-gray-400">/</span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" 
+                                              x-text="row.data.employee_agreed"></span>
+                                        <span class="text-[10px] text-gray-400 block mt-0.5" x-text="'(' + row.data.employee_rate + '%)'"></span>
+                                    </div>
+                                </template>
+                                <template x-if="row.type === 'prodi'">
+                                    <div>
+                                        <span class="font-medium text-amber-700" x-text="row.data.employee_total"></span>
+                                        <span class="text-gray-400">/</span>
+                                        <span class="text-emerald-700 font-semibold" x-text="row.data.employee_agreed"></span>
+                                    </div>
+                                </template>
+                            </td>
+
+                            {{-- Setuju (Selesai) --}}
+                            <td class="px-4 py-3 text-center">
+                                <template x-if="row.type === 'unit'">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800" x-text="row.data.agreed"></span>
+                                </template>
+                                <template x-if="row.type === 'prodi'">
+                                    <span class="text-xs font-semibold text-emerald-700" x-text="row.data.agreed"></span>
+                                </template>
+                            </td>
+
+                            {{-- Pending --}}
+                            <td class="px-4 py-3 text-center">
+                                <template x-if="row.type === 'unit'">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700" x-text="row.data.pending"></span>
+                                </template>
+                                <template x-if="row.type === 'prodi'">
+                                    <span class="text-xs font-semibold text-amber-600" x-text="row.data.pending"></span>
+                                </template>
+                            </td>
+
+                            {{-- Consent Rate --}}
+                            <td class="px-5 py-3 text-center">
+                                <template x-if="row.type === 'unit'">
+                                    <div class="flex items-center gap-2 justify-center">
+                                        <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden max-w-[90px]">
+                                            <div class="bg-teal-600 h-2 rounded-full transition-all" :style="'width: ' + Math.min(row.data.rate, 100) + '%'"></div>
                                         </div>
-                                    </td>
-                                    <td class="px-4 py-2.5 text-center text-xs font-bold text-gray-700" x-text="prodi.total"></td>
-                                    <td class="px-4 py-2.5 text-center text-xs bg-indigo-50/10">
-                                        <span class="font-medium text-indigo-700" x-text="prodi.academic_total"></span>
-                                        <span class="text-gray-400">/</span>
-                                        <span class="text-emerald-700 font-semibold" x-text="prodi.academic_agreed"></span>
-                                    </td>
-                                    <td class="px-4 py-2.5 text-center text-xs bg-amber-50/10">
-                                        <span class="font-medium text-amber-700" x-text="prodi.employee_total"></span>
-                                        <span class="text-gray-400">/</span>
-                                        <span class="text-emerald-700 font-semibold" x-text="prodi.employee_agreed"></span>
-                                    </td>
-                                    <td class="px-4 py-2.5 text-center text-xs font-semibold text-emerald-700" x-text="prodi.agreed"></td>
-                                    <td class="px-4 py-2.5 text-center text-xs font-semibold text-amber-600" x-text="prodi.pending"></td>
-                                    <td class="px-5 py-2.5 text-center text-xs font-bold text-teal-700" x-text="prodi.rate + '%'"></td>
-                                </tr>
-                            </template>
-                        </template>
+                                        <span class="text-xs font-bold text-gray-800" x-text="row.data.rate + '%'"></span>
+                                    </div>
+                                </template>
+                                <template x-if="row.type === 'prodi'">
+                                    <span class="text-xs font-bold text-teal-700" x-text="row.data.rate + '%'"></span>
+                                </template>
+                            </td>
+
+                        </tr>
                     </template>
 
-                    <tr x-show="filteredUnits.length === 0">
+                    <tr x-show="displayRows.length === 0">
                         <td colspan="7" class="text-center py-12 text-gray-400">
                             <i class="fas fa-search text-3xl mb-2 block"></i>
-                            Tidak ada unit atau prodi yang sesuai dengan pencarian.
+                            Tidak ada unit atau prodi yang sesuai dengan pencarian atau filter yang dipilih.
                         </td>
                     </tr>
                 </tbody>
@@ -345,6 +380,7 @@ function sessionBreakdownManager() {
     return {
         units: @json($units),
         searchQuery: '',
+        selectedUnitFilter: '',
         expandedUnits: {},
         allExpanded: false,
 
@@ -359,14 +395,53 @@ function sessionBreakdownManager() {
         },
 
         get filteredUnits() {
+            let list = this.units;
+            if (this.selectedUnitFilter) {
+                list = list.filter(u => u.unit === this.selectedUnitFilter);
+            }
             if (!this.searchQuery.trim()) {
-                return this.units;
+                return list;
             }
             const q = this.searchQuery.toLowerCase();
-            return this.units.filter(u => {
+            return list.filter(u => {
                 if (u.unit.toLowerCase().includes(q)) return true;
                 return (u.prodis || []).some(p => p.name.toLowerCase().includes(q));
             });
+        },
+
+        get displayRows() {
+            const rows = [];
+            this.filteredUnits.forEach(u => {
+                const isExpanded = this.isUnitExpanded(u.unit);
+                const hasProdis = !!(u.prodis && u.prodis.length > 0);
+
+                // Add unit row
+                rows.push({
+                    _key: 'unit-' + u.unit,
+                    type: 'unit',
+                    data: u,
+                    isExpanded: isExpanded,
+                    hasProdis: hasProdis
+                });
+
+                // Add prodi rows if unit is expanded
+                if (isExpanded && hasProdis) {
+                    const q = this.searchQuery.trim().toLowerCase();
+                    u.prodis.forEach(p => {
+                        // If searching, keep matching prodi
+                        if (q && !u.unit.toLowerCase().includes(q) && !p.name.toLowerCase().includes(q)) {
+                            return;
+                        }
+                        rows.push({
+                            _key: 'prodi-' + u.unit + '-' + p.name,
+                            type: 'prodi',
+                            parentUnit: u.unit,
+                            data: p
+                        });
+                    });
+                }
+            });
+            return rows;
         },
 
         isUnitExpanded(unitKey) {
