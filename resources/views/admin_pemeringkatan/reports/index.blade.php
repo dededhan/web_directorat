@@ -515,7 +515,11 @@
 
             {{-- Left Column: Sebaran Penginput --}}
             @if(!Auth::user()->isProdi())
-                <div class="xl:col-span-4 space-y-4 xl:sticky xl:top-6">
+                <div x-show="showInputerSidebar" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 -translate-x-2"
+                     x-transition:enter-end="opacity-100 translate-x-0"
+                     class="xl:col-span-3 space-y-4 xl:sticky xl:top-6">
                     <div id="legacyInputerPanel" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
                         <div class="p-4 sm:p-5 border-b border-gray-100 flex flex-col gap-3">
                             <div class="flex items-center gap-3">
@@ -544,7 +548,7 @@
                                         id="legacyInputerToggleAll"
                                         x-show="legacyBreakdown.length > 0"
                                         @click="toggleAllInputerGroups()"
-                                        class="px-2.5 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg transition ml-auto">
+                                        class="px-2.5 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-200 hover:text-gray-900 rounded-lg transition ml-auto cursor-pointer">
                                     <i class="fas mr-1 text-[10px]" :class="allInputerGroupsOpen() ? 'fa-compress-alt' : 'fa-expand-alt'"></i>
                                     <span x-text="allInputerGroupsOpen() ? 'Tutup' : 'Buka Semua'"></span>
                                 </button>
@@ -567,7 +571,7 @@
                                         {{-- Group header --}}
                                         <button type="button"
                                                 @click="toggleInputerGroup(group.type)"
-                                                class="w-full flex items-center justify-between gap-2.5 px-3.5 py-2.5 text-left transition-colors"
+                                                class="w-full flex items-center justify-between gap-2.5 px-3.5 py-2.5 text-left transition-colors cursor-pointer"
                                                 :class="inputerTypeMeta(group.type).headerBg">
                                             <div class="flex items-center gap-2.5 min-w-0">
                                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :class="inputerTypeMeta(group.type).iconBg">
@@ -601,7 +605,7 @@
                                                 <li>
                                                     <button type="button"
                                                             @click="filterByInputer(inp.id)"
-                                                            class="w-full flex items-center gap-2.5 px-3.5 py-2 text-left transition-colors hover:bg-gray-50"
+                                                            class="w-full flex items-center gap-2.5 px-3.5 py-2 text-left transition-colors hover:bg-gray-50 cursor-pointer"
                                                             :class="legacyFilters.inputer === inp.id ? 'bg-teal-50 ring-1 ring-inset ring-teal-300' : ''"
                                                             :title="legacyFilters.inputer === inp.id ? 'Klik untuk menghapus filter' : 'Tampilkan responden yang diinput oleh ' + inp.name">
                                                         <div class="flex-1 min-w-0">
@@ -631,19 +635,189 @@
             @endif
 
             {{-- Right Column: Daftar Arsip Responden Table --}}
-            <div class="{{ !Auth::user()->isProdi() ? 'xl:col-span-8' : 'w-full' }} bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+            <div :class="(!showInputerSidebar || {{ Auth::user()->isProdi() ? 'true' : 'false' }}) ? 'col-span-12 w-full' : 'xl:col-span-9 w-full'" 
+                 class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-200">
+                <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
-                        <h2 class="text-base font-bold text-gray-800">Daftar Arsip Responden</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">Data responden dari tabel legacy dengan indikator status email dan status pengisian form (Status Akhir)</p>
+                        <div class="flex items-center gap-2.5">
+                            <h2 class="text-base font-bold text-gray-800">Daftar Arsip Responden</h2>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-gray-100 text-gray-700" 
+                                  x-text="(legacyPagination.total || 0) + ' data'"></span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">Semua detail responden terdata langsung tanpa perlu geser/scroll horizontal.</p>
                     </div>
-                    <div x-show="loadingLegacy" class="text-teal-600 text-xs font-medium flex items-center gap-1.5">
-                        <i class="fas fa-spinner fa-spin"></i> Memuat data...
+
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div x-show="loadingLegacy" class="text-teal-600 text-xs font-medium flex items-center gap-1.5 mr-1">
+                            <i class="fas fa-spinner fa-spin"></i> Memuat data...
+                        </div>
+
+                        {{-- Mode View Toggle: Fit Layar (No Scroll) vs 9 Kolom --}}
+                        <div class="inline-flex p-0.5 bg-gray-100 rounded-xl text-xs font-medium">
+                            <button type="button" 
+                                    @click="legacyTableMode = 'compact'"
+                                    :class="legacyTableMode === 'compact' ? 'bg-white text-teal-700 shadow-2xs font-bold' : 'text-gray-500 hover:text-gray-900 font-medium'"
+                                    class="px-2.5 py-1 rounded-lg transition flex items-center gap-1.5 cursor-pointer"
+                                    title="Tampilkan seluruh detail dalam 5 kolom rapi yang pas di layar tanpa scroll bar">
+                                <i class="fas fa-table-cells text-[10px]"></i>
+                                <span>Fit Layar</span>
+                            </button>
+                            <button type="button" 
+                                    @click="legacyTableMode = 'full'"
+                                    :class="legacyTableMode === 'full' ? 'bg-white text-teal-700 shadow-2xs font-bold' : 'text-gray-500 hover:text-gray-900 font-medium'"
+                                    class="px-2.5 py-1 rounded-lg transition flex items-center gap-1.5 cursor-pointer"
+                                    title="Tampilkan tabel klasik 9 kolom terpisah dengan scroll horizontal">
+                                <i class="fas fa-table-columns text-[10px]"></i>
+                                <span>9 Kolom</span>
+                            </button>
+                        </div>
+
+                        {{-- Toggle Sidebar Penginput (if not Prodi) --}}
+                        @if(!Auth::user()->isProdi())
+                            <button type="button" 
+                                    @click="showInputerSidebar = !showInputerSidebar"
+                                    class="px-3 py-1.5 text-xs font-medium rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 transition shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                                    :title="showInputerSidebar ? 'Sembunyikan panel sebaran penginput agar tabel lebih lebar' : 'Tampilkan panel sebaran penginput'">
+                                <i class="fas text-[11px]" :class="showInputerSidebar ? 'fa-arrows-alt-h text-teal-600' : 'fa-columns text-gray-500'"></i>
+                                <span x-text="showInputerSidebar ? 'Lebarkan Tabel' : 'Buka Penginput'"></span>
+                            </button>
+                        @endif
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-600">
+                {{-- Table 1: Fit Layar (Compact & Integrated Columns - NO Horizontal Scroll) --}}
+                <div x-show="legacyTableMode === 'compact'" class="w-full overflow-x-visible">
+                    <table class="w-full text-left text-sm text-gray-600 table-auto">
+                        <thead class="bg-gray-50/75 text-xs uppercase text-gray-500 font-semibold border-b border-gray-100">
+                            <tr>
+                                <th class="px-4 py-3.5 w-[18%]">Penginput</th>
+                                <th class="px-4 py-3.5 w-[28%]">Responden & Kontak</th>
+                                <th class="px-4 py-3.5 w-[24%]">Instansi & Posisi</th>
+                                <th class="px-4 py-3.5 w-[18%] text-center">Kategori & Status</th>
+                                <th class="px-4 py-3.5 w-[12%] text-right">Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <template x-for="item in legacyItems" :key="'compact-' + item.id">
+                                <tr class="hover:bg-gray-50/60 transition-colors">
+                                    {{-- 1. Penginput --}}
+                                    <td class="px-4 py-3.5 align-top">
+                                        <div class="text-xs font-bold text-gray-900 break-words line-clamp-2"
+                                             :title="item.inputer_name"
+                                             x-text="item.inputer_name || '-'"></div>
+                                        <div class="mt-1 flex items-center gap-1 flex-wrap">
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[10px] font-semibold"
+                                                  :class="inputerTypeMeta(item.inputer_type).badge">
+                                                <i class="fas text-[8px]" :class="inputerTypeMeta(item.inputer_type).icon"></i>
+                                                <span x-text="inputerTypeMeta(item.inputer_type).short"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    {{-- 2. Responden & Kontak --}}
+                                    <td class="px-4 py-3.5 align-top">
+                                        <div class="flex items-baseline gap-1.5 flex-wrap">
+                                            <span class="font-bold text-gray-900 text-xs sm:text-sm" x-text="item.fullname || '-'"></span>
+                                            <span class="text-[11px] font-medium text-teal-700" x-show="item.title" x-text="'(' + item.title + ')'"></span>
+                                        </div>
+                                        <div class="mt-1 space-y-0.5 text-xs">
+                                            <div class="text-gray-600 flex items-center gap-1.5 break-all">
+                                                <i class="far fa-envelope text-gray-400 text-[10px] shrink-0"></i>
+                                                <span x-text="item.email || '-'"></span>
+                                            </div>
+                                            <div class="text-gray-500 text-[11px] flex items-center gap-1.5" x-show="item.phone_responden">
+                                                <i class="fas fa-phone-alt text-gray-400 text-[9px] shrink-0"></i>
+                                                <span x-text="item.phone_responden"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    {{-- 3. Instansi & Posisi --}}
+                                    <td class="px-4 py-3.5 align-top">
+                                        <div class="text-xs font-bold text-gray-900 break-words" x-text="item.instansi || '-'"></div>
+                                        <div class="text-xs text-gray-500 mt-0.5" x-text="item.jabatan || '-'"></div>
+                                        <div class="mt-1.5 flex items-center gap-1.5 flex-wrap">
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200"
+                                                  title="Fakultas">
+                                                <i class="fas fa-university mr-1 text-[9px] text-slate-400"></i>
+                                                <span x-text="item.fakultas ? item.fakultas.toUpperCase() : '-'"></span>
+                                            </span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                                                  :class="item.category === 'academic' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-amber-50 text-amber-700 border border-amber-200'">
+                                                <i class="fas mr-1 text-[8px]" :class="item.category === 'academic' ? 'fa-graduation-cap' : 'fa-briefcase'"></i>
+                                                <span x-text="item.category ? item.category.toUpperCase() : '-'"></span>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    {{-- 4. Kategori & Status --}}
+                                    <td class="px-4 py-3.5 align-top text-center">
+                                        <div class="inline-flex flex-col items-center gap-1.5">
+                                            {{-- Status Akhir --}}
+                                            <template x-if="item.is_finished == 1 || item.status === 'clear' || item.status === 'selesai'">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                    <i class="fas fa-check-circle mr-1 text-emerald-600"></i> Selesai
+                                                </span>
+                                            </template>
+                                            <template x-if="item.is_finished != 1 && item.status !== 'clear' && item.status !== 'selesai'">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                                    <i class="fas fa-hourglass-half mr-1 text-amber-500"></i> Belum Selesai
+                                                </span>
+                                            </template>
+
+                                            {{-- Status Email --}}
+                                            <div>
+                                                <template x-if="item.status === 'done'">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                                        <i class="fas fa-paper-plane mr-1 text-blue-500 text-[9px]"></i> Di-email
+                                                    </span>
+                                                </template>
+                                                <template x-if="item.status === 'dones'">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                                        <i class="fas fa-envelope-open-text mr-1 text-indigo-500 text-[9px]"></i> Follow up
+                                                    </span>
+                                                </template>
+                                                <template x-if="item.status === 'clear' || item.status === 'selesai'">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-emerald-50 text-emerald-700">
+                                                        <i class="fas fa-check mr-1 text-[9px]"></i> Form Clear
+                                                    </span>
+                                                </template>
+                                                <template x-if="!['done', 'dones', 'clear', 'selesai'].includes(item.status)">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-gray-100 text-gray-500">
+                                                        <i class="fas fa-clock mr-1 text-[9px]"></i> Belum Email
+                                                    </span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    {{-- 5. Tanggal & Aksi Detail --}}
+                                    <td class="px-4 py-3.5 align-top text-right">
+                                        <div class="text-xs font-semibold text-gray-800" x-text="formatDate(item.created_at)"></div>
+                                        <div class="text-[10px] text-gray-400" x-text="formatTime(item.created_at)"></div>
+                                        <button type="button" 
+                                                @click="openRespondentDetail(item)"
+                                                class="mt-1.5 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition cursor-pointer">
+                                            <i class="fas fa-eye text-[10px]"></i>
+                                            <span>Detail</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+
+                            <tr x-show="legacyItems.length === 0 && !loadingLegacy">
+                                <td colspan="5" class="text-center py-12 text-gray-400">
+                                    <i class="fas fa-search text-3xl mb-2 block"></i>
+                                    Tidak ada data responden legacy yang sesuai dengan filter.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Table 2: Full 9 Columns View (Horizontal Scroll) --}}
+                <div x-show="legacyTableMode === 'full'" class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600 min-w-[950px]">
                         <thead class="bg-gray-50/75 text-xs uppercase text-gray-500 font-semibold border-b border-gray-100">
                             <tr>
                                 <th class="px-4 py-3.5">Penginput</th>
@@ -658,7 +832,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <template x-for="item in legacyItems" :key="item.id">
+                            <template x-for="item in legacyItems" :key="'full-' + item.id">
                                 <tr class="hover:bg-gray-50/60 transition-colors">
                                     <td class="px-4 py-3.5">
                                         <div class="text-xs font-semibold text-gray-800 max-w-[150px] truncate"
@@ -754,7 +928,7 @@
                     <div class="flex items-center gap-1.5">
                         <button @click="loadLegacyData(legacyPagination.current_page - 1)" 
                                 :disabled="legacyPagination.current_page <= 1"
-                                class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium">
+                                class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium cursor-pointer">
                             <i class="fas fa-chevron-left mr-1"></i> Prev
                         </button>
                         <span class="px-3 py-1.5 text-gray-700 font-bold">
@@ -762,7 +936,7 @@
                         </span>
                         <button @click="loadLegacyData(legacyPagination.current_page + 1)" 
                                 :disabled="legacyPagination.current_page >= legacyPagination.last_page"
-                                class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium">
+                                class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium cursor-pointer">
                             Next <i class="fas fa-chevron-right ml-1"></i>
                         </button>
                     </div>
@@ -898,6 +1072,198 @@
         </div>
     </div>
 
+    {{-- MODAL: DETAIL LENGKAP RESPONDEN LEGACY --}}
+    <div x-show="respondentDetailModalOpen" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4"
+         x-cloak>
+        <div @click.away="closeRespondentDetail()" 
+             class="bg-white rounded-2xl border border-gray-100 shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+            
+            {{-- Modal Header --}}
+            <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+                        <i class="fas fa-user-circle text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="text-base font-bold text-gray-900 truncate" x-text="selectedRespondentDetail?.fullname || 'Detail Responden'"></h3>
+                            <span class="text-xs font-semibold text-teal-700" x-show="selectedRespondentDetail?.title" x-text="'(' + selectedRespondentDetail?.title + ')'"></span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">Informasi lengkap data responden arsip legacy</p>
+                    </div>
+                </div>
+                <button @click="closeRespondentDetail()" class="text-gray-400 hover:text-gray-600 transition cursor-pointer p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            {{-- Modal Body --}}
+            <div class="p-6 space-y-5 overflow-y-auto flex-1 text-xs">
+                
+                {{-- Toast copy alert --}}
+                <div x-show="copiedToast" 
+                     x-transition 
+                     class="p-2.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center gap-2">
+                    <i class="fas fa-check-circle text-emerald-600"></i>
+                    <span>Teks berhasil disalin ke clipboard!</span>
+                </div>
+
+                {{-- Status Overview Bar --}}
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">Status Akhir</span>
+                        <div class="mt-1">
+                            <template x-if="selectedRespondentDetail?.is_finished == 1 || selectedRespondentDetail?.status === 'clear' || selectedRespondentDetail?.status === 'selesai'">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                    <i class="fas fa-check-circle mr-1 text-emerald-600"></i> Selesai
+                                </span>
+                            </template>
+                            <template x-if="selectedRespondentDetail?.is_finished != 1 && selectedRespondentDetail?.status !== 'clear' && selectedRespondentDetail?.status !== 'selesai'">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">
+                                    <i class="fas fa-hourglass-half mr-1 text-amber-500"></i> Belum Selesai
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">Status Email</span>
+                        <div class="mt-1">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium"
+                                  :class="selectedRespondentDetail?.status === 'done' ? 'bg-blue-50 text-blue-700' : (selectedRespondentDetail?.status === 'dones' ? 'bg-indigo-50 text-indigo-700' : 'bg-gray-100 text-gray-600')">
+                                <span x-text="selectedRespondentDetail?.status ? selectedRespondentDetail.status.toUpperCase() : 'BELUM EMAIL'"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 col-span-2 sm:col-span-1">
+                        <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">Kategori</span>
+                        <div class="mt-1">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold"
+                                  :class="selectedRespondentDetail?.category === 'academic' ? 'bg-indigo-50 text-indigo-700' : 'bg-amber-50 text-amber-700'">
+                                <i class="fas mr-1 text-[10px]" :class="selectedRespondentDetail?.category === 'academic' ? 'fa-graduation-cap' : 'fa-briefcase'"></i>
+                                <span x-text="selectedRespondentDetail?.category ? selectedRespondentDetail.category.toUpperCase() : '-'"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Detail Sections --}}
+                <div class="space-y-3">
+                    {{-- Section 1: Kontak & Identitas --}}
+                    <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-2xs space-y-2.5">
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 text-teal-700">
+                            <i class="fas fa-address-card"></i> Identitas & Kontak
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Nama Lengkap:</span>
+                                <span class="font-semibold text-gray-900" x-text="selectedRespondentDetail?.fullname || '-'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Gelar:</span>
+                                <span class="font-semibold text-gray-900" x-text="selectedRespondentDetail?.title || '-'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Email:</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-medium text-gray-900 break-all" x-text="selectedRespondentDetail?.email || '-'"></span>
+                                    <button type="button" 
+                                            x-show="selectedRespondentDetail?.email"
+                                            @click="copyText(selectedRespondentDetail?.email)"
+                                            class="text-gray-400 hover:text-teal-600 transition cursor-pointer"
+                                            title="Salin email">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Nomor Telepon:</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-medium text-gray-900" x-text="selectedRespondentDetail?.phone_responden || '-'"></span>
+                                    <button type="button" 
+                                            x-show="selectedRespondentDetail?.phone_responden"
+                                            @click="copyText(selectedRespondentDetail?.phone_responden)"
+                                            class="text-gray-400 hover:text-teal-600 transition cursor-pointer"
+                                            title="Salin nomor telepon">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Section 2: Instansi & Posisi --}}
+                    <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-2xs space-y-2.5">
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 text-indigo-700">
+                            <i class="fas fa-building"></i> Instansi & Jabatan
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Nama Instansi:</span>
+                                <span class="font-semibold text-gray-900" x-text="selectedRespondentDetail?.instansi || '-'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Jabatan:</span>
+                                <span class="font-semibold text-gray-900" x-text="selectedRespondentDetail?.jabatan || '-'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Fakultas / Unit Terkait:</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700" 
+                                      x-text="selectedRespondentDetail?.fakultas ? selectedRespondentDetail.fakultas.toUpperCase() : '-'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Waktu Input / Dibuat:</span>
+                                <span class="text-gray-700 font-medium" 
+                                      x-text="formatDate(selectedRespondentDetail?.created_at) + ' pukul ' + formatTime(selectedRespondentDetail?.created_at)"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Section 3: Data Penginput --}}
+                    <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-2xs space-y-2.5">
+                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 text-amber-700">
+                            <i class="fas fa-user-edit"></i> Akun Penginput
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Nama Akun Penginput:</span>
+                                <span class="font-bold text-gray-900" x-text="selectedRespondentDetail?.inputer_name || '-'"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block text-[11px]">Tipe Penginput:</span>
+                                <template x-if="selectedRespondentDetail">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-semibold"
+                                          :class="inputerTypeMeta(selectedRespondentDetail.inputer_type).badge">
+                                        <i class="fas text-[9px]" :class="inputerTypeMeta(selectedRespondentDetail.inputer_type).icon"></i>
+                                        <span x-text="inputerTypeMeta(selectedRespondentDetail.inputer_type).short"></span>
+                                    </span>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- Modal Footer --}}
+            <div class="p-4 border-t border-gray-100 bg-gray-50 flex items-center justify-end">
+                <button type="button" 
+                        @click="closeRespondentDetail()" 
+                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-semibold rounded-xl transition cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -926,6 +1292,12 @@ function reportManager() {
 
         // Legacy Tab State
         loadingLegacy: false,
+        showInputerSidebar: true,
+        legacyTableMode: 'compact', // 'compact' (fit without horizontal scroll) or 'full' (all 9 separated columns)
+        selectedRespondentDetail: null,
+        respondentDetailModalOpen: false,
+        copiedToast: false,
+
         legacyFilters: {
             year: 'all',
             start_date: '',
@@ -1281,6 +1653,25 @@ function reportManager() {
             const d = new Date(dateStr);
             if (isNaN(d.getTime())) return '';
             return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        },
+
+        openRespondentDetail(item) {
+            this.selectedRespondentDetail = item;
+            this.respondentDetailModalOpen = true;
+        },
+
+        closeRespondentDetail() {
+            this.respondentDetailModalOpen = false;
+            this.selectedRespondentDetail = null;
+        },
+
+        copyText(text) {
+            if (!text) return;
+            if (navigator && navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+                this.copiedToast = true;
+                setTimeout(() => { this.copiedToast = false; }, 2000);
+            }
         }
     };
 }
