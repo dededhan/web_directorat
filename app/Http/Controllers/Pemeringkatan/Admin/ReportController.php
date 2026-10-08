@@ -346,6 +346,97 @@ class ReportController extends Controller
     }
 
     /**
+     * Dedicated Page: Full Sebaran Penginput (Arsip Legacy) analytics & ranking per prodi/fakultas/direktorat.
+     */
+    public function inputerAnalyticsPage(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->isProdi()) {
+            return redirect()->route('admin_pemeringkatan.reports.index', ['tab' => 'legacy'])
+                ->with('error', 'Akses dibatasi. Halaman analisis penginput hanya untuk level Fakultas dan Direktorat.');
+        }
+
+        $accessibleUserIds = $user->getAccessibleUserIds();
+        $baseQuery = $this->buildLegacyBaseQuery($request, $user, $accessibleUserIds);
+
+        // Overall stats
+        $finishedSql = $this->getIsFinishedSubquery();
+        $statsRow = (clone $baseQuery)
+            ->selectRaw("COUNT(*) as total, SUM($finishedSql) as finished")
+            ->first();
+
+        $total = (int) ($statsRow->total ?? 0);
+        $finished = (int) ($statsRow->finished ?? 0);
+        $pending = max(0, $total - $finished);
+        $rate = $total > 0 ? round(($finished / $total) * 100, 1) : 0;
+
+        // Breakdown groups
+        $breakdown = $this->buildInputerBreakdown($baseQuery);
+
+        // Extract Prodi list specifically for deep analytics & charts
+        $prodiGroup = collect($breakdown)->firstWhere('type', 'prodi') ?? [
+            'type' => 'prodi',
+            'label' => 'Program Studi',
+            'total' => 0,
+            'finished' => 0,
+            'rate' => 0,
+            'inputers' => [],
+        ];
+
+        $prodiInputers = $prodiGroup['inputers'] ?? [];
+        $prodiCount = count($prodiInputers);
+        $prodiTotal = $prodiGroup['total'] ?? 0;
+        $prodiFinished = $prodiGroup['finished'] ?? 0;
+        $prodiAvg = $prodiCount > 0 ? round($prodiTotal / $prodiCount, 1) : 0;
+
+        // Faculty options for filter dropdown
+        $fakultasOptions = (clone $baseQuery)
+            ->whereNotNull('fakultas')
+            ->where('fakultas', '!=', '')
+            ->distinct()
+            ->pluck('fakultas')
+            ->sort()
+            ->values();
+
+        // Available years
+        $years = (clone $baseQuery)
+            ->selectRaw('YEAR(created_at) as year')
+            ->whereNotNull('created_at')
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year')
+            ->values();
+
+        return view('admin_pemeringkatan.reports.inputer_analytics', [
+            'overallStats' => [
+                'total' => $total,
+                'finished' => $finished,
+                'pending' => $pending,
+                'rate' => $rate,
+            ],
+            'prodiStats' => [
+                'count' => $prodiCount,
+                'total' => $prodiTotal,
+                'finished' => $prodiFinished,
+                'rate' => $prodiGroup['rate'] ?? 0,
+                'avg' => $prodiAvg,
+                'top' => !empty($prodiInputers) ? $prodiInputers[0] : null,
+            ],
+            'breakdown' => $breakdown,
+            'prodiList' => $prodiInputers,
+            'fakultasOptions' => $fakultasOptions,
+            'years' => $years,
+            'filters' => [
+                'year' => $request->query('year', 'all'),
+                'fakultas' => $request->query('fakultas', 'all'),
+                'start_date' => $request->query('start_date', ''),
+                'end_date' => $request->query('end_date', ''),
+            ],
+            'user' => $user,
+        ]);
+    }
+
+    /**
      * Compute session unit breakdown with separation between academic and employee respondents.
      */
     private function computeSessionBreakdown(QsSession $session, ?array $accessibleUserIds): array

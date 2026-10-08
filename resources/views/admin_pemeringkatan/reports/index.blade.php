@@ -545,14 +545,13 @@
                                     </button>
                                 </template>
                                 <div class="flex items-center gap-1.5 ml-auto flex-wrap">
-                                    <button type="button"
-                                            @click="openProdiStatsModal()"
-                                            x-show="prodiStats.count > 0"
-                                            class="px-2 py-1 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition flex items-center gap-1 cursor-pointer shadow-2xs"
-                                            title="Lihat grafik visual & rincian angka seluruh akun program studi">
-                                        <i class="fas fa-chart-bar text-[11px] text-blue-600"></i>
-                                        <span>Grafik Prodi</span>
-                                    </button>
+                                    <a href="{{ route('admin_pemeringkatan.reports.inputer-analytics') }}"
+                                       x-show="prodiStats.count > 0"
+                                       class="px-2 py-1 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition inline-flex items-center gap-1 shadow-2xs"
+                                       title="Buka halaman analitik lengkap & grafik sebaran seluruh akun penginput">
+                                        <i class="fas fa-chart-pie text-[11px] text-blue-600"></i>
+                                        <span>Analitik Penginput</span>
+                                    </a>
                                     <button type="button"
                                             id="legacyInputerToggleAll"
                                             x-show="legacyBreakdown.length > 0"
@@ -597,12 +596,13 @@
                                             </div>
                                             <div class="flex items-center gap-2 shrink-0">
                                                 <template x-if="group.type === 'prodi'">
-                                                    <span @click.stop="openProdiStatsModal()" 
-                                                          class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 hover:bg-blue-200 transition cursor-pointer"
-                                                          title="Buka grafik & peringkat prodi">
+                                                    <a href="{{ route('admin_pemeringkatan.reports.inputer-analytics') }}"
+                                                       @click.stop
+                                                       class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
+                                                       title="Buka halaman analitik & grafik sebaran prodi">
                                                         <i class="fas fa-chart-bar text-[9px]"></i>
-                                                        <span>Grafik</span>
-                                                    </span>
+                                                        <span>Analitik</span>
+                                                    </a>
                                                 </template>
                                                 <div class="text-right">
                                                     <div class="text-base font-bold text-gray-900 leading-tight" x-text="group.total"></div>
@@ -625,12 +625,11 @@
                                                 <div class="p-2.5 bg-blue-50/50 border-b border-blue-100/70 space-y-2">
                                                     <div class="flex items-center justify-between text-[11px] text-blue-900 font-semibold">
                                                         <span>Rata-rata: <strong x-text="prodiStats.avg"></strong> /prodi</span>
-                                                        <button type="button" 
-                                                                @click="openProdiStatsModal()"
-                                                                class="text-blue-700 hover:underline flex items-center gap-1 font-bold cursor-pointer">
+                                                        <a href="{{ route('admin_pemeringkatan.reports.inputer-analytics') }}"
+                                                           class="text-blue-700 hover:underline flex items-center gap-1 font-bold">
                                                             <i class="fas fa-chart-bar text-[10px]"></i>
-                                                            <span>Lihat Grafik</span>
-                                                        </button>
+                                                            <span>Lihat Halaman Analitik</span>
+                                                        </a>
                                                     </div>
                                                     <div class="relative" x-show="group.inputers.length > 5">
                                                         <input type="text" 
@@ -1307,173 +1306,7 @@
         </div>
     </div>
 
-    {{-- MODAL: GRAFIK & STATISTIK KONTRIBUSI PROGRAM STUDI --}}
-    <div x-show="prodiStatsModalOpen" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4"
-         x-cloak>
-        <div @click.away="closeProdiStatsModal()" 
-             class="bg-white rounded-2xl border border-gray-100 shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-            
-            {{-- Modal Header --}}
-            <div class="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50/70 to-indigo-50/40">
-                <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
-                        <i class="fas fa-graduation-cap text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <h3 class="text-lg font-bold text-gray-900">Statistik & Kontribusi Akun Program Studi</h3>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800" 
-                                  x-text="prodiStats.count + ' Prodi Aktif'"></span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-0.5">
-                            Rincian angka input, penyelesaian form, serta grafik sebaran responden dari setiap akun prodi
-                        </p>
-                    </div>
-                </div>
-                <button type="button" @click="closeProdiStatsModal()" class="text-gray-400 hover:text-gray-600 transition cursor-pointer p-1">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
 
-            {{-- Modal Body --}}
-            <div class="p-5 sm:p-6 space-y-6 overflow-y-auto flex-1">
-                
-                {{-- KPI Summary Cards --}}
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-gray-50/90 p-4 rounded-xl border border-gray-100">
-                        <span class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider block">Total Input Prodi</span>
-                        <p class="text-2xl font-bold text-gray-900 mt-1" x-text="prodiStats.total"></p>
-                        <span class="text-[11px] text-gray-400 mt-0.5 block">Responden diinput</span>
-                    </div>
-
-                    <div class="bg-emerald-50/70 p-4 rounded-xl border border-emerald-100">
-                        <span class="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider block">Selesai (Form Clear)</span>
-                        <p class="text-2xl font-bold text-emerald-700 mt-1" x-text="prodiStats.finished"></p>
-                        <span class="text-[11px] text-emerald-600 mt-0.5 font-semibold block" x-text="prodiStats.rate + '% rasio selesai'"></span>
-                    </div>
-
-                    <div class="bg-blue-50/70 p-4 rounded-xl border border-blue-100">
-                        <span class="text-[11px] font-semibold text-blue-700 uppercase tracking-wider block">Rata-rata / Prodi</span>
-                        <p class="text-2xl font-bold text-blue-700 mt-1" x-text="prodiStats.avg"></p>
-                        <span class="text-[11px] text-blue-600 mt-0.5 block" x-text="'Dari ' + prodiStats.count + ' akun prodi'"></span>
-                    </div>
-
-                    <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100">
-                        <span class="text-[11px] font-semibold text-indigo-700 uppercase tracking-wider block">Top Kontributor</span>
-                        <p class="text-sm font-bold text-indigo-900 mt-1.5 truncate" :title="prodiStats.topProdi?.name" x-text="prodiStats.topProdi?.name || '-'"></p>
-                        <span class="text-[11px] text-indigo-600 mt-0.5 font-semibold block" x-text="(prodiStats.topProdi?.total || 0) + ' responden (' + (prodiStats.topProdi?.rate || 0) + '%)'"></span>
-                    </div>
-                </div>
-
-                {{-- Chart Section --}}
-                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-2xs space-y-3">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-                                <i class="fas fa-chart-bar text-blue-600"></i>
-                                <span>Grafik Distribusi Kontribusi Responden per Program Studi</span>
-                            </h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Klik pada salah satu batang grafik untuk langsung memfilter tabel responden utama.</p>
-                        </div>
-                        <div class="flex items-center gap-3 text-xs">
-                            <span class="inline-flex items-center gap-1.5 text-emerald-700 font-medium">
-                                <span class="w-3 h-3 rounded bg-emerald-500"></span> Selesai
-                            </span>
-                            <span class="inline-flex items-center gap-1.5 text-slate-500 font-medium">
-                                <span class="w-3 h-3 rounded bg-slate-300"></span> Belum Selesai
-                            </span>
-                        </div>
-                    </div>
-
-                    {{-- Dynamic Chart Container --}}
-                    <div class="relative w-full overflow-hidden pt-2" :style="'height: ' + Math.max(280, Math.min(500, (prodiGroup.inputers?.length || 0) * 24 + 60)) + 'px'">
-                        <canvas id="prodiContributionChart"></canvas>
-                    </div>
-                </div>
-
-                {{-- Full Ranking / Detail Table --}}
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden space-y-0">
-                    <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-gray-50/50">
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-900">Daftar Peringkat & Angka Input Seluruh Prodi</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">Urutan kontribusi program studi dari yang terbanyak</p>
-                        </div>
-                        <div class="relative min-w-[220px]">
-                            <input type="text" 
-                                   x-model="prodiModalSearch" 
-                                   placeholder="Cari program studi..."
-                                   class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700">
-                            <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
-                        </div>
-                    </div>
-
-                    <div class="max-h-72 overflow-y-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-[11px] uppercase text-gray-500 font-semibold border-b border-gray-100 sticky top-0 z-10">
-                                <tr>
-                                    <th class="px-4 py-2.5 text-center w-12">#</th>
-                                    <th class="px-4 py-2.5">Program Studi</th>
-                                    <th class="px-4 py-2.5 text-center">Total Input</th>
-                                    <th class="px-4 py-2.5 text-center">Selesai</th>
-                                    <th class="px-4 py-2.5 w-40">Tingkat Selesai</th>
-                                    <th class="px-4 py-2.5 text-right w-24">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <template x-for="(inp, idx) in filteredProdiModalList" :key="'prodi-rank-' + inp.id">
-                                    <tr class="hover:bg-blue-50/30 transition-colors">
-                                        <td class="px-4 py-2.5 text-center font-bold text-gray-400" x-text="idx + 1"></td>
-                                        <td class="px-4 py-2.5 font-semibold text-gray-900" x-text="inp.name"></td>
-                                        <td class="px-4 py-2.5 text-center font-bold text-blue-700 text-sm" x-text="inp.total"></td>
-                                        <td class="px-4 py-2.5 text-center font-semibold text-emerald-600" x-text="inp.finished"></td>
-                                        <td class="px-4 py-2.5">
-                                            <div class="flex items-center gap-2">
-                                                <div class="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                                                    <div class="bg-emerald-500 h-1.5 rounded-full transition-all" :style="'width: ' + Math.min(inp.rate, 100) + '%'"></div>
-                                                </div>
-                                                <span class="text-[11px] font-bold text-gray-700" x-text="inp.rate + '%'"></span>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-2.5 text-right">
-                                            <button type="button" 
-                                                    @click="filterByInputer(inp.id); closeProdiStatsModal();"
-                                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200 transition cursor-pointer">
-                                                <i class="fas fa-filter text-[9px]"></i>
-                                                <span>Filter</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </template>
-                                <tr x-show="filteredProdiModalList.length === 0">
-                                    <td colspan="6" class="text-center py-8 text-gray-400">
-                                        Tidak ada program studi yang cocok dengan pencarian.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-
-            {{-- Modal Footer --}}
-            <div class="p-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
-                <span>Klik <strong>Filter</strong> pada prodi mana pun untuk langsung menampilkan datanya pada tabel utama.</span>
-                <button type="button" 
-                        @click="closeProdiStatsModal()" 
-                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-semibold rounded-xl transition cursor-pointer">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
 
 </div>
 
@@ -1523,11 +1356,7 @@ function reportManager() {
         isFakultasUser: @json(Auth::user()->isFakultas()),
         legacyBreakdown: [],
         expandedInputerGroups: {},
-        breakdownScopeKey: null,
-        prodiStatsModalOpen: false,
-        prodiChartInstance: null,
         prodiSearchQuery: '',
-        prodiModalSearch: '',
         legacyStats: {
             total: 0,
             finished: 0,
@@ -1878,114 +1707,7 @@ function reportManager() {
             };
         },
 
-        get filteredProdiModalList() {
-            const list = [...(this.prodiGroup.inputers || [])];
-            list.sort((a, b) => b.total - a.total);
-            if (!this.prodiModalSearch.trim()) {
-                return list;
-            }
-            const q = this.prodiModalSearch.toLowerCase();
-            return list.filter(i => i.name.toLowerCase().includes(q));
-        },
 
-        openProdiStatsModal() {
-            this.prodiStatsModalOpen = true;
-            this.$nextTick(() => {
-                this.renderProdiChart();
-            });
-        },
-
-        closeProdiStatsModal() {
-            this.prodiStatsModalOpen = false;
-        },
-
-        renderProdiChart() {
-            const canvas = document.getElementById('prodiContributionChart');
-            if (!canvas) return;
-
-            const inputers = [...(this.prodiGroup.inputers || [])];
-            if (inputers.length === 0) return;
-
-            inputers.sort((a, b) => b.total - a.total);
-
-            const labels = inputers.map(i => {
-                const name = i.name.replace(/^(FT|FEB|FIP|FBS|FMIPA|FIK|FISH|FPsi|Vokasi)-/, '');
-                return name.length > 28 ? name.substring(0, 26) + '...' : name;
-            });
-            const finishedData = inputers.map(i => i.finished);
-            const pendingData = inputers.map(i => Math.max(0, i.total - i.finished));
-
-            if (this.prodiChartInstance) {
-                this.prodiChartInstance.destroy();
-            }
-
-            const ctx = canvas.getContext('2d');
-            this.prodiChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Selesai (Form Clear)',
-                            data: finishedData,
-                            backgroundColor: '#10B981',
-                            borderRadius: 4,
-                            barThickness: 14,
-                        },
-                        {
-                            label: 'Belum Selesai',
-                            data: pendingData,
-                            backgroundColor: '#CBD5E1',
-                            borderRadius: 4,
-                            barThickness: 14,
-                        }
-                    ]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true,
-                            beginAtZero: true,
-                            grid: { color: '#F1F5F9' },
-                            ticks: { precision: 0 }
-                        },
-                        y: {
-                            stacked: true,
-                            grid: { display: false },
-                            ticks: {
-                                font: { size: 11, family: 'Inter, sans-serif' },
-                                autoSkip: false
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                afterBody: (context) => {
-                                    const idx = context[0].dataIndex;
-                                    const item = inputers[idx];
-                                    return `Total: ${item.total} responden (${item.rate}% selesai)`;
-                                }
-                            }
-                        }
-                    },
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const idx = elements[0].index;
-                            const clickedItem = inputers[idx];
-                            this.filterByInputer(clickedItem.id);
-                            this.closeProdiStatsModal();
-                        }
-                    }
-                }
-            });
-        },
 
         formatDate(dateStr) {
             if (!dateStr) return '-';
