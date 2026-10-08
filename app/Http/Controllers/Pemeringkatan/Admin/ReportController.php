@@ -35,50 +35,9 @@ class ReportController extends Controller
         // 1. Available QS Sessions for dropdown
         $sessions = QsSession::orderBy('created_at', 'desc')->get();
 
-        // 2. Legacy filters metadata
-        $yearsQuery = Responden::selectRaw('YEAR(created_at) as yr')
-            ->whereNotNull('created_at');
-
-        // Scope faculties for non-directorate
-        if ($user->isProdi()) {
-            $yearsQuery->where('user_id', $user->id);
-            $facultyCode = $this->getUserFacultyCode($user);
-            $userCanonical = $facultyCode ? self::normalizeFacultyCode($facultyCode) : null;
-            $legacyFaculties = $userCanonical ? [$userCanonical] : [];
-        } elseif ($user->isFakultas()) {
-            $facultyCode = $this->getUserFacultyCode($user);
-            if ($facultyCode !== null) {
-                $yearsQuery->whereIn(DB::raw('LOWER(fakultas)'), $this->getFacultyAliases($facultyCode));
-            }
-            $userCanonical = $facultyCode ? self::normalizeFacultyCode($facultyCode) : null;
-            $legacyFaculties = $userCanonical ? [$userCanonical] : [];
-        } else {
-            $rawFaculties = Responden::selectRaw('DISTINCT LOWER(fakultas) as fak')
-                ->whereNotNull('fakultas')
-                ->where('fakultas', '!=', '')
-                ->pluck('fak');
-
-            $canonicalList = [];
-            foreach ($rawFaculties as $rawFak) {
-                $canon = self::normalizeFacultyCode($rawFak);
-                if (!empty($canon)) {
-                    $canonicalList[$canon] = true;
-                }
-            }
-            // Ensure standard faculties requested are present in filter options
-            $standardFaculties = ['FBS', 'FEB', 'FIP', 'FISH', 'FMIPA', 'FPB', 'FPSI', 'FT'];
-            foreach ($standardFaculties as $std) {
-                $canonicalList[$std] = true;
-            }
-            $legacyFaculties = array_keys($canonicalList);
-            sort($legacyFaculties);
-        }
-
-        $legacyYears = $yearsQuery->distinct()
-            ->orderBy('yr', 'desc')
-            ->pluck('yr')
-            ->filter()
-            ->values();
+        // 2. Legacy filters metadata using canonical helpers
+        $legacyFaculties = $this->getAvailableFaculties($user);
+        $legacyYears = $this->getAvailableLegacyYears($user);
 
         return view('admin_pemeringkatan.reports.index', compact(
             'sessions',
@@ -357,7 +316,7 @@ class ReportController extends Controller
         }
 
         $accessibleUserIds = $user->getAccessibleUserIds();
-        $baseQuery = $this->buildLegacyBaseQuery($request, $user, $accessibleUserIds);
+        $baseQuery = $this->buildLegacyBaseQuery($request, $user);
 
         // Overall stats
         $finishedSql = $this->getIsFinishedSubquery();
@@ -389,23 +348,9 @@ class ReportController extends Controller
         $prodiFinished = $prodiGroup['finished'] ?? 0;
         $prodiAvg = $prodiCount > 0 ? round($prodiTotal / $prodiCount, 1) : 0;
 
-        // Faculty options for filter dropdown
-        $fakultasOptions = (clone $baseQuery)
-            ->whereNotNull('fakultas')
-            ->where('fakultas', '!=', '')
-            ->distinct()
-            ->pluck('fakultas')
-            ->sort()
-            ->values();
-
-        // Available years
-        $years = (clone $baseQuery)
-            ->selectRaw('YEAR(created_at) as year')
-            ->whereNotNull('created_at')
-            ->distinct()
-            ->orderByDesc('year')
-            ->pluck('year')
-            ->values();
+        // Faculty options and years using consistent canonical helpers
+        $fakultasOptions = $this->getAvailableFaculties($user);
+        $years = $this->getAvailableLegacyYears($user);
 
         return view('admin_pemeringkatan.reports.inputer_analytics', [
             'overallStats' => [
@@ -881,6 +826,71 @@ class ReportController extends Controller
 
         $lowerCode = strtolower(trim($code));
         return array_unique(array_filter([$lowerCode, strtolower($canonical)]));
+    }
+
+    /**
+     * Get available legacy faculties based on user scope and canonical normalization.
+     */
+    public function getAvailableFaculties(User $user): array
+    {
+        if ($user->isProdi()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            $userCanonical = $facultyCode ? self::normalizeFacultyCode($facultyCode) : null;
+            return $userCanonical ? [$userCanonical] : [];
+        }
+
+        if ($user->isFakultas()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            $userCanonical = $facultyCode ? self::normalizeFacultyCode($facultyCode) : null;
+            return $userCanonical ? [$userCanonical] : [];
+        }
+
+        $rawFaculties = Responden::selectRaw('DISTINCT LOWER(fakultas) as fak')
+            ->whereNotNull('fakultas')
+            ->where('fakultas', '!=', '')
+            ->pluck('fak');
+
+        $canonicalList = [];
+        foreach ($rawFaculties as $rawFak) {
+            $canon = self::normalizeFacultyCode($rawFak);
+            if (!empty($canon)) {
+                $canonicalList[$canon] = true;
+            }
+        }
+
+        $standardFaculties = ['FBS', 'FEB', 'FIP', 'FISH', 'FMIPA', 'FPB', 'FPSI', 'FT'];
+        foreach ($standardFaculties as $std) {
+            $canonicalList[$std] = true;
+        }
+
+        $faculties = array_keys($canonicalList);
+        sort($faculties);
+        return $faculties;
+    }
+
+    /**
+     * Get available legacy years based on user scope.
+     */
+    public function getAvailableLegacyYears(User $user): array
+    {
+        $yearsQuery = Responden::selectRaw('YEAR(created_at) as yr')
+            ->whereNotNull('created_at');
+
+        if ($user->isProdi()) {
+            $yearsQuery->where('user_id', $user->id);
+        } elseif ($user->isFakultas()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            if ($facultyCode !== null) {
+                $yearsQuery->whereIn(DB::raw('LOWER(fakultas)'), $this->getFacultyAliases($facultyCode));
+            }
+        }
+
+        return $yearsQuery->distinct()
+            ->orderBy('yr', 'desc')
+            ->pluck('yr')
+            ->filter()
+            ->values()
+            ->all();
     }
 
     /**

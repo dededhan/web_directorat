@@ -80,7 +80,7 @@
                 </select>
             </div>
 
-            {{-- Filter Fakultas (hanya tampil jika direktorat) --}}
+            {{-- Filter Fakultas --}}
             @if(Auth::user()->isDirectorateAdmin() && count($fakultasOptions) > 0)
                 <div class="min-w-[180px]">
                     <label class="block text-[11px] font-semibold text-gray-500 uppercase mb-1">Fakultas</label>
@@ -88,9 +88,17 @@
                             class="w-full px-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700 cursor-pointer">
                         <option value="all">Semua Fakultas</option>
                         @foreach($fakultasOptions as $fak)
-                            <option value="{{ $fak }}" {{ $filters['fakultas'] === $fak ? 'selected' : '' }}>{{ strtoupper($fak) }}</option>
+                            <option value="{{ strtolower($fak) }}" {{ strtolower($filters['fakultas'] ?? '') === strtolower($fak) ? 'selected' : '' }}>{{ $fak }}</option>
                         @endforeach
                     </select>
+                </div>
+            @elseif(Auth::user()->isFakultas() && count($fakultasOptions) > 0)
+                <div class="min-w-[180px]">
+                    <label class="block text-[11px] font-semibold text-gray-500 uppercase mb-1">Fakultas</label>
+                    <div class="w-full px-3 py-1.5 text-xs bg-gray-100 border border-gray-200 rounded-xl text-gray-600 flex items-center justify-between" title="Dibatasi hanya data fakultas Anda">
+                        <span class="font-medium truncate">{{ $fakultasOptions[0] ?? Auth::user()->name }}</span>
+                        <span class="text-[10px] text-indigo-600 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded shrink-0">Terkunci</span>
+                    </div>
                 </div>
             @endif
 

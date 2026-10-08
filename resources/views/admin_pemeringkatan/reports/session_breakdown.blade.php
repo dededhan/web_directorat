@@ -189,9 +189,9 @@
                     <select x-model="selectedUnitFilter" 
                             class="w-full px-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-gray-700 cursor-pointer">
                         <option value="">Semua Fakultas / Unit</option>
-                        <template x-for="u in units" :key="'opt-' + u.unit">
-                            <option :value="u.unit" x-text="u.unit + ' (' + (u.prodis ? u.prodis.length : 0) + ' Prodi)'"></option>
-                        </template>
+                        @foreach($units as $u)
+                            <option value="{{ $u['unit'] }}">{{ $u['unit'] }} ({{ count($u['prodis'] ?? []) }} Prodi)</option>
+                        @endforeach
                     </select>
                 </div>
 
