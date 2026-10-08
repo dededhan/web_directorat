@@ -51,6 +51,8 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             'Status Akhir',
             'Dosen Pengusul',
             'Tanggal Dibuat',
+            'Penginput',
+            'Tipe Penginput',
         ];
     }
 
@@ -70,6 +72,8 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
         $statusAkhir = $isFinished ? 'Selesai' : 'Belum Selesai';
         $tanggalDibuat = $row->created_at ? $row->created_at->format('d/m/Y H:i') : '-';
 
+        $inputer = ReportController::describeInputer($row->user, $row->user_id);
+
         return [
             $this->counter,
             $row->title ? strtoupper($row->title) : '-',
@@ -84,6 +88,8 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             $statusAkhir,
             $row->nama_dosen_pengusul ?? '-',
             $tanggalDibuat,
+            $inputer['name'],
+            $inputer['type_label'],
         ];
     }
 
@@ -92,7 +98,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
         $lastRow = $sheet->getHighestRow();
 
         // Header style
-        $sheet->getStyle('A1:M1')->applyFromArray([
+        $sheet->getStyle('A1:O1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -111,7 +117,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
 
         // Body border and alignment
         if ($lastRow > 1) {
-            $sheet->getStyle("A2:M{$lastRow}")->applyFromArray([
+            $sheet->getStyle("A2:O{$lastRow}")->applyFromArray([
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_THIN,
@@ -127,6 +133,7 @@ class LegacyRespondenExport implements FromCollection, WithHeadings, WithMapping
             $sheet->getStyle("A2:B{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle("H2:K{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle("M2:M{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("O2:O{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
 
         return [];

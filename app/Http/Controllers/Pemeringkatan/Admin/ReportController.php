@@ -7,7 +7,7 @@ use App\Models\Responden;
 use App\Models\QsSession;
 use App\Models\QsSessionRespondent;
 use App\Models\User;
-use App\Exports\LegacyRespondenExport;
+use App\Exports\LegacyReportExport;
 use App\Exports\SessionReportExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +16,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
+    /**
+     * Roles considered as "Direktorat" accounts (inputer / unit label).
+     */
+    private const DIREKTORAT_ROLES = [
+        'admin_pemeringkatan', 'admin_direktorat', 'super_admin', 'kepala_direktorat',
+        'kepala_sub_direktorat', 'wr3', 'admin_hilirisasi', 'admin_inovasi',
+    ];
+
     /**
      * Display the main Reports page with both tabs.
      */
@@ -88,62 +96,17 @@ class ReportController extends Controller
         $user = Auth::user();
         $isFinishedSubquery = $this->getIsFinishedSubquery();
 
-        $query = Responden::selectRaw("respondens.*, ($isFinishedSubquery) as is_finished");
+        // Base query: role scope + date/year/fakultas/category/search (no status, no inputer)
+        $baseQuery = $this->buildLegacyBaseQuery($request, $user);
 
-        // Role-based scoping
-        if ($user->isProdi()) {
-            $query->where('respondens.user_id', $user->id);
-        } elseif ($user->isFakultas()) {
-            $facultyCode = $this->getUserFacultyCode($user);
-            if ($facultyCode !== null) {
-                $allowedFakultas = $this->getFacultyAliases($facultyCode);
-                $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
-            }
-        }
+        // Inputer breakdown follows all filters except Status & Penginput (hidden for Prodi)
+        $inputerBreakdown = $user->isProdi() ? [] : $this->buildInputerBreakdown($baseQuery);
 
-        // Apply filters
-        // Date range / Jenjang Tanggal (Date Created)
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('respondens.created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
-        } elseif ($request->filled('start_date')) {
-            $query->where('respondens.created_at', '>=', $request->start_date . ' 00:00:00');
-        } elseif ($request->filled('end_date')) {
-            $query->where('respondens.created_at', '<=', $request->end_date . ' 23:59:59');
-        } elseif ($request->filled('date')) {
-            $query->whereDate('respondens.created_at', $request->date);
-        }
+        $query = (clone $baseQuery)
+            ->selectRaw("respondens.*, ($isFinishedSubquery) as is_finished")
+            ->with('user:id,name,role');
 
-        if ($request->filled('year') && $request->year !== 'all') {
-            $query->whereYear('respondens.created_at', $request->year);
-        }
-
-        if (!$user->isProdi() && $request->filled('fakultas') && $request->fakultas !== 'all') {
-            $selectedAliases = $this->getFacultyAliases(strtolower($request->fakultas));
-            $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $selectedAliases);
-        }
-
-        if ($request->filled('category') && $request->category !== 'all') {
-            $cat = strtolower(trim($request->category));
-            if ($cat === 'academic') {
-                $query->whereIn('respondens.category', ['academic', 'researcher', 'reseracher']);
-            } elseif ($cat === 'employer') {
-                $query->whereIn('respondens.category', ['employer', 'employeer', 'industri', 'employee']);
-            }
-        }
-
-        if ($request->filled('search')) {
-            $search = strtolower(trim($request->search));
-            $query->where(function ($q) use ($search) {
-                $q->where(DB::raw('LOWER(fullname)'), 'LIKE', "%{$search}%")
-                  ->orWhere(DB::raw('LOWER(email)'), 'LIKE', "%{$search}%")
-                  ->orWhere(DB::raw('LOWER(instansi)'), 'LIKE', "%{$search}%")
-                  ->orWhere(DB::raw('LOWER(jabatan)'), 'LIKE', "%{$search}%")
-                  ->orWhere(DB::raw('LOWER(phone_responden)'), 'LIKE', "%{$search}%");
-            });
-        }
+        $this->applyLegacyInputerFilter($query, $request, $user);
 
         // Calculate summary stats on the filtered query (before status filter to know total vs finished)
         $statsBaseQuery = clone $query;
@@ -153,32 +116,16 @@ class ReportController extends Controller
         $finishRate = $totalCount > 0 ? round(($finishedCount / $totalCount) * 100, 1) : 0;
 
         // Apply status filter if specified
-        if ($request->filled('status') && $request->status !== 'all') {
-            $statusVal = strtolower(trim($request->status));
-            if (in_array($statusVal, ['selesai', 'clear', 'finished'])) {
-                $query->whereRaw("($isFinishedSubquery) = 1");
-            } elseif (in_array($statusVal, ['belum_selesai', 'unfinished'])) {
-                $query->whereRaw("($isFinishedSubquery) = 0");
-            } elseif ($statusVal === 'done') {
-                $query->where(DB::raw('LOWER(respondens.status)'), 'done');
-            } elseif ($statusVal === 'belum') {
-                $query->where(function($q) {
-                    $q->where(DB::raw('LOWER(respondens.status)'), 'belum')
-                      ->orWhereNull('respondens.status');
-                });
-            } elseif ($statusVal === 'dones') {
-                $query->where(DB::raw('LOWER(respondens.status)'), 'dones');
-            }
-        }
+        $this->applyLegacyStatusFilter($query, $request);
 
         // Sorting
         $sortBy = $request->get('sort', 'created_at');
         $direction = strtolower($request->get('direction', 'desc')) === 'asc' ? 'asc' : 'desc';
         $allowedSorts = ['fullname', 'email', 'instansi', 'fakultas', 'category', 'created_at', 'is_finished'];
         if (in_array($sortBy, $allowedSorts)) {
-            $query->orderBy($sortBy, $direction);
+            $query->orderBy($sortBy === 'is_finished' ? 'is_finished' : 'respondens.' . $sortBy, $direction);
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('respondens.created_at', 'desc');
         }
 
         $perPage = max(5, min(100, (int) $request->get('per_page', 15)));
@@ -186,6 +133,13 @@ class ReportController extends Controller
 
         $paginator->getCollection()->transform(function ($item) {
             $item->fakultas = self::normalizeFacultyCode($item->fakultas) ?: ($item->fakultas ? strtoupper($item->fakultas) : '-');
+
+            $inputer = self::describeInputer($item->user, $item->user_id);
+            $item->inputer_name = $inputer['name'];
+            $item->inputer_type = $inputer['type'];
+            $item->inputer_type_label = $inputer['type_label'];
+            $item->makeHidden('user');
+
             return $item;
         });
 
@@ -196,6 +150,7 @@ class ReportController extends Controller
                 'pending' => $pendingCount,
                 'rate' => $finishRate,
             ],
+            'inputer_breakdown' => $inputerBreakdown,
             'data' => $paginator->items(),
             'pagination' => [
                 'current_page' => $paginator->currentPage(),
@@ -457,83 +412,22 @@ class ReportController extends Controller
         $user = Auth::user();
         $isFinishedSubquery = $this->getIsFinishedSubquery();
 
-        $query = Responden::selectRaw("respondens.*, ($isFinishedSubquery) as is_finished");
+        $baseQuery = $this->buildLegacyBaseQuery($request, $user);
 
-        // Role-based scoping
-        if ($user->isProdi()) {
-            $query->where('respondens.user_id', $user->id);
-        } elseif ($user->isFakultas()) {
-            $facultyCode = $this->getUserFacultyCode($user);
-            if ($facultyCode !== null) {
-                $allowedFakultas = $this->getFacultyAliases($facultyCode);
-                $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
-            }
-        }
+        // Rekap Penginput sheet uses the same scope as the on-screen breakdown panel
+        $inputerBreakdown = $user->isProdi() ? [] : $this->buildInputerBreakdown($baseQuery);
 
-        // Apply filters
-        // Date range / Jenjang Tanggal (Date Created)
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('respondens.created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
-        } elseif ($request->filled('start_date')) {
-            $query->where('respondens.created_at', '>=', $request->start_date . ' 00:00:00');
-        } elseif ($request->filled('end_date')) {
-            $query->where('respondens.created_at', '<=', $request->end_date . ' 23:59:59');
-        } elseif ($request->filled('date')) {
-            $query->whereDate('respondens.created_at', $request->date);
-        }
+        $query = (clone $baseQuery)
+            ->selectRaw("respondens.*, ($isFinishedSubquery) as is_finished")
+            ->with('user:id,name,role');
 
-        if ($request->filled('year') && $request->year !== 'all') {
-            $query->whereYear('respondens.created_at', $request->year);
-        }
+        $this->applyLegacyInputerFilter($query, $request, $user);
+        $this->applyLegacyStatusFilter($query, $request);
 
-        if (!$user->isProdi() && $request->filled('fakultas') && $request->fakultas !== 'all') {
-            $selectedAliases = $this->getFacultyAliases(strtolower($request->fakultas));
-            $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $selectedAliases);
-        }
-
-        if ($request->filled('category') && $request->category !== 'all') {
-            $cat = strtolower(trim($request->category));
-            if ($cat === 'academic') {
-                $query->whereIn('respondens.category', ['academic', 'researcher', 'reseracher']);
-            } elseif ($cat === 'employer') {
-                $query->whereIn('respondens.category', ['employer', 'employeer', 'industri', 'employee']);
-            }
-        }
-
-        if ($request->filled('status') && $request->status !== 'all') {
-            $statusVal = strtolower(trim($request->status));
-            if (in_array($statusVal, ['selesai', 'clear', 'finished'])) {
-                $query->whereRaw("($isFinishedSubquery) = 1");
-            } elseif (in_array($statusVal, ['belum_selesai', 'unfinished'])) {
-                $query->whereRaw("($isFinishedSubquery) = 0");
-            } elseif ($statusVal === 'done') {
-                $query->where(DB::raw('LOWER(respondens.status)'), 'done');
-            } elseif ($statusVal === 'belum') {
-                $query->where(function($q) {
-                    $q->where(DB::raw('LOWER(respondens.status)'), 'belum')
-                      ->orWhereNull('respondens.status');
-                });
-            } elseif ($statusVal === 'dones') {
-                $query->where(DB::raw('LOWER(respondens.status)'), 'dones');
-            }
-        }
-
-        if ($request->filled('search')) {
-            $search = strtolower(trim($request->search));
-            $query->where(function ($q) use ($search) {
-                $q->where(DB::raw('LOWER(fullname)'), 'LIKE', "%{$search}%")
-                  ->orWhere(DB::raw('LOWER(email)'), 'LIKE', "%{$search}%")
-                  ->orWhere(DB::raw('LOWER(instansi)'), 'LIKE', "%{$search}%");
-            });
-        }
-
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('respondens.created_at', 'desc');
 
         $fileName = 'Laporan_Responden_Legacy_' . date('Ymd_His') . '.xlsx';
-        return Excel::download(new LegacyRespondenExport($query), $fileName);
+        return Excel::download(new LegacyReportExport($query, $inputerBreakdown), $fileName);
     }
 
     /**
@@ -768,7 +662,7 @@ class ReportController extends Controller
         }
 
         $role = $user->role ?? '';
-        if (in_array($role, ['admin_pemeringkatan', 'admin_direktorat', 'super_admin', 'kepala_direktorat', 'kepala_sub_direktorat', 'wr3', 'admin_hilirisasi', 'admin_inovasi'])) {
+        if (in_array($role, self::DIREKTORAT_ROLES)) {
             return 'Direktorat';
         }
 
@@ -796,5 +690,234 @@ class ReportController extends Controller
             WHEN LOWER(TRIM(respondens.status)) IN ('clear', 'selesai') THEN 1 
             ELSE 0 
         END";
+    }
+
+    // --- Legacy Filter Builders ---
+
+    /**
+     * Base legacy query: role scope + date / year / fakultas / category / search.
+     * Status and Penginput filters are applied separately so stats and the
+     * inputer breakdown can be computed before them.
+     */
+    private function buildLegacyBaseQuery(Request $request, User $user)
+    {
+        $query = Responden::query();
+
+        // Role-based scoping
+        if ($user->isProdi()) {
+            $query->where('respondens.user_id', $user->id);
+        } elseif ($user->isFakultas()) {
+            $facultyCode = $this->getUserFacultyCode($user);
+            if ($facultyCode !== null) {
+                $allowedFakultas = $this->getFacultyAliases($facultyCode);
+                $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $allowedFakultas);
+            }
+        }
+
+        // Date range / Jenjang Tanggal (Date Created)
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('respondens.created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        } elseif ($request->filled('start_date')) {
+            $query->where('respondens.created_at', '>=', $request->start_date . ' 00:00:00');
+        } elseif ($request->filled('end_date')) {
+            $query->where('respondens.created_at', '<=', $request->end_date . ' 23:59:59');
+        } elseif ($request->filled('date')) {
+            $query->whereDate('respondens.created_at', $request->date);
+        }
+
+        if ($request->filled('year') && $request->year !== 'all') {
+            $query->whereYear('respondens.created_at', $request->year);
+        }
+
+        if (!$user->isProdi() && $request->filled('fakultas') && $request->fakultas !== 'all') {
+            $selectedAliases = $this->getFacultyAliases(strtolower($request->fakultas));
+            $query->whereIn(DB::raw('LOWER(respondens.fakultas)'), $selectedAliases);
+        }
+
+        if ($request->filled('category') && $request->category !== 'all') {
+            $cat = strtolower(trim($request->category));
+            if ($cat === 'academic') {
+                $query->whereIn('respondens.category', ['academic', 'researcher', 'reseracher']);
+            } elseif ($cat === 'employer') {
+                $query->whereIn('respondens.category', ['employer', 'employeer', 'industri', 'employee']);
+            }
+        }
+
+        if ($request->filled('search')) {
+            $search = strtolower(trim($request->search));
+            $query->where(function ($q) use ($search) {
+                $q->where(DB::raw('LOWER(respondens.fullname)'), 'LIKE', "%{$search}%")
+                  ->orWhere(DB::raw('LOWER(respondens.email)'), 'LIKE', "%{$search}%")
+                  ->orWhere(DB::raw('LOWER(respondens.instansi)'), 'LIKE', "%{$search}%")
+                  ->orWhere(DB::raw('LOWER(respondens.jabatan)'), 'LIKE', "%{$search}%")
+                  ->orWhere(DB::raw('LOWER(respondens.phone_responden)'), 'LIKE', "%{$search}%");
+            });
+        }
+
+        return $query;
+    }
+
+    /**
+     * Apply Status (email / final) filter.
+     */
+    private function applyLegacyStatusFilter($query, Request $request): void
+    {
+        if (!$request->filled('status') || $request->status === 'all') {
+            return;
+        }
+
+        $isFinishedSubquery = $this->getIsFinishedSubquery();
+        $statusVal = strtolower(trim($request->status));
+
+        if (in_array($statusVal, ['selesai', 'clear', 'finished'])) {
+            $query->whereRaw("($isFinishedSubquery) = 1");
+        } elseif (in_array($statusVal, ['belum_selesai', 'unfinished'])) {
+            $query->whereRaw("($isFinishedSubquery) = 0");
+        } elseif ($statusVal === 'done') {
+            $query->where(DB::raw('LOWER(respondens.status)'), 'done');
+        } elseif ($statusVal === 'belum') {
+            $query->where(function ($q) {
+                $q->where(DB::raw('LOWER(respondens.status)'), 'belum')
+                  ->orWhereNull('respondens.status');
+            });
+        } elseif ($statusVal === 'dones') {
+            $query->where(DB::raw('LOWER(respondens.status)'), 'dones');
+        }
+    }
+
+    /**
+     * Apply Penginput filter: numeric user_id, or 'none' for rows without user_id.
+     * Ignored for Prodi accounts (already locked to their own user_id).
+     */
+    private function applyLegacyInputerFilter($query, Request $request, User $user): void
+    {
+        if ($user->isProdi() || !$request->filled('inputer') || $request->inputer === 'all') {
+            return;
+        }
+
+        $inputer = (string) $request->inputer;
+        if ($inputer === 'none') {
+            $query->whereNull('respondens.user_id');
+        } elseif (ctype_digit($inputer)) {
+            $query->where('respondens.user_id', (int) $inputer);
+        }
+    }
+
+    // --- Inputer (Penginput) Helpers ---
+
+    /**
+     * Classify an inputer account into direktorat / fakultas / prodi / unknown.
+     */
+    public static function classifyInputerType(?string $role, bool $hasUser): string
+    {
+        if (!$hasUser) {
+            return 'unknown';
+        }
+        if (in_array($role, ['fakultas', 'equity_fakultas'])) {
+            return 'fakultas';
+        }
+        if ($role === 'prodi') {
+            return 'prodi';
+        }
+        // Direktorat roles and any other role default to Direktorat (same as resolveFacultyLabel)
+        return 'direktorat';
+    }
+
+    public static function inputerTypeLabel(string $type): string
+    {
+        return match ($type) {
+            'direktorat' => 'Direktorat',
+            'fakultas' => 'Fakultas',
+            'prodi' => 'Prodi',
+            default => 'Tidak Diketahui (Import Lama)',
+        };
+    }
+
+    /**
+     * Describe the inputer of a legacy respondent row.
+     */
+    public static function describeInputer(?User $user, $userId): array
+    {
+        if ($user) {
+            $type = self::classifyInputerType($user->role, true);
+            $name = $user->name;
+        } else {
+            $type = 'unknown';
+            $name = $userId === null ? 'Tidak Diketahui' : 'Akun Terhapus (#' . $userId . ')';
+        }
+
+        return [
+            'name' => $name,
+            'type' => $type,
+            'type_label' => self::inputerTypeLabel($type),
+        ];
+    }
+
+    /**
+     * Grouped breakdown of who inputted the respondents in the given (cloned) query.
+     * Returns groups ordered Direktorat, Fakultas, Prodi, Tidak Diketahui; empty groups omitted.
+     */
+    private function buildInputerBreakdown($baseQuery): array
+    {
+        $finishedSql = $this->getIsFinishedSubquery();
+
+        $rows = (clone $baseQuery)
+            ->leftJoin('users as inp', 'inp.id', '=', 'respondens.user_id')
+            ->selectRaw("respondens.user_id as inputer_id, inp.name as inputer_name, inp.role as inputer_role, COUNT(*) as total, SUM($finishedSql) as finished")
+            ->groupBy('respondens.user_id', 'inp.name', 'inp.role')
+            ->toBase()
+            ->get();
+
+        $groups = [];
+        foreach (['direktorat', 'fakultas', 'prodi', 'unknown'] as $type) {
+            $groups[$type] = [
+                'type' => $type,
+                'label' => self::inputerTypeLabel($type),
+                'total' => 0,
+                'finished' => 0,
+                'rate' => 0,
+                'inputers' => [],
+            ];
+        }
+
+        foreach ($rows as $row) {
+            $hasUser = $row->inputer_id !== null && $row->inputer_name !== null;
+            $type = self::classifyInputerType($row->inputer_role, $hasUser);
+            $total = (int) $row->total;
+            $finished = (int) $row->finished;
+
+            if ($hasUser) {
+                $name = $row->inputer_name;
+            } elseif ($row->inputer_id === null) {
+                $name = 'Tidak Diketahui (Import Lama)';
+            } else {
+                $name = 'Akun Terhapus (#' . $row->inputer_id . ')';
+            }
+
+            $groups[$type]['inputers'][] = [
+                'id' => $row->inputer_id === null ? 'none' : (string) $row->inputer_id,
+                'name' => $name,
+                'total' => $total,
+                'finished' => $finished,
+                'rate' => $total > 0 ? round(($finished / $total) * 100, 1) : 0,
+            ];
+            $groups[$type]['total'] += $total;
+            $groups[$type]['finished'] += $finished;
+        }
+
+        $result = [];
+        foreach ($groups as $group) {
+            if ($group['total'] === 0) {
+                continue;
+            }
+            usort($group['inputers'], fn ($a, $b) => $b['total'] <=> $a['total'] ?: strcmp($a['name'], $b['name']));
+            $group['rate'] = round(($group['finished'] / $group['total']) * 100, 1);
+            $result[] = $group;
+        }
+
+        return $result;
     }
 }
