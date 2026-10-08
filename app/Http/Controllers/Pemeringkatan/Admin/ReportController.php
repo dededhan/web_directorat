@@ -312,14 +312,48 @@ class ReportController extends Controller
     /**
      * AJAX endpoint: Detail breakdown per unit/fakultas for a specific session.
      */
+    /**
+     * AJAX endpoint: Detail breakdown per unit/fakultas for a specific session.
+     */
     public function sessionDetail($sessionId)
     {
         $user = Auth::user();
         $accessibleUserIds = $user->getAccessibleUserIds();
 
         $session = QsSession::findOrFail($sessionId);
+        $data = $this->computeSessionBreakdown($session, $accessibleUserIds);
 
-        $query = QsSessionRespondent::where('qs_session_id', $sessionId)
+        return response()->json([
+            'session' => $data['stats'],
+            'units' => $data['units'],
+        ]);
+    }
+
+    /**
+     * Dedicated Page: Full Breakdown Unit details with Academic vs Employee metrics.
+     */
+    public function sessionBreakdownPage(Request $request, $sessionId)
+    {
+        $user = Auth::user();
+        $accessibleUserIds = $user->getAccessibleUserIds();
+
+        $session = QsSession::findOrFail($sessionId);
+        $data = $this->computeSessionBreakdown($session, $accessibleUserIds);
+
+        return view('admin_pemeringkatan.reports.session_breakdown', [
+            'session' => $session,
+            'stats' => $data['stats'],
+            'units' => $data['units'],
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Compute session unit breakdown with separation between academic and employee respondents.
+     */
+    private function computeSessionBreakdown(QsSession $session, ?array $accessibleUserIds): array
+    {
+        $query = QsSessionRespondent::where('qs_session_id', $session->id)
             ->with(['bankRespondent', 'addedByUser']);
 
         if ($accessibleUserIds !== null) {
@@ -328,11 +362,22 @@ class ReportController extends Controller
 
         $respondents = $query->get();
 
+        $totalRespondents = $respondents->count();
+        $agreedTotal = 0;
+        $pendingTotal = 0;
+        $academicTotal = 0;
+        $academicAgreed = 0;
+        $employeeTotal = 0;
+        $employeeAgreed = 0;
+
         $unitBreakdown = [];
         foreach ($respondents as $r) {
             $addedUser = $r->addedByUser;
             $unitLabel = $this->resolveFacultyLabel($addedUser);
             $specificName = $r->added_by_label;
+
+            $rawCat = strtolower(trim($r->category ?: ($r->bankRespondent?->category ?: 'academic')));
+            $isEmployee = in_array($rawCat, ['employer', 'employeer', 'employee', 'industri']);
 
             $key = $unitLabel;
             if (!isset($unitBreakdown[$key])) {
@@ -342,6 +387,12 @@ class ReportController extends Controller
                     'agreed' => 0,
                     'pending' => 0,
                     'not_emailed' => 0,
+                    'academic_total' => 0,
+                    'academic_agreed' => 0,
+                    'academic_pending' => 0,
+                    'employee_total' => 0,
+                    'employee_agreed' => 0,
+                    'employee_pending' => 0,
                     'prodis' => [],
                 ];
             }
@@ -349,11 +400,34 @@ class ReportController extends Controller
             $unitBreakdown[$key]['total']++;
             if ($r->consent_status === 'agreed') {
                 $unitBreakdown[$key]['agreed']++;
+                $agreedTotal++;
             } else {
                 $unitBreakdown[$key]['pending']++;
+                $pendingTotal++;
             }
+
             if ($r->email_sent_at === null) {
                 $unitBreakdown[$key]['not_emailed']++;
+            }
+
+            if ($isEmployee) {
+                $employeeTotal++;
+                $unitBreakdown[$key]['employee_total']++;
+                if ($r->consent_status === 'agreed') {
+                    $employeeAgreed++;
+                    $unitBreakdown[$key]['employee_agreed']++;
+                } else {
+                    $unitBreakdown[$key]['employee_pending']++;
+                }
+            } else {
+                $academicTotal++;
+                $unitBreakdown[$key]['academic_total']++;
+                if ($r->consent_status === 'agreed') {
+                    $academicAgreed++;
+                    $unitBreakdown[$key]['academic_agreed']++;
+                } else {
+                    $unitBreakdown[$key]['academic_pending']++;
+                }
             }
 
             // Track specific prodi / user under this faculty
@@ -362,11 +436,31 @@ class ReportController extends Controller
                     'name' => $specificName,
                     'total' => 0,
                     'agreed' => 0,
+                    'pending' => 0,
+                    'academic_total' => 0,
+                    'academic_agreed' => 0,
+                    'employee_total' => 0,
+                    'employee_agreed' => 0,
                 ];
             }
+
             $unitBreakdown[$key]['prodis'][$specificName]['total']++;
             if ($r->consent_status === 'agreed') {
                 $unitBreakdown[$key]['prodis'][$specificName]['agreed']++;
+            } else {
+                $unitBreakdown[$key]['prodis'][$specificName]['pending']++;
+            }
+
+            if ($isEmployee) {
+                $unitBreakdown[$key]['prodis'][$specificName]['employee_total']++;
+                if ($r->consent_status === 'agreed') {
+                    $unitBreakdown[$key]['prodis'][$specificName]['employee_agreed']++;
+                }
+            } else {
+                $unitBreakdown[$key]['prodis'][$specificName]['academic_total']++;
+                if ($r->consent_status === 'agreed') {
+                    $unitBreakdown[$key]['prodis'][$specificName]['academic_agreed']++;
+                }
             }
         }
         ksort($unitBreakdown);
@@ -377,6 +471,32 @@ class ReportController extends Controller
             $total = $u['total'];
             $agreed = $u['agreed'];
             $rate = $total > 0 ? round(($agreed / $total) * 100, 1) : 0;
+            $acadRate = $u['academic_total'] > 0 ? round(($u['academic_agreed'] / $u['academic_total']) * 100, 1) : 0;
+            $empRate = $u['employee_total'] > 0 ? round(($u['employee_agreed'] / $u['employee_total']) * 100, 1) : 0;
+
+            $prodis = [];
+            foreach ($u['prodis'] as $p) {
+                $pTotal = $p['total'];
+                $pAgreed = $p['agreed'];
+                $pRate = $pTotal > 0 ? round(($pAgreed / $pTotal) * 100, 1) : 0;
+                $pAcadRate = $p['academic_total'] > 0 ? round(($p['academic_agreed'] / $p['academic_total']) * 100, 1) : 0;
+                $pEmpRate = $p['employee_total'] > 0 ? round(($p['employee_agreed'] / $p['employee_total']) * 100, 1) : 0;
+
+                $prodis[] = [
+                    'name' => $p['name'],
+                    'total' => $pTotal,
+                    'agreed' => $pAgreed,
+                    'pending' => $p['pending'],
+                    'rate' => $pRate,
+                    'academic_total' => $p['academic_total'],
+                    'academic_agreed' => $p['academic_agreed'],
+                    'academic_rate' => $pAcadRate,
+                    'employee_total' => $p['employee_total'],
+                    'employee_agreed' => $p['employee_agreed'],
+                    'employee_rate' => $pEmpRate,
+                ];
+            }
+            usort($prodis, fn($a, $b) => $b['total'] <=> $a['total']);
 
             $formattedUnits[] = [
                 'unit' => $u['unit'],
@@ -385,23 +505,46 @@ class ReportController extends Controller
                 'pending' => $u['pending'],
                 'not_emailed' => $u['not_emailed'],
                 'rate' => $rate,
-                'prodis' => array_values($u['prodis']),
+                'academic_total' => $u['academic_total'],
+                'academic_agreed' => $u['academic_agreed'],
+                'academic_pending' => $u['academic_pending'],
+                'academic_rate' => $acadRate,
+                'employee_total' => $u['employee_total'],
+                'employee_agreed' => $u['employee_agreed'],
+                'employee_pending' => $u['employee_pending'],
+                'employee_rate' => $empRate,
+                'prodis' => $prodis,
             ];
         }
 
-        return response()->json([
-            'session' => [
+        $overallRate = $totalRespondents > 0 ? round(($agreedTotal / $totalRespondents) * 100, 1) : 0;
+        $academicRate = $academicTotal > 0 ? round(($academicAgreed / $academicTotal) * 100, 1) : 0;
+        $employeeRate = $employeeTotal > 0 ? round(($employeeAgreed / $employeeTotal) * 100, 1) : 0;
+
+        return [
+            'stats' => [
                 'id' => $session->id,
                 'name' => $session->name,
                 'status' => $session->status,
                 'mode' => $session->mode,
                 'description' => $session->description,
-                'total_respondents' => $respondents->count(),
-                'agreed_count' => $respondents->where('consent_status', 'agreed')->count(),
-                'rate' => $respondents->count() > 0 ? round(($respondents->where('consent_status', 'agreed')->count() / $respondents->count()) * 100, 1) : 0,
+                'start_date' => $session->start_date ? $session->start_date->format('d M Y') : '-',
+                'end_date' => $session->end_date ? $session->end_date->format('d M Y') : '-',
+                'total_respondents' => $totalRespondents,
+                'agreed_count' => $agreedTotal,
+                'pending_count' => $pendingTotal,
+                'rate' => $overallRate,
+                'academic_total' => $academicTotal,
+                'academic_agreed' => $academicAgreed,
+                'academic_pending' => $academicTotal - $academicAgreed,
+                'academic_rate' => $academicRate,
+                'employee_total' => $employeeTotal,
+                'employee_agreed' => $employeeAgreed,
+                'employee_pending' => $employeeTotal - $employeeAgreed,
+                'employee_rate' => $employeeRate,
             ],
             'units' => $formattedUnits,
-        ]);
+        ];
     }
 
     /**

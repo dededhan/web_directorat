@@ -276,11 +276,11 @@
                                     </div>
                                 </td>
                                 <td class="px-5 py-4 text-right">
-                                    <button @click="openSessionDetail(item.id)" 
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg transition-colors">
+                                    <a :href="'{{ url('admin_pemeringkatan/reports/session-breakdown') }}/' + item.id" 
+                                       class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg transition-colors shadow-2xs hover:shadow-xs">
                                         <i class="fas fa-sitemap mr-1.5"></i>
                                         Breakdown Unit
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         </template>
@@ -510,258 +510,265 @@
             </div>
         </div>
 
-        {{-- Sebaran Penginput (Inputer Breakdown) --}}
-        @if(!Auth::user()->isProdi())
-            <div id="legacyInputerPanel" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
-                <div class="p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 text-teal-600 flex items-center justify-center shadow-xs">
-                            <i class="fas fa-user-edit"></i>
+        {{-- Layout: Sebaran Penginput on the Left & Daftar Arsip Responden Table on the Right --}}
+        <div class="grid grid-cols-1 @if(!Auth::user()->isProdi()) xl:grid-cols-12 @endif gap-6 items-start">
+
+            {{-- Left Column: Sebaran Penginput --}}
+            @if(!Auth::user()->isProdi())
+                <div class="xl:col-span-4 space-y-4 xl:sticky xl:top-6">
+                    <div id="legacyInputerPanel" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
+                        <div class="p-4 sm:p-5 border-b border-gray-100 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 text-teal-600 flex items-center justify-center shadow-xs shrink-0">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h2 class="text-base font-bold text-gray-800 truncate">Sebaran Penginput</h2>
+                                    <p class="text-[11px] text-gray-400 mt-0.5 line-clamp-2">
+                                        Klik akun untuk memfilter data pada tabel di sebelah kanan.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-gray-50">
+                                <template x-if="legacyFilters.inputer !== 'all'">
+                                    <button type="button"
+                                            id="legacyInputerClearChip"
+                                            @click="filterByInputer(legacyFilters.inputer)"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-600 text-white hover:bg-teal-700 shadow-xs transition max-w-[220px]"
+                                            title="Hapus filter penginput">
+                                        <i class="fas fa-times-circle text-[10px]"></i>
+                                        <span class="truncate" x-text="selectedInputerName()"></span>
+                                    </button>
+                                </template>
+                                <button type="button"
+                                        id="legacyInputerToggleAll"
+                                        x-show="legacyBreakdown.length > 0"
+                                        @click="toggleAllInputerGroups()"
+                                        class="px-2.5 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg transition ml-auto">
+                                    <i class="fas mr-1 text-[10px]" :class="allInputerGroupsOpen() ? 'fa-compress-alt' : 'fa-expand-alt'"></i>
+                                    <span x-text="allInputerGroupsOpen() ? 'Tutup' : 'Buka Semua'"></span>
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="text-base font-bold text-gray-800">Sebaran Penginput</h2>
-                            <p class="text-xs text-gray-400 mt-0.5">
-                                Siapa yang menginput responden sesuai filter aktif (tidak terpengaruh filter Status). Klik akun untuk memfilter tabel.
-                            </p>
+
+                        <div x-show="loadingLegacy" class="absolute inset-0 bg-white/60 flex items-center justify-center z-10">
+                            <i class="fas fa-spinner fa-spin text-teal-600 text-2xl"></i>
+                        </div>
+
+                        <div class="p-4 sm:p-5">
+                            <div x-show="legacyBreakdown.length === 0 && !loadingLegacy" class="text-center py-8 text-gray-400 text-sm">
+                                <i class="fas fa-user-slash text-3xl mb-2 block"></i>
+                                Tidak ada data penginput untuk filter ini.
+                            </div>
+
+                            <div class="space-y-3">
+                                <template x-for="group in legacyBreakdown" :key="group.type">
+                                    <div class="rounded-xl border overflow-hidden transition-shadow hover:shadow-xs" :class="inputerTypeMeta(group.type).border">
+                                        {{-- Group header --}}
+                                        <button type="button"
+                                                @click="toggleInputerGroup(group.type)"
+                                                class="w-full flex items-center justify-between gap-2.5 px-3.5 py-2.5 text-left transition-colors"
+                                                :class="inputerTypeMeta(group.type).headerBg">
+                                            <div class="flex items-center gap-2.5 min-w-0">
+                                                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :class="inputerTypeMeta(group.type).iconBg">
+                                                    <i class="fas text-xs" :class="inputerTypeMeta(group.type).icon"></i>
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <div class="text-xs font-bold text-gray-800 truncate" x-text="group.label"></div>
+                                                    <div class="text-[10px] text-gray-500">
+                                                        <span x-text="group.inputers.length"></span> akun &middot;
+                                                        <span x-text="group.finished"></span>/<span x-text="group.total"></span> selesai
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 shrink-0">
+                                                <div class="text-right">
+                                                    <div class="text-base font-bold text-gray-900 leading-tight" x-text="group.total"></div>
+                                                    <div class="text-[9px] font-semibold" :class="inputerTypeMeta(group.type).text" x-text="group.rate + '%'"></div>
+                                                </div>
+                                                <i class="fas fa-chevron-down text-gray-400 text-[10px] transition-transform duration-200"
+                                                   :class="{ 'rotate-180': isInputerGroupOpen(group.type) }"></i>
+                                            </div>
+                                        </button>
+
+                                        {{-- Inputer accounts --}}
+                                        <ul x-show="isInputerGroupOpen(group.type)"
+                                            x-transition:enter="transition ease-out duration-150"
+                                            x-transition:enter-start="opacity-0 -translate-y-1"
+                                            x-transition:enter-end="opacity-100 translate-y-0"
+                                            class="divide-y divide-gray-100 max-h-60 overflow-y-auto bg-white border-t border-gray-100">
+                                            <template x-for="inp in group.inputers" :key="group.type + '-' + inp.id">
+                                                <li>
+                                                    <button type="button"
+                                                            @click="filterByInputer(inp.id)"
+                                                            class="w-full flex items-center gap-2.5 px-3.5 py-2 text-left transition-colors hover:bg-gray-50"
+                                                            :class="legacyFilters.inputer === inp.id ? 'bg-teal-50 ring-1 ring-inset ring-teal-300' : ''"
+                                                            :title="legacyFilters.inputer === inp.id ? 'Klik untuk menghapus filter' : 'Tampilkan responden yang diinput oleh ' + inp.name">
+                                                        <div class="flex-1 min-w-0">
+                                                            <div class="text-xs font-semibold text-gray-800 truncate" x-text="inp.name"></div>
+                                                            <div class="mt-0.5 flex items-center gap-1.5">
+                                                                <div class="flex-1 bg-gray-100 rounded-full h-1 overflow-hidden max-w-[100px]">
+                                                                    <div class="h-1 rounded-full transition-all duration-500"
+                                                                         :class="inputerTypeMeta(group.type).bar"
+                                                                         :style="'width: ' + Math.min(inp.rate, 100) + '%'"></div>
+                                                                </div>
+                                                                <span class="text-[9px] text-gray-500 whitespace-nowrap" x-text="inp.finished + ' sel. · ' + inp.rate + '%'"></span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="text-xs font-bold text-gray-900 shrink-0" x-text="inp.total"></span>
+                                                        <i class="fas text-[10px] shrink-0"
+                                                           :class="legacyFilters.inputer === inp.id ? 'fa-check-circle text-teal-600' : 'fa-filter text-gray-300'"></i>
+                                                    </button>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <template x-if="legacyFilters.inputer !== 'all'">
-                            <button type="button"
-                                    id="legacyInputerClearChip"
-                                    @click="filterByInputer(legacyFilters.inputer)"
-                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-teal-600 text-white hover:bg-teal-700 shadow-xs transition max-w-[320px]"
-                                    title="Hapus filter penginput">
-                                <i class="fas fa-times-circle"></i>
-                                <span class="truncate" x-text="'Penginput: ' + selectedInputerName()"></span>
-                            </button>
-                        </template>
-                        <button type="button"
-                                id="legacyInputerToggleAll"
-                                x-show="legacyBreakdown.length > 0"
-                                @click="toggleAllInputerGroups()"
-                                class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg transition">
-                            <i class="fas mr-1" :class="allInputerGroupsOpen() ? 'fa-compress-alt' : 'fa-expand-alt'"></i>
-                            <span x-text="allInputerGroupsOpen() ? 'Tutup Semua' : 'Buka Semua'"></span>
+                </div>
+            @endif
+
+            {{-- Right Column: Daftar Arsip Responden Table --}}
+            <div class="{{ !Auth::user()->isProdi() ? 'xl:col-span-8' : 'w-full' }} bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-bold text-gray-800">Daftar Arsip Responden</h2>
+                        <p class="text-xs text-gray-400 mt-0.5">Data responden dari tabel legacy dengan indikator status email dan status pengisian form (Status Akhir)</p>
+                    </div>
+                    <div x-show="loadingLegacy" class="text-teal-600 text-xs font-medium flex items-center gap-1.5">
+                        <i class="fas fa-spinner fa-spin"></i> Memuat data...
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-50/75 text-xs uppercase text-gray-500 font-semibold border-b border-gray-100">
+                            <tr>
+                                <th class="px-4 py-3.5">Penginput</th>
+                                <th class="px-5 py-3.5">Responden</th>
+                                <th class="px-5 py-3.5">Kontak</th>
+                                <th class="px-5 py-3.5">Instansi & Jabatan</th>
+                                <th class="px-4 py-3.5 text-center">Fakultas</th>
+                                <th class="px-4 py-3.5 text-center">Kategori</th>
+                                <th class="px-4 py-3.5 text-center">Status Email</th>
+                                <th class="px-5 py-3.5 text-center">Status Akhir</th>
+                                <th class="px-4 py-3.5 text-center">Tanggal Dibuat</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <template x-for="item in legacyItems" :key="item.id">
+                                <tr class="hover:bg-gray-50/60 transition-colors">
+                                    <td class="px-4 py-3.5">
+                                        <div class="text-xs font-semibold text-gray-800 max-w-[150px] truncate"
+                                             :title="item.inputer_name"
+                                             x-text="item.inputer_name || '-'"></div>
+                                        <span class="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[10px] font-semibold"
+                                              :class="inputerTypeMeta(item.inputer_type).badge">
+                                            <i class="fas text-[9px]" :class="inputerTypeMeta(item.inputer_type).icon"></i>
+                                            <span x-text="inputerTypeMeta(item.inputer_type).short"></span>
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="font-semibold text-gray-900" x-text="item.fullname || '-'"></div>
+                                        <div class="text-xs text-gray-400" x-text="item.title ? item.title.toUpperCase() : ''"></div>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="text-xs font-medium text-gray-800" x-text="item.email || '-'"></div>
+                                        <div class="text-xs text-gray-400" x-text="item.phone_responden || '-'"></div>
+                                    </td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="text-xs font-semibold text-gray-800" x-text="item.instansi || '-'"></div>
+                                        <div class="text-xs text-gray-400" x-text="item.jabatan || '-'"></div>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-center">
+                                        <span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700" 
+                                              x-text="item.fakultas ? item.fakultas.toUpperCase() : '-'"></span>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-center">
+                                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
+                                              :class="item.category === 'academic' ? 'bg-indigo-50 text-indigo-700' : 'bg-amber-50 text-amber-700'"
+                                              x-text="item.category ? item.category.toUpperCase() : '-'"></span>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-center">
+                                        <template x-if="item.status === 'done'">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                                <i class="fas fa-paper-plane mr-1 text-blue-500 text-[10px]"></i> Sudah di-email
+                                            </span>
+                                        </template>
+                                        <template x-if="item.status === 'dones'">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                                <i class="fas fa-envelope-open-text mr-1 text-indigo-500 text-[10px]"></i> Follow up done
+                                            </span>
+                                        </template>
+                                        <template x-if="item.status === 'clear' || item.status === 'selesai'">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                <i class="fas fa-check mr-1 text-emerald-500 text-[10px]"></i> Selesai
+                                            </span>
+                                        </template>
+                                        <template x-if="!['done', 'dones', 'clear', 'selesai'].includes(item.status)">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                                <i class="fas fa-clock mr-1 text-gray-400 text-[10px]"></i> Belum di-email
+                                            </span>
+                                        </template>
+                                    </td>
+                                    <td class="px-5 py-3.5 text-center">
+                                        <template x-if="item.is_finished == 1 || item.status === 'clear' || item.status === 'selesai'">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                <i class="fas fa-check-circle mr-1.5 text-emerald-600"></i>
+                                                Selesai
+                                            </span>
+                                        </template>
+                                        <template x-if="item.is_finished != 1 && item.status !== 'clear' && item.status !== 'selesai'">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                                <i class="fas fa-hourglass-half mr-1.5 text-amber-500"></i>
+                                                Belum Selesai
+                                            </span>
+                                        </template>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-center text-xs text-gray-600 font-medium whitespace-nowrap">
+                                        <div class="font-semibold text-gray-800" x-text="formatDate(item.created_at)"></div>
+                                        <div class="text-[10px] text-gray-400" x-text="formatTime(item.created_at)"></div>
+                                    </td>
+                                </tr>
+                            </template>
+
+                            <tr x-show="legacyItems.length === 0 && !loadingLegacy">
+                                <td colspan="9" class="text-center py-10 text-gray-400">
+                                    <i class="fas fa-search text-3xl mb-2 block"></i>
+                                    Tidak ada data responden legacy yang sesuai dengan filter.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination Footer --}}
+                <div class="px-5 py-3.5 bg-gray-50/75 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+                    <div>
+                        Menampilkan <span class="font-bold text-gray-700" x-text="legacyPagination.from || 0"></span> - 
+                        <span class="font-bold text-gray-700" x-text="legacyPagination.to || 0"></span> dari 
+                        <span class="font-bold text-gray-700" x-text="legacyPagination.total || 0"></span> data
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button @click="loadLegacyData(legacyPagination.current_page - 1)" 
+                                :disabled="legacyPagination.current_page <= 1"
+                                class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium">
+                            <i class="fas fa-chevron-left mr-1"></i> Prev
+                        </button>
+                        <span class="px-3 py-1.5 text-gray-700 font-bold">
+                            Halaman <span x-text="legacyPagination.current_page"></span> dari <span x-text="legacyPagination.last_page || 1"></span>
+                        </span>
+                        <button @click="loadLegacyData(legacyPagination.current_page + 1)" 
+                                :disabled="legacyPagination.current_page >= legacyPagination.last_page"
+                                class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium">
+                            Next <i class="fas fa-chevron-right ml-1"></i>
                         </button>
                     </div>
                 </div>
-
-                <div x-show="loadingLegacy" class="absolute inset-0 bg-white/60 flex items-center justify-center z-10">
-                    <i class="fas fa-spinner fa-spin text-teal-600 text-2xl"></i>
-                </div>
-
-                <div class="p-5">
-                    <div x-show="legacyBreakdown.length === 0 && !loadingLegacy" class="text-center py-8 text-gray-400 text-sm">
-                        <i class="fas fa-user-slash text-3xl mb-2 block"></i>
-                        Tidak ada data penginput untuk filter ini.
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-                        <template x-for="group in legacyBreakdown" :key="group.type">
-                            <div class="rounded-xl border overflow-hidden transition-shadow hover:shadow-sm" :class="inputerTypeMeta(group.type).border">
-                                {{-- Group header --}}
-                                <button type="button"
-                                        @click="toggleInputerGroup(group.type)"
-                                        class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left transition-colors"
-                                        :class="inputerTypeMeta(group.type).headerBg">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" :class="inputerTypeMeta(group.type).iconBg">
-                                            <i class="fas" :class="inputerTypeMeta(group.type).icon"></i>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <div class="text-sm font-bold text-gray-800 truncate" x-text="group.label"></div>
-                                            <div class="text-[11px] text-gray-500">
-                                                <span x-text="group.inputers.length"></span> akun &middot;
-                                                <span x-text="group.finished"></span>/<span x-text="group.total"></span> selesai
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-3 shrink-0">
-                                        <div class="text-right">
-                                            <div class="text-lg font-bold text-gray-900 leading-tight" x-text="group.total"></div>
-                                            <div class="text-[10px] font-semibold" :class="inputerTypeMeta(group.type).text" x-text="group.rate + '% selesai'"></div>
-                                        </div>
-                                        <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-200"
-                                           :class="{ 'rotate-180': isInputerGroupOpen(group.type) }"></i>
-                                    </div>
-                                </button>
-
-                                {{-- Inputer accounts --}}
-                                <ul x-show="isInputerGroupOpen(group.type)"
-                                    x-transition:enter="transition ease-out duration-150"
-                                    x-transition:enter-start="opacity-0 -translate-y-1"
-                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                    class="divide-y divide-gray-100 max-h-72 overflow-y-auto bg-white border-t border-gray-100">
-                                    <template x-for="inp in group.inputers" :key="group.type + '-' + inp.id">
-                                        <li>
-                                            <button type="button"
-                                                    @click="filterByInputer(inp.id)"
-                                                    class="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-gray-50"
-                                                    :class="legacyFilters.inputer === inp.id ? 'bg-teal-50 ring-1 ring-inset ring-teal-300' : ''"
-                                                    :title="legacyFilters.inputer === inp.id ? 'Klik untuk menghapus filter' : 'Tampilkan responden yang diinput oleh ' + inp.name">
-                                                <div class="flex-1 min-w-0">
-                                                    <div class="text-xs font-semibold text-gray-800 truncate" x-text="inp.name"></div>
-                                                    <div class="mt-1 flex items-center gap-2">
-                                                        <div class="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden max-w-[140px]">
-                                                            <div class="h-1.5 rounded-full transition-all duration-500"
-                                                                 :class="inputerTypeMeta(group.type).bar"
-                                                                 :style="'width: ' + Math.min(inp.rate, 100) + '%'"></div>
-                                                        </div>
-                                                        <span class="text-[10px] text-gray-500 whitespace-nowrap" x-text="inp.finished + ' selesai · ' + inp.rate + '%'"></span>
-                                                    </div>
-                                                </div>
-                                                <span class="text-sm font-bold text-gray-900 shrink-0" x-text="inp.total"></span>
-                                                <i class="fas text-[11px] shrink-0"
-                                                   :class="legacyFilters.inputer === inp.id ? 'fa-check-circle text-teal-600' : 'fa-filter text-gray-300'"></i>
-                                            </button>
-                                        </li>
-                                    </template>
-                                </ul>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        {{-- Legacy Data Table --}}
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-gray-100 flex items-center justify-between">
-                <div>
-                    <h2 class="text-base font-bold text-gray-800">Daftar Arsip Responden</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Data responden dari tabel legacy dengan indikator status email dan status pengisian form (Status Akhir)</p>
-                </div>
-                <div x-show="loadingLegacy" class="text-teal-600 text-xs font-medium flex items-center gap-1.5">
-                    <i class="fas fa-spinner fa-spin"></i> Memuat data...
-                </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-gray-600">
-                    <thead class="bg-gray-50/75 text-xs uppercase text-gray-500 font-semibold border-b border-gray-100">
-                        <tr>
-                            <th class="px-5 py-3.5">Responden</th>
-                            <th class="px-5 py-3.5">Kontak</th>
-                            <th class="px-5 py-3.5">Instansi & Jabatan</th>
-                            <th class="px-4 py-3.5 text-center">Fakultas</th>
-                            <th class="px-4 py-3.5">Penginput</th>
-                            <th class="px-4 py-3.5 text-center">Kategori</th>
-                            <th class="px-4 py-3.5 text-center">Status Email</th>
-                            <th class="px-5 py-3.5 text-center">Status Akhir</th>
-                            <th class="px-4 py-3.5 text-center">Tanggal Dibuat</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        <template x-for="item in legacyItems" :key="item.id">
-                            <tr class="hover:bg-gray-50/60 transition-colors">
-                                <td class="px-5 py-3.5">
-                                    <div class="font-semibold text-gray-900" x-text="item.fullname || '-'"></div>
-                                    <div class="text-xs text-gray-400" x-text="item.title ? item.title.toUpperCase() : ''"></div>
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="text-xs font-medium text-gray-800" x-text="item.email || '-'"></div>
-                                    <div class="text-xs text-gray-400" x-text="item.phone_responden || '-'"></div>
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="text-xs font-semibold text-gray-800" x-text="item.instansi || '-'"></div>
-                                    <div class="text-xs text-gray-400" x-text="item.jabatan || '-'"></div>
-                                </td>
-                                <td class="px-4 py-3.5 text-center">
-                                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700" 
-                                          x-text="item.fakultas ? item.fakultas.toUpperCase() : '-'"></span>
-                                </td>
-                                <td class="px-4 py-3.5">
-                                    <div class="text-xs font-semibold text-gray-800 max-w-[180px] truncate"
-                                         :title="item.inputer_name"
-                                         x-text="item.inputer_name || '-'"></div>
-                                    <span class="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[10px] font-semibold"
-                                          :class="inputerTypeMeta(item.inputer_type).badge">
-                                        <i class="fas text-[9px]" :class="inputerTypeMeta(item.inputer_type).icon"></i>
-                                        <span x-text="inputerTypeMeta(item.inputer_type).short"></span>
-                                    </span>
-                                </td>
-                                <td class="px-4 py-3.5 text-center">
-                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
-                                          :class="item.category === 'academic' ? 'bg-indigo-50 text-indigo-700' : 'bg-amber-50 text-amber-700'"
-                                          x-text="item.category ? item.category.toUpperCase() : '-'"></span>
-                                </td>
-                                <td class="px-4 py-3.5 text-center">
-                                    <template x-if="item.status === 'done'">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                                            <i class="fas fa-paper-plane mr-1 text-blue-500 text-[10px]"></i> Sudah di-email
-                                        </span>
-                                    </template>
-                                    <template x-if="item.status === 'dones'">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
-                                            <i class="fas fa-envelope-open-text mr-1 text-indigo-500 text-[10px]"></i> Follow up done
-                                        </span>
-                                    </template>
-                                    <template x-if="item.status === 'clear' || item.status === 'selesai'">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                            <i class="fas fa-check mr-1 text-emerald-500 text-[10px]"></i> Selesai
-                                        </span>
-                                    </template>
-                                    <template x-if="!['done', 'dones', 'clear', 'selesai'].includes(item.status)">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
-                                            <i class="fas fa-clock mr-1 text-gray-400 text-[10px]"></i> Belum di-email
-                                        </span>
-                                    </template>
-                                </td>
-                                <td class="px-5 py-3.5 text-center">
-                                    <template x-if="item.is_finished == 1 || item.status === 'clear' || item.status === 'selesai'">
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                                            <i class="fas fa-check-circle mr-1.5 text-emerald-600"></i>
-                                            Selesai
-                                        </span>
-                                    </template>
-                                    <template x-if="item.is_finished != 1 && item.status !== 'clear' && item.status !== 'selesai'">
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                                            <i class="fas fa-hourglass-half mr-1.5 text-amber-500"></i>
-                                            Belum Selesai
-                                        </span>
-                                    </template>
-                                </td>
-                                <td class="px-4 py-3.5 text-center text-xs text-gray-600 font-medium whitespace-nowrap">
-                                    <div class="font-semibold text-gray-800" x-text="formatDate(item.created_at)"></div>
-                                    <div class="text-[10px] text-gray-400" x-text="formatTime(item.created_at)"></div>
-                                </td>
-                            </tr>
-                        </template>
-
-                        <tr x-show="legacyItems.length === 0 && !loadingLegacy">
-                            <td colspan="9" class="text-center py-10 text-gray-400">
-                                <i class="fas fa-search text-3xl mb-2 block"></i>
-                                Tidak ada data responden legacy yang sesuai dengan filter.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            {{-- Pagination Footer --}}
-            <div class="px-5 py-3.5 bg-gray-50/75 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
-                <div>
-                    Menampilkan <span class="font-bold text-gray-700" x-text="legacyPagination.from || 0"></span> - 
-                    <span class="font-bold text-gray-700" x-text="legacyPagination.to || 0"></span> dari 
-                    <span class="font-bold text-gray-700" x-text="legacyPagination.total || 0"></span> data
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <button @click="loadLegacyData(legacyPagination.current_page - 1)" 
-                            :disabled="legacyPagination.current_page <= 1"
-                            class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium">
-                        <i class="fas fa-chevron-left mr-1"></i> Prev
-                    </button>
-                    <span class="px-3 py-1.5 text-gray-700 font-bold">
-                        Halaman <span x-text="legacyPagination.current_page"></span> dari <span x-text="legacyPagination.last_page || 1"></span>
-                    </span>
-                    <button @click="loadLegacyData(legacyPagination.current_page + 1)" 
-                            :disabled="legacyPagination.current_page >= legacyPagination.last_page"
-                            class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition font-medium">
-                        Next <i class="fas fa-chevron-right ml-1"></i>
-                    </button>
-                </div>
-            </div>
         </div>
 
     </div>

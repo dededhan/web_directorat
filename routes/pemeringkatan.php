@@ -355,6 +355,7 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
             Route::get('/legacy-data', [ReportController::class, 'legacyData'])->name('legacy-data');
             Route::get('/session-overview', [ReportController::class, 'sessionOverview'])->name('session-overview');
             Route::get('/session-detail/{session}', [ReportController::class, 'sessionDetail'])->name('session-detail');
+            Route::get('/session-breakdown/{session}', [ReportController::class, 'sessionBreakdownPage'])->name('session-breakdown');
             Route::get('/export-legacy', [ReportController::class, 'exportLegacy'])->name('export-legacy');
             Route::get('/export-session', [ReportController::class, 'exportSession'])->name('export-session');
         });
