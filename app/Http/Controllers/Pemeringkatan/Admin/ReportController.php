@@ -320,12 +320,17 @@ class ReportController extends Controller
 
         // Overall stats
         $finishedSql = $this->getIsFinishedSubquery();
+        $academicSql = "CASE WHEN LOWER(TRIM(respondens.category)) IN ('academic', 'researcher', 'reseracher') THEN 1 ELSE 0 END";
+        $employeeSql = "CASE WHEN LOWER(TRIM(respondens.category)) IN ('employer', 'employeer', 'industri', 'employee') THEN 1 ELSE 0 END";
+
         $statsRow = (clone $baseQuery)
-            ->selectRaw("COUNT(*) as total, SUM($finishedSql) as finished")
+            ->selectRaw("COUNT(*) as total, SUM($finishedSql) as finished, SUM($academicSql) as academic_total, SUM($employeeSql) as employee_total")
             ->first();
 
         $total = (int) ($statsRow->total ?? 0);
         $finished = (int) ($statsRow->finished ?? 0);
+        $academicTotal = (int) ($statsRow->academic_total ?? 0);
+        $employeeTotal = (int) ($statsRow->employee_total ?? 0);
         $pending = max(0, $total - $finished);
         $rate = $total > 0 ? round(($finished / $total) * 100, 1) : 0;
 
@@ -352,23 +357,69 @@ class ReportController extends Controller
         $fakultasOptions = $this->getAvailableFaculties($user);
         $years = $this->getAvailableLegacyYears($user);
 
+        // Faculty-level breakdown for chart (when 'Semua Fakultas' is selected)
+        $facultyRows = (clone $baseQuery)
+            ->whereNotNull('respondens.fakultas')
+            ->where('respondens.fakultas', '!=', '')
+            ->selectRaw("LOWER(TRIM(respondens.fakultas)) as raw_fak, COUNT(*) as total, SUM($finishedSql) as finished, SUM($academicSql) as academic_total, SUM($employeeSql) as employee_total")
+            ->groupBy(DB::raw("LOWER(TRIM(respondens.fakultas))"))
+            ->toBase()
+            ->get();
+
+        $facultyChartMap = [];
+        foreach ($facultyRows as $r) {
+            $canon = self::normalizeFacultyCode($r->raw_fak);
+            if (!$canon) continue;
+            if (!isset($facultyChartMap[$canon])) {
+                $facultyChartMap[$canon] = [
+                    'name' => 'Fakultas ' . $canon,
+                    'short_name' => $canon,
+                    'id' => strtolower($canon),
+                    'total' => 0,
+                    'finished' => 0,
+                    'pending' => 0,
+                    'academic_total' => 0,
+                    'employee_total' => 0,
+                    'rate' => 0,
+                ];
+            }
+            $facultyChartMap[$canon]['total'] += (int) $r->total;
+            $facultyChartMap[$canon]['finished'] += (int) $r->finished;
+            $facultyChartMap[$canon]['academic_total'] += (int) ($r->academic_total ?? 0);
+            $facultyChartMap[$canon]['employee_total'] += (int) ($r->employee_total ?? 0);
+        }
+
+        foreach ($facultyChartMap as &$fc) {
+            $fc['pending'] = max(0, $fc['total'] - $fc['finished']);
+            $fc['rate'] = $fc['total'] > 0 ? round(($fc['finished'] / $fc['total']) * 100, 1) : 0;
+        }
+        unset($fc);
+
+        $facultyChartList = array_values($facultyChartMap);
+        usort($facultyChartList, fn($a, $b) => $b['total'] <=> $a['total']);
+
         return view('admin_pemeringkatan.reports.inputer_analytics', [
             'overallStats' => [
                 'total' => $total,
                 'finished' => $finished,
                 'pending' => $pending,
+                'academic_total' => $academicTotal,
+                'employee_total' => $employeeTotal,
                 'rate' => $rate,
             ],
             'prodiStats' => [
                 'count' => $prodiCount,
                 'total' => $prodiTotal,
                 'finished' => $prodiFinished,
+                'academic_total' => array_sum(array_column($prodiInputers, 'academic_total')),
+                'employee_total' => array_sum(array_column($prodiInputers, 'employee_total')),
                 'rate' => $prodiGroup['rate'] ?? 0,
                 'avg' => $prodiAvg,
                 'top' => !empty($prodiInputers) ? $prodiInputers[0] : null,
             ],
             'breakdown' => $breakdown,
             'prodiList' => $prodiInputers,
+            'facultyList' => $facultyChartList,
             'fakultasOptions' => $fakultasOptions,
             'years' => $years,
             'filters' => [
@@ -1104,10 +1155,12 @@ class ReportController extends Controller
     private function buildInputerBreakdown($baseQuery): array
     {
         $finishedSql = $this->getIsFinishedSubquery();
+        $academicSql = "CASE WHEN LOWER(TRIM(respondens.category)) IN ('academic', 'researcher', 'reseracher') THEN 1 ELSE 0 END";
+        $employeeSql = "CASE WHEN LOWER(TRIM(respondens.category)) IN ('employer', 'employeer', 'industri', 'employee') THEN 1 ELSE 0 END";
 
         $rows = (clone $baseQuery)
             ->leftJoin('users as inp', 'inp.id', '=', 'respondens.user_id')
-            ->selectRaw("respondens.user_id as inputer_id, inp.name as inputer_name, inp.role as inputer_role, COUNT(*) as total, SUM($finishedSql) as finished")
+            ->selectRaw("respondens.user_id as inputer_id, inp.name as inputer_name, inp.role as inputer_role, COUNT(*) as total, SUM($finishedSql) as finished, SUM($academicSql) as academic_total, SUM($employeeSql) as employee_total")
             ->groupBy('respondens.user_id', 'inp.name', 'inp.role')
             ->toBase()
             ->get();
@@ -1129,6 +1182,8 @@ class ReportController extends Controller
             $type = self::classifyInputerType($row->inputer_role, $hasUser);
             $total = (int) $row->total;
             $finished = (int) $row->finished;
+            $academicTotal = (int) ($row->academic_total ?? 0);
+            $employeeTotal = (int) ($row->employee_total ?? 0);
 
             if ($hasUser) {
                 $name = $row->inputer_name;
@@ -1143,6 +1198,9 @@ class ReportController extends Controller
                 'name' => $name,
                 'total' => $total,
                 'finished' => $finished,
+                'pending' => max(0, $total - $finished),
+                'academic_total' => $academicTotal,
+                'employee_total' => $employeeTotal,
                 'rate' => $total > 0 ? round(($finished / $total) * 100, 1) : 0,
             ];
             $groups[$type]['total'] += $total;

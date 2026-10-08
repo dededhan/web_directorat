@@ -508,14 +508,96 @@
             // 5. Render Prodi per Fakultas Chart
             function renderProdiPerFakultasChart(data) {
                 const selectedFakultas = document.getElementById('fakultas_filter').value;
-                let filteredData = data;
-                
-                // Filter by selected fakultas
-                if (selectedFakultas) {
-                    filteredData = {
-                        [selectedFakultas]: data[selectedFakultas] || {}
-                    };
+                const container = document.getElementById('prodiChartContainer');
+                const chartCardTitle = container?.previousElementSibling;
+
+                // ⭐ JIKA "SEMUA FAKULTAS" DIPILIH: Tampilkan total per FAKULTAS (bukan semua prodi)
+                if (!selectedFakultas) {
+                    if (chartCardTitle) {
+                        chartCardTitle.textContent = 'Total Input per Fakultas';
+                    }
+
+                    const facultyTotals = {};
+                    Object.keys(data).forEach(faculty => {
+                        const prodis = data[faculty] || {};
+                        facultyTotals[faculty] = Object.values(prodis).reduce((sum, val) => sum + (val || 0), 0);
+                    });
+
+                    const sortedFaculties = Object.keys(facultyTotals)
+                        .sort((a, b) => facultyTotals[b] - facultyTotals[a]);
+
+                    const calculatedHeight = Math.max(380, (sortedFaculties.length * 36) + 80);
+                    container.style.height = `${calculatedHeight}px`;
+
+                    const facultyColors = generateFacultyColors(sortedFaculties.length);
+
+                    prodiPerFakultasChart = renderChart(prodiPerFakultasChart, 'prodiPerFakultasChart', {
+                        type: 'bar',
+                        data: {
+                            labels: sortedFaculties,
+                            datasets: [{
+                                label: 'Total Responden',
+                                data: sortedFaculties.map(f => facultyTotals[f]),
+                                backgroundColor: facultyColors,
+                                borderWidth: 0,
+                                maxBarThickness: 28,
+                                barPercentage: 0.85,
+                                categoryPercentage: 0.9
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    ticks: { precision: 0, font: { size: 10 } },
+                                    grid: { display: true, color: 'rgba(0, 0, 0, 0.05)' },
+                                    title: { display: true, text: 'Jumlah Responden', font: { size: 11, weight: 'bold' } }
+                                },
+                                y: {
+                                    ticks: { font: { size: 11, weight: 'bold' } },
+                                    grid: { display: false }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                datalabels: {
+                                    display: function(context) {
+                                        return context.dataset.data[context.dataIndex] > 0;
+                                    },
+                                    anchor: 'end',
+                                    align: 'right',
+                                    color: '#374151',
+                                    font: { size: 10, weight: 'bold' },
+                                    formatter: function(value) { return value > 0 ? value : ''; },
+                                    clamp: true
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    padding: 12,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return ` Total Input: ${context.raw} responden`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    return;
                 }
+
+                // ⭐ JIKA FAKULTAS TERTENTU DIPILIH: Tampilkan rincian prodi untuk fakultas tersebut
+                if (chartCardTitle) {
+                    chartCardTitle.textContent = `Input Prodi Fakultas ${selectedFakultas}`;
+                }
+
+                let filteredData = {
+                    [selectedFakultas]: data[selectedFakultas] || {}
+                };
                 
                 // ⭐ TRANSPOSED DATA STRUCTURE: Prodi becomes Y-axis, Faculties become datasets
                 const faculties = Object.keys(filteredData).sort();

@@ -143,6 +143,15 @@
                     <span class="text-emerald-600 font-semibold">{{ number_format($overallStats['finished']) }}</span> selesai &middot;
                     <span class="text-amber-500 font-semibold">{{ number_format($overallStats['pending']) }}</span> pending
                 </p>
+                <p class="text-[11px] text-gray-500 mt-1 flex items-center gap-1.5 flex-wrap">
+                    <span class="inline-flex items-center gap-1 text-indigo-700 font-semibold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> {{ number_format($overallStats['academic_total'] ?? 0) }} Acad
+                    </span>
+                    <span class="text-gray-300">&middot;</span>
+                    <span class="inline-flex items-center gap-1 text-amber-700 font-semibold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {{ number_format($overallStats['employee_total'] ?? 0) }} Emp
+                    </span>
+                </p>
             </div>
             <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600 shadow-xs">
                 <i class="fas fa-users text-xl"></i>
@@ -171,6 +180,15 @@
                 <p class="text-2xl font-bold text-blue-700 mt-1">{{ number_format($prodiStats['total']) }}</p>
                 <p class="text-xs text-gray-500 mt-0.5">
                     Dari <strong>{{ $prodiStats['count'] }}</strong> program studi aktif ({{ $prodiStats['rate'] }}% selesai)
+                </p>
+                <p class="text-[11px] text-gray-500 mt-1 flex items-center gap-1.5 flex-wrap">
+                    <span class="inline-flex items-center gap-1 text-indigo-700 font-semibold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> {{ number_format($prodiStats['academic_total'] ?? 0) }} Acad
+                    </span>
+                    <span class="text-gray-300">&middot;</span>
+                    <span class="inline-flex items-center gap-1 text-amber-700 font-semibold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {{ number_format($prodiStats['employee_total'] ?? 0) }} Emp
+                    </span>
                 </p>
             </div>
             <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-xs">
@@ -234,43 +252,90 @@
             </div>
         </div>
 
-        {{-- Chart 2: Horizontal Bar Chart Peringkat Kontribusi Prodi (8 Cols) --}}
+        {{-- Chart 2: Horizontal Bar Chart Peringkat Kontribusi (8 Cols) --}}
         <div class="lg:col-span-8 bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
             <div>
                 <div class="flex items-center justify-between flex-wrap gap-2">
                     <div>
                         <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
                             <i class="fas fa-chart-bar text-blue-600"></i>
-                            <span>Distribusi Kontribusi Seluruh Program Studi</span>
+                            <span x-text="chartTitle"></span>
                         </h3>
-                        <p class="text-xs text-gray-400 mt-0.5">Perbandingan responden Selesai (Form Clear) vs Belum Selesai dari setiap prodi</p>
+                        <p class="text-xs text-gray-400 mt-0.5" x-text="chartSubtitle"></p>
                     </div>
-                    <div class="flex items-center gap-3 text-xs">
-                        <span class="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
-                            <span class="w-3 h-3 rounded bg-emerald-500"></span> Selesai
-                        </span>
-                        <span class="inline-flex items-center gap-1.5 text-slate-500 font-semibold">
-                            <span class="w-3 h-3 rounded bg-slate-300"></span> Belum Selesai
-                        </span>
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        {{-- Mode Switcher (jika 'Semua Fakultas' dipilih) --}}
+                        <template x-if="isAllFaculties && facultyList.length > 0">
+                            <div class="inline-flex p-0.5 rounded-lg bg-gray-100 text-xs font-semibold">
+                                <button type="button" 
+                                        @click="setChartViewMode('fakultas')" 
+                                        :class="chartViewMode === 'fakultas' ? 'bg-white text-blue-700 shadow-2xs' : 'text-gray-500 hover:text-gray-800'"
+                                        class="px-2.5 py-1 rounded-md transition cursor-pointer">
+                                    <i class="fas fa-university mr-1 text-[10px]"></i> Per Fakultas
+                                </button>
+                                <button type="button" 
+                                        @click="setChartViewMode('prodi')" 
+                                        :class="chartViewMode === 'prodi' ? 'bg-white text-blue-700 shadow-2xs' : 'text-gray-500 hover:text-gray-800'"
+                                        class="px-2.5 py-1 rounded-md transition cursor-pointer">
+                                    <i class="fas fa-graduation-cap mr-1 text-[10px]"></i> Per Prodi
+                                </button>
+                            </div>
+                        </template>
+
+                        {{-- Metric Mode Switcher: Status vs Academic/Employee --}}
+                        <div class="inline-flex p-0.5 rounded-lg bg-gray-100 text-xs font-semibold">
+                            <button type="button" 
+                                    @click="setChartMetricType('status')" 
+                                    :class="chartMetricType === 'status' ? 'bg-white text-emerald-700 shadow-2xs' : 'text-gray-500 hover:text-gray-800'"
+                                    class="px-2.5 py-1 rounded-md transition cursor-pointer"
+                                    title="Tampilkan grafik berdasarkan status selesai form">
+                                <i class="fas fa-check-circle mr-1 text-[10px]"></i> Status
+                            </button>
+                            <button type="button" 
+                                    @click="setChartMetricType('category')" 
+                                    :class="chartMetricType === 'category' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-gray-500 hover:text-gray-800'"
+                                    class="px-2.5 py-1 rounded-md transition cursor-pointer"
+                                    title="Tampilkan grafik berdasarkan kategori Academic vs Employee">
+                                <i class="fas fa-users mr-1 text-[10px]"></i> Academic / Employee
+                            </button>
+                        </div>
+
+                        {{-- Legend dynamic based on chartMetricType --}}
+                        <div class="flex items-center gap-3 text-xs" x-show="chartMetricType === 'status'">
+                            <span class="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
+                                <span class="w-3 h-3 rounded bg-emerald-500"></span> Selesai
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 text-slate-500 font-semibold">
+                                <span class="w-3 h-3 rounded bg-slate-300"></span> Belum Selesai
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs" x-show="chartMetricType === 'category'" style="display: none;">
+                            <span class="inline-flex items-center gap-1.5 text-indigo-700 font-semibold">
+                                <span class="w-3 h-3 rounded bg-indigo-500"></span> Academic
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 text-amber-700 font-semibold">
+                                <span class="w-3 h-3 rounded bg-amber-500"></span> Employee
+                            </span>
+                        </div>
                     </div>
                 </div>
 
                 {{-- Chart Container --}}
-                <div class="relative w-full overflow-hidden mt-4" :style="'height: ' + Math.max(300, Math.min(520, prodiList.length * 22 + 40)) + 'px'">
+                <div class="relative w-full overflow-hidden mt-4" :style="'height: ' + (chartViewMode === 'fakultas' ? Math.max(280, Math.min(520, (facultyList ? facultyList.length : 0) * 38 + 50)) : Math.max(320, Math.min(650, (prodiList ? prodiList.length : 0) * 26 + 50))) + 'px'">
                     <canvas id="prodiHorizontalChart"></canvas>
                 </div>
             </div>
 
             <div class="pt-3 border-t border-gray-100 text-xs text-gray-400 flex items-center justify-between">
                 <span>Tips: Arahkan kursor atau klik batang pada grafik untuk melihat rincian detail.</span>
-                <span class="font-semibold text-gray-600">{{ count($prodiList) }} Program Studi Terdata</span>
+                <span class="font-semibold text-gray-600" x-text="chartFooterCount"></span>
             </div>
         </div>
 
     </div>
 
     {{-- Full Interactive Ranking Table --}}
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div id="rankingTableSection" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden scroll-mt-6">
         {{-- Toolbar --}}
         <div class="p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -327,10 +392,12 @@
                         <th class="px-5 py-3.5">Akun Penginput</th>
                         <th class="px-4 py-3.5 text-center">Kategori</th>
                         <th class="px-4 py-3.5 text-center">Total Responden</th>
+                        <th class="px-3 py-3.5 text-center text-indigo-700">Academic</th>
+                        <th class="px-3 py-3.5 text-center text-amber-700">Employee</th>
                         <th class="px-4 py-3.5 text-center text-emerald-700">Selesai</th>
-                        <th class="px-4 py-3.5 text-center text-amber-700">Pending</th>
-                        <th class="px-5 py-3.5 w-44">Tingkat Selesai</th>
-                        <th class="px-5 py-3.5 text-right w-32">Aksi</th>
+                        <th class="px-4 py-3.5 text-center text-slate-600">Pending</th>
+                        <th class="px-5 py-3.5 w-40">Tingkat Selesai</th>
+                        <th class="px-5 py-3.5 text-right w-28">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -349,8 +416,10 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3.5 text-center font-bold text-gray-900 text-sm" x-text="row.total"></td>
+                            <td class="px-3 py-3.5 text-center font-bold text-indigo-700 text-xs sm:text-sm" x-text="row.academic_total"></td>
+                            <td class="px-3 py-3.5 text-center font-bold text-amber-700 text-xs sm:text-sm" x-text="row.employee_total"></td>
                             <td class="px-4 py-3.5 text-center font-bold text-emerald-600 text-sm" x-text="row.finished"></td>
-                            <td class="px-4 py-3.5 text-center font-medium text-amber-600 text-xs" x-text="row.total - row.finished"></td>
+                            <td class="px-4 py-3.5 text-center font-medium text-slate-600 text-xs" x-text="row.total - row.finished"></td>
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2">
                                     <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
@@ -372,7 +441,7 @@
                     </template>
 
                     <tr x-show="filteredTableRows.length === 0">
-                        <td colspan="8" class="text-center py-12 text-gray-400">
+                        <td colspan="10" class="text-center py-12 text-gray-400">
                             <i class="fas fa-search text-3xl mb-2 block"></i>
                             Tidak ada akun penginput yang sesuai dengan filter atau kata kunci pencarian.
                         </td>
@@ -382,13 +451,15 @@
         </div>
 
         {{-- Footer summary --}}
-        <div class="p-4 bg-gray-50/75 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
+        <div class="p-4 bg-gray-50/75 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
             <div>
                 Menampilkan <span class="font-bold text-gray-700" x-text="filteredTableRows.length"></span> akun penginput
             </div>
-            <div class="flex items-center gap-4 text-xs font-semibold">
-                <span class="text-blue-700">Total Prodi: {{ $prodiStats['count'] }} akun ({{ $prodiStats['total'] }} responden)</span>
-                <span class="text-teal-700">Total Keseluruhan: {{ $overallStats['total'] }} responden</span>
+            <div class="flex items-center gap-4 text-xs font-semibold flex-wrap">
+                <span class="text-indigo-700"><i class="fas fa-graduation-cap mr-1 text-[10px]"></i> Academic: {{ number_format($overallStats['academic_total'] ?? 0) }}</span>
+                <span class="text-amber-700"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Employee: {{ number_format($overallStats['employee_total'] ?? 0) }}</span>
+                <span class="text-blue-700">Total Prodi: {{ $prodiStats['count'] }} akun ({{ number_format($prodiStats['total']) }} responden)</span>
+                <span class="text-teal-700">Total Keseluruhan: {{ number_format($overallStats['total']) }} responden</span>
             </div>
         </div>
     </div>
@@ -398,16 +469,73 @@
 <script>
 function inputerAnalyticsManager() {
     return {
+        filters: @json($filters),
         breakdown: @json($breakdown),
         prodiList: @json($prodiList),
+        facultyList: @json($facultyList),
         overallStats: @json($overallStats),
         prodiStats: @json($prodiStats),
+        chartViewMode: @json(($filters['fakultas'] === 'all' || empty($filters['fakultas'])) ? 'fakultas' : 'prodi'),
+        chartMetricType: 'status', // 'status' (Selesai vs Belum) or 'category' (Academic vs Employee)
 
         selectedCategoryTab: 'all', // 'all', 'prodi', 'fakultas', 'direktorat'
         searchQuery: '',
 
         categoryDonutInstance: null,
         prodiHorizontalInstance: null,
+
+        get isAllFaculties() {
+            return !this.filters.fakultas || this.filters.fakultas === 'all';
+        },
+
+        get chartTitle() {
+            if (this.chartViewMode === 'fakultas') {
+                return 'Distribusi Kontribusi Seluruh Fakultas';
+            }
+            if (this.filters.fakultas && this.filters.fakultas !== 'all') {
+                return 'Distribusi Kontribusi Program Studi (' + this.filters.fakultas.toUpperCase() + ')';
+            }
+            return 'Distribusi Kontribusi Seluruh Program Studi';
+        },
+
+        get chartSubtitle() {
+            const scope = this.chartViewMode === 'fakultas' ? 'fakultas' : 'program studi';
+            if (this.chartMetricType === 'category') {
+                return `Sebaran kontribusi responden Academic (Peneliti/Dosen) vs Employee (Praktisi) dari setiap ${scope}`;
+            }
+            return `Perbandingan responden Selesai (Form Clear) vs Belum Selesai dari setiap ${scope}`;
+        },
+
+        get chartFooterCount() {
+            if (this.chartViewMode === 'fakultas') {
+                return (this.facultyList?.length || 0) + ' Fakultas Terdata';
+            }
+            return (this.prodiList?.length || 0) + ' Program Studi Terdata';
+        },
+
+        setChartViewMode(mode) {
+            this.chartViewMode = mode;
+            this.$nextTick(() => {
+                this.renderProdiHorizontalChart();
+            });
+        },
+
+        setChartMetricType(type) {
+            this.chartMetricType = type;
+            this.$nextTick(() => {
+                this.renderProdiHorizontalChart();
+            });
+        },
+
+        filterTableByAccount(id) {
+            const found = this.allRows.find(r => String(r.id) === String(id));
+            if (found) {
+                this.searchQuery = found.name;
+                this.selectedCategoryTab = 'all';
+                const el = document.getElementById('rankingTableSection');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
 
         init() {
             this.$nextTick(() => {
@@ -426,6 +554,8 @@ function inputerAnalyticsManager() {
                         categoryLabel: grp.label,
                         total: inp.total,
                         finished: inp.finished,
+                        academic_total: inp.academic_total || 0,
+                        employee_total: inp.employee_total || 0,
                         rate: inp.rate,
                     });
                 });
@@ -505,52 +635,136 @@ function inputerAnalyticsManager() {
             const canvas = document.getElementById('prodiHorizontalChart');
             if (!canvas) return;
 
-            const list = [...(this.prodiList || [])];
+            const isFacultyMode = this.chartViewMode === 'fakultas';
+            const rawList = isFacultyMode ? this.facultyList : this.prodiList;
+            const list = [...(rawList || [])];
             if (list.length === 0) return;
 
             list.sort((a, b) => b.total - a.total);
 
             const labels = list.map(i => {
+                if (isFacultyMode) {
+                    return i.short_name ? 'Fakultas ' + i.short_name : i.name;
+                }
                 const name = i.name.replace(/^(FT|FEB|FIP|FBS|FMIPA|FIK|FISH|FPsi|Vokasi)-/, '');
                 return name.length > 28 ? name.substring(0, 26) + '...' : name;
             });
-            const finishedData = list.map(i => i.finished);
-            const pendingData = list.map(i => Math.max(0, i.total - i.finished));
+
+            const barThick = isFacultyMode ? 20 : 13;
+
+            let datasets = [];
+            if (this.chartMetricType === 'category') {
+                datasets = [
+                    {
+                        label: 'Academic',
+                        data: list.map(i => i.academic_total || 0),
+                        backgroundColor: '#6366F1',
+                        hoverBackgroundColor: '#4F46E5',
+                        borderRadius: 4,
+                        barThickness: barThick,
+                    },
+                    {
+                        label: 'Employee',
+                        data: list.map(i => i.employee_total || 0),
+                        backgroundColor: '#F59E0B',
+                        hoverBackgroundColor: '#D97706',
+                        borderRadius: 4,
+                        barThickness: barThick,
+                    }
+                ];
+            } else {
+                datasets = [
+                    {
+                        label: 'Selesai',
+                        data: list.map(i => i.finished || 0),
+                        backgroundColor: '#10B981',
+                        hoverBackgroundColor: '#059669',
+                        borderRadius: 4,
+                        barThickness: barThick,
+                    },
+                    {
+                        label: 'Belum Selesai',
+                        data: list.map(i => Math.max(0, (i.total || 0) - (i.finished || 0))),
+                        backgroundColor: '#CBD5E1',
+                        hoverBackgroundColor: '#94A3B8',
+                        borderRadius: 4,
+                        barThickness: barThick,
+                    }
+                ];
+            }
 
             if (this.prodiHorizontalInstance) {
                 this.prodiHorizontalInstance.destroy();
             }
+
+            // Custom inline plugin to draw numbers and breakdown at the end of each bar
+            const customBarLabelsPlugin = {
+                id: 'customBarLabels',
+                afterDatasetsDraw(chart) {
+                    const { ctx, scales: { x } } = chart;
+                    const metaLast = chart.getDatasetMeta(chart.data.datasets.length - 1);
+                    if (!metaLast || !metaLast.data) return;
+
+                    ctx.save();
+                    ctx.textBaseline = 'middle';
+
+                    list.forEach((item, index) => {
+                        const bar = metaLast.data[index];
+                        if (!bar) return;
+
+                        const xPos = Math.max(bar.x + 8, x.getPixelForValue(0) + 8);
+                        const yPos = bar.y;
+
+                        const totalStr = String(item.total || 0);
+                        const acad = item.academic_total || 0;
+                        const emp = item.employee_total || 0;
+
+                        const isNarrow = chart.width < 580;
+                        const detailStr = isNarrow 
+                            ? ` (${acad}A · ${emp}E)` 
+                            : ` (${acad} Acad · ${emp} Emp)`;
+
+                        // 1. Draw total number in bold dark
+                        ctx.font = 'bold 11px Inter, system-ui, -apple-system, sans-serif';
+                        ctx.fillStyle = '#0F172A';
+                        ctx.fillText(totalStr, xPos, yPos);
+
+                        const totalWidth = ctx.measureText(totalStr).width;
+
+                        // 2. Draw Academic & Employee count in soft secondary style
+                        ctx.font = '500 10px Inter, system-ui, -apple-system, sans-serif';
+                        ctx.fillStyle = '#64748B';
+                        ctx.fillText(detailStr, xPos + totalWidth + 2, yPos);
+                    });
+
+                    ctx.restore();
+                }
+            };
 
             const ctx = canvas.getContext('2d');
             this.prodiHorizontalInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: 'Selesai',
-                            data: finishedData,
-                            backgroundColor: '#10B981',
-                            borderRadius: 4,
-                            barThickness: 12,
-                        },
-                        {
-                            label: 'Belum Selesai',
-                            data: pendingData,
-                            backgroundColor: '#CBD5E1',
-                            borderRadius: 4,
-                            barThickness: 12,
-                        }
-                    ]
+                    datasets: datasets
                 },
+                plugins: [customBarLabelsPlugin],
                 options: {
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            right: 90,
+                            top: 6,
+                            bottom: 6
+                        }
+                    },
                     scales: {
                         x: {
                             stacked: true,
                             beginAtZero: true,
+                            grace: '35%',
                             grid: { color: '#F1F5F9' },
                             ticks: { precision: 0 }
                         },
@@ -558,7 +772,7 @@ function inputerAnalyticsManager() {
                             stacked: true,
                             grid: { display: false },
                             ticks: {
-                                font: { size: 10, family: 'Inter, sans-serif' },
+                                font: { size: 11, family: 'Inter, system-ui, sans-serif' },
                                 autoSkip: false
                             }
                         }
@@ -566,12 +780,42 @@ function inputerAnalyticsManager() {
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: '#0F172A',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 10,
+                            cornerRadius: 8,
                             callbacks: {
                                 afterBody: (context) => {
                                     const idx = context[0].dataIndex;
                                     const item = list[idx];
-                                    return `Total: ${item.total} responden (${item.rate}% selesai)`;
+                                    const total = item.total || 0;
+                                    const acad = item.academic_total || 0;
+                                    const emp = item.employee_total || 0;
+                                    const acadPct = total > 0 ? Math.round((acad / total) * 100) : 0;
+                                    const empPct = total > 0 ? Math.round((emp / total) * 100) : 0;
+                                    return [
+                                        `------------------------------`,
+                                        `Total Responden: ${total}`,
+                                        `• Academic: ${acad} (${acadPct}%)`,
+                                        `• Employee: ${emp} (${empPct}%)`,
+                                        `• Selesai (Clear): ${item.finished} (${item.rate}%)`,
+                                        `• Pending: ${Math.max(0, total - item.finished)}`
+                                    ];
                                 }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            const clickedItem = list[idx];
+                            if (isFacultyMode && clickedItem.short_name) {
+                                const url = new URL(window.location.href);
+                                url.searchParams.set('fakultas', clickedItem.short_name.toLowerCase());
+                                window.location.href = url.toString();
+                            } else if (!isFacultyMode && clickedItem.id) {
+                                this.filterTableByAccount(clickedItem.id);
                             }
                         }
                     }
