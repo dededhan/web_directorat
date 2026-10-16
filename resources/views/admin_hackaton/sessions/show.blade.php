@@ -48,7 +48,8 @@
         {{-- Info Cards --}}
         @php
             $countDFarm = $session->submissions->filter(fn($s) => $s->kategori === 'd-farm' || str_contains($s->tema, 'D-FARM'))->count();
-            $countDTech = $session->submissions->filter(fn($s) => $s->kategori === 'd-tech' || str_contains($s->tema, 'D-TECH') || str_contains($s->tema, 'D-MARC'))->count();
+            $countDTech = $session->submissions->filter(fn($s) => in_array($s->kategori, ['d-tech', 'd-marc']) || str_contains($s->tema, 'D-TECH') || str_contains($s->tema, 'D-MARC'))->count();
+            $countDMarc = $countDTech;
         @endphp
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="border-2 border-gray-950 bg-white p-5">
@@ -86,7 +87,7 @@
             </div>
 
             <div class="border-2 border-gray-950 bg-white p-5">
-                <p class="text-xs font-bold uppercase tracking-wider text-rose-700">Proposal D-TECH</p>
+                <p class="text-xs font-bold uppercase tracking-wider text-rose-700">Proposal D-MARC</p>
                 <div class="mt-2 flex items-baseline justify-between">
                     <p class="text-2xl font-black text-gray-950">{{ $countDTech }}</p>
                     <span class="text-xs font-bold text-rose-800 bg-rose-100 px-2 py-0.5 border border-rose-300">Med &amp; Tech</span>

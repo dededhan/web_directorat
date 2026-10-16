@@ -88,6 +88,9 @@
 
                         <div class="pt-3 border-t border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                             @if($assessment)
+                                <a href="{{ route('hackaton.katsinov.show', $assessment->id) }}" class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded-xl transition">
+                                    <i class="fas fa-eye mr-1.5"></i> Lihat Detail
+                                </a>
                                 <a href="{{ route('hackaton.katsinov.download_pdf', $assessment->id) }}" class="inline-flex items-center px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow-sm">
                                     <i class="fas fa-file-pdf mr-1.5"></i> Unduh PDF
                                 </a>
@@ -156,6 +159,9 @@
                                         {{ $item->assessment_date ? $item->assessment_date->translatedFormat('d M Y') : $item->created_at->translatedFormat('d M Y') }}
                                     </td>
                                     <td class="p-3 text-right space-x-2">
+                                        <a href="{{ route('hackaton.katsinov.show', $item->id) }}" class="inline-flex items-center px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg text-[11px] transition" title="Lihat Detail (View Only)">
+                                            <i class="fas fa-eye mr-1"></i> Lihat
+                                        </a>
                                         <a href="{{ route('hackaton.katsinov.download_pdf', $item->id) }}" class="inline-flex items-center px-2.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-lg text-[11px] transition shadow-sm" title="Unduh PDF">
                                             <i class="fas fa-file-pdf mr-1"></i> Unduh PDF
                                         </a>

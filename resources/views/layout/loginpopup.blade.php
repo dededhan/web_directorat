@@ -205,7 +205,7 @@
                                 class="btn-primary w-full py-3 rounded-lg text-white font-medium tracking-wide mt-3">SIGN
                                 IN</button>
                         </form>
-                        <a href="{{ route('inovchalenge.register.form') }}"
+                        <a href="#" target="_blank" rel="noopener noreferrer" onclick="this.href=getResetPasswordWaUrl();"
                             class="text-center block mt-5 text-teal-800 text-sm hover:text-teal-900 hover:underline transition-all duration-300">Forgot
                             your Password?</a>
 
@@ -228,6 +228,25 @@
         </div>
     </div>
 
+    <script>
+        function getResetPasswordWaUrl() {
+            const emailInput = document.querySelector('#loginModal input[name="email"]') || document.querySelector('input[name="email"]');
+            const enteredEmail = (emailInput && emailInput.value ? emailInput.value.trim() : '') || '{{ old('email') }}';
+            const currentUrl = window.location.href;
+            const pageTitle = (document.title || 'Website DITISIP UNJ').split('|')[0].trim();
+
+            let msg = 'Halo Admin, salam sejahtera.\n\n';
+            msg += 'Saya pengguna website ' + pageTitle + ' (' + currentUrl + ').\n';
+            msg += 'Saya ingin meminta tolong kepada Admin untuk melakukan reset password akun saya karena saya lupa password.\n';
+            if (enteredEmail) {
+                msg += '\nEmail Akun: ' + enteredEmail + '\n';
+            }
+            msg += '\nMohon bantuannya ya Admin. Terima kasih banyak sebelumnya.';
+
+            return 'https://wa.me/6285157000915?text=' + encodeURIComponent(msg);
+        }
+    </script>
+
     @if (session('login_error'))
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
@@ -247,7 +266,7 @@
                         '<a href="{{ route('inovchalenge.register.form') }}" style="color: #0d9488; font-weight: 600;">Belum punya akun? Daftar di sini</a>';
                 } else if (errorType === 'wrong_password') {
                     icon = 'error';
-                    footer = '<a href="#" style="color: #0d9488; font-weight: 600;">Lupa password? Reset di sini</a>';
+                    footer = 'Lupa password? <a href="' + getResetPasswordWaUrl() + '" target="_blank" rel="noopener noreferrer" onclick="this.href=getResetPasswordWaUrl()" style="color: #0d9488; font-weight: 600; text-decoration: underline;">Reset di sini</a>';
                 }
 
                 Swal.fire({

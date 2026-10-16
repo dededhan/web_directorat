@@ -39,9 +39,10 @@ Route::prefix('hackathon/register')
     });
 Route::redirect('hackaton/register', '/hackathon/register', 301);
 
-// Public shareable link for Katsinov Verification
+// Shareable link for Katsinov Verification (Redirects into internal dashboard view)
 Route::get('hackathon/katsinov/share/{token}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'showPublic'])
-    ->name('hackaton.katsinov.show_public');
+    ->name('hackaton.katsinov.show_public')
+    ->middleware(['auth', 'katsinov.viewer']);
 Route::redirect('hackaton/katsinov/share/{token}', '/hackathon/katsinov/share/{token}', 301);
 
 // ── Admin Hackathon Panel ────────────────────────────────────────────────
@@ -152,7 +153,7 @@ Route::redirect('admin-hackaton', '/admin-hackathon', 301);
 Route::redirect('admin-hackaton/{any}', '/admin-hackathon/{any}', 301)->where('any', '.*');
 
 // ── Portal Terpadu Semua Role Peserta & Reviewer ────────────────────────
-$allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_dosen_eksternal,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge,dosen,tendik,admin_hackaton,superadmin';
+$allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_dosen_eksternal,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_mahasiswa,reviewer_hackaton,reviewer_inovchalenge,reviewer_equity,dosen,tendik,admin_hackaton,superadmin,admin,admin_inovasi,admin_inovchalenge,admin_direktorat,mahasiswa,alumni,dudi,peneliti,registered_user';
 
 Route::prefix('hackathon')
     ->name('hackaton.')
@@ -178,6 +179,14 @@ Route::prefix('hackathon')
             ->name('team.show');
         Route::get('team-submissions/{submission}/tahap/{tahapId}', [ParticipantDashboardController::class, 'showTahap'])
             ->name('team.tahap');
+
+        // Katsinov Self-Assessment View-Only & PDF (Accessible by Pengusul/Team, Reviewer, and Admin)
+        Route::get('katsinov/{katsinov}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'show'])
+            ->name('katsinov.show')
+            ->middleware('katsinov.viewer');
+        Route::get('katsinov/{katsinov}/download-pdf', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'downloadPdf'])
+            ->name('katsinov.download_pdf')
+            ->middleware('katsinov.viewer');
 
         // ── Khusus Pengusul (Semua Role Peserta & Admin) ─────────────────────
         Route::middleware(['role:hackaton_dosen,hackaton_dosen_eksternal,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_mahasiswa,dosen,tendik,admin_hackaton,superadmin'])->group(function () {

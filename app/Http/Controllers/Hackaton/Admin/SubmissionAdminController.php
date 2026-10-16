@@ -32,15 +32,16 @@ class SubmissionAdminController extends Controller
             });
         }
 
-        // Filter by category (d-farm / d-tech)
+        // Filter by category (d-farm / d-marc / d-tech)
         if ($request->filled('kategori')) {
             $kategori = $request->kategori;
             $query->where(function ($q) use ($kategori) {
-                $q->where('kategori', $kategori);
                 if ($kategori === 'd-farm') {
-                    $q->orWhere('tema', 'like', '%D-FARM%');
+                    $q->where('kategori', 'd-farm')
+                      ->orWhere('tema', 'like', '%D-FARM%');
                 } else {
-                    $q->orWhere('tema', 'like', '%D-MARC%')
+                    $q->whereIn('kategori', ['d-tech', 'd-marc'])
+                      ->orWhere('tema', 'like', '%D-MARC%')
                       ->orWhere('tema', 'like', '%D-TECH%');
                 }
             });
@@ -51,9 +52,10 @@ class SubmissionAdminController extends Controller
         $dFarmCount = HackatonSubmission::where('hackaton_session_id', $session->id)
             ->where(fn($q) => $q->where('kategori', 'd-farm')->orWhere('tema', 'like', '%D-FARM%'))
             ->count();
-        $dTechCount = HackatonSubmission::where('hackaton_session_id', $session->id)
-            ->where(fn($q) => $q->where('kategori', 'd-tech')->orWhere('tema', 'like', '%D-TECH%')->orWhere('tema', 'like', '%D-MARC%'))
+        $dMarcCount = HackatonSubmission::where('hackaton_session_id', $session->id)
+            ->where(fn($q) => $q->whereIn('kategori', ['d-tech', 'd-marc'])->orWhere('tema', 'like', '%D-TECH%')->orWhere('tema', 'like', '%D-MARC%'))
             ->count();
+        $dTechCount = $dMarcCount;
 
         $session->load('tahap');
         $hasReviewerMap = [];
@@ -61,7 +63,7 @@ class SubmissionAdminController extends Controller
             $hasReviewerMap[$sub->id] = $sub->reviewers->isNotEmpty();
         }
 
-        return view('admin_hackaton.submissions.index', compact('submissions', 'session', 'hasReviewerMap', 'dFarmCount', 'dTechCount'));
+        return view('admin_hackaton.submissions.index', compact('submissions', 'session', 'hasReviewerMap', 'dFarmCount', 'dTechCount', 'dMarcCount'));
     }
 
     /**

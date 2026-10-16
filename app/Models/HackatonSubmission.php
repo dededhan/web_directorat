@@ -20,27 +20,51 @@ class HackatonSubmission extends Model
 
     public const KATEGORI_DFARM = 'd-farm';
     public const KATEGORI_DTECH = 'd-tech';
+    public const KATEGORI_DMARC = 'd-marc';
 
     public const KATEGORI_LABELS = [
         self::KATEGORI_DFARM => 'D-FARM',
-        self::KATEGORI_DTECH => 'D-TECH',
+        self::KATEGORI_DTECH => 'D-MARC',
+        self::KATEGORI_DMARC => 'D-MARC',
     ];
 
     public const TEMAS = [
         'D-FARM' => 'D-FARM (DeepTech Food Acceleration Research to Market)',
-        'D-TECH' => 'D-TECH (DeepTech Acceleration Research to Challenge)',
-        'D-MARC' => 'D-TECH (DeepTech Medical & Technology Acceleration / D-MARC)',
+        'D-MARC' => 'D-MARC (DeepTech Acceleration Research to Challenge)',
+        'D-TECH' => 'D-MARC (DeepTech Acceleration Research to Challenge)',
     ];
+
+    public function isDFarm(): bool
+    {
+        return $this->kategori === self::KATEGORI_DFARM || str_contains($this->tema ?? '', 'D-FARM');
+    }
+
+    public function isDMarc(): bool
+    {
+        return !$this->isDFarm();
+    }
 
     public function getKategoriLabelAttribute(): string
     {
-        return self::KATEGORI_LABELS[$this->kategori] ?? ($this->kategori ? strtoupper($this->kategori) : '-');
+        if ($this->isDFarm()) {
+            return 'D-FARM';
+        }
+        return 'D-MARC';
     }
 
     public function getTemaLabelAttribute()
     {
         if (!$this->tema) return null;
-        return self::TEMAS[$this->tema] ?? $this->tema;
+        if (isset(self::TEMAS[$this->tema])) {
+            return self::TEMAS[$this->tema];
+        }
+        if (str_contains($this->tema, 'D-MARC') || str_contains($this->tema, 'D-TECH')) {
+            return self::TEMAS['D-MARC'];
+        }
+        if (str_contains($this->tema, 'D-FARM')) {
+            return self::TEMAS['D-FARM'];
+        }
+        return $this->tema;
     }
 
     public function session()

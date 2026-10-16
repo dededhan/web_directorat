@@ -29,7 +29,7 @@
                                 @endphp
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black {{ $isDFarm ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
                                     <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1"></i>
-                                    {{ $isDFarm ? 'D-FARM' : 'D-TECH' }}
+                                    {{ $isDFarm ? 'D-FARM' : 'D-MARC' }}
                                 </span>
                                 @if ($sub->identitasIsComplete())
                                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">

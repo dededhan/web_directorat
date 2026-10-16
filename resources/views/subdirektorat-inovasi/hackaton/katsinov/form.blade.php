@@ -28,7 +28,7 @@
                 signaturePad: null,
                 uploadedSignatureData: null,
                 existingSignature: {!! json_encode($initialSignature) !!},
-                shareUrl: {!! $initialShareToken ? json_encode(route('hackaton.katsinov.show_public', $initialShareToken)) : 'null' !!},
+                shareUrl: {!! $assessment->id ? json_encode(route('hackaton.katsinov.show', $assessment->id)) : ($initialShareToken ? json_encode(route('hackaton.katsinov.show_public', $initialShareToken)) : 'null') !!},
                 downloadUrl: {!! $assessment->id ? json_encode(route('hackaton.katsinov.download_pdf', $assessment->id)) : 'null' !!},
                 isCompleted: {{ $assessment->signed_at ? 'true' : 'false' }},
                 responses: {!! json_encode($initialResponses, JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!},
@@ -392,7 +392,10 @@
                             <h3 class="text-lg font-bold text-gray-900 mt-1">Laporan KATSINOV Siap Digunakan</h3>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <a :href="shareUrl" class="inline-flex items-center px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl transition shadow">
+                            <i class="fas fa-eye mr-2 text-sm"></i> Lihat Detail (View Only)
+                        </a>
                         <a :href="downloadUrl" class="inline-flex items-center px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow">
                             <i class="fas fa-file-pdf mr-2 text-sm"></i> Unduh PDF Resmi
                         </a>
@@ -705,11 +708,18 @@
                     </button>
 
                     <template x-if="isCompleted">
-                        <a :href="downloadUrl"
-                            class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow flex items-center gap-2 border border-emerald-800">
-                            <i class="fas fa-file-pdf"></i>
-                            <span>Unduh PDF</span>
-                        </a>
+                        <div class="flex items-center gap-2">
+                            <a :href="shareUrl"
+                                class="px-4 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5">
+                                <i class="fas fa-eye"></i>
+                                <span>Lihat Detail</span>
+                            </a>
+                            <a :href="downloadUrl"
+                                class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow flex items-center gap-2 border border-emerald-800">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>Unduh PDF</span>
+                            </a>
+                        </div>
                     </template>
                 </div>
             </div>

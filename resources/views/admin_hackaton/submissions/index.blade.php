@@ -36,9 +36,9 @@
                     class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ request('kategori') === 'd-farm' ? 'bg-amber-500 text-gray-950 border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:border-amber-400' }}">
                     <i class="fas fa-wheat-awn mr-1"></i> D-FARM ({{ $dFarmCount ?? 0 }})
                 </a>
-                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'kategori' => 'd-tech', 'search' => request('search')]) }}"
-                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ request('kategori') === 'd-tech' ? 'bg-rose-600 text-white border-rose-700' : 'bg-rose-50 text-rose-900 border-rose-200 hover:border-rose-400' }}">
-                    <i class="fas fa-heart-pulse mr-1"></i> D-TECH ({{ $dTechCount ?? 0 }})
+                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'kategori' => 'd-marc', 'search' => request('search')]) }}"
+                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ in_array(request('kategori'), ['d-marc', 'd-tech']) ? 'bg-rose-600 text-white border-rose-700' : 'bg-rose-50 text-rose-900 border-rose-200 hover:border-rose-400' }}">
+                    <i class="fas fa-heart-pulse mr-1"></i> D-MARC ({{ $dMarcCount ?? $dTechCount ?? 0 }})
                 </a>
             </div>
 
@@ -119,7 +119,7 @@
                                     <div class="mt-1">
                                         <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-black {{ $isDFarm ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
                                             <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1"></i>
-                                            {{ $isDFarm ? 'D-FARM' : 'D-TECH' }}
+                                            {{ $isDFarm ? 'D-FARM' : 'D-MARC' }}
                                         </span>
                                     </div>
                                 </td>

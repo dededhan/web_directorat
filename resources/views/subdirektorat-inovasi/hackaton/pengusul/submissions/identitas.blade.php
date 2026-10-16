@@ -59,11 +59,11 @@
                     <div class="sm:col-span-2">
                         <label class="block font-bold text-gray-700 mb-1">Tema Inovasi Hackaton <span class="text-rose-600">*</span></label>
                         <select name="tema" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-500 focus:ring-amber-500 font-semibold bg-amber-50/40">
-                            <option value="D-FARM (DeepTech Food Acceleration Research to Market)" {{ old('tema', $submission->tema) === 'D-FARM (DeepTech Food Acceleration Research to Market)' ? 'selected' : '' }}>
+                            <option value="D-FARM (DeepTech Food Acceleration Research to Market)" {{ (old('tema', $submission->tema) === 'D-FARM (DeepTech Food Acceleration Research to Market)' || str_contains(old('tema', $submission->tema) ?? '', 'D-FARM')) ? 'selected' : '' }}>
                                 D-FARM (DeepTech Food Acceleration Research to Market)
                             </option>
-                            <option value="D-TECH (DeepTech Acceleration Research to Challenge)" {{ in_array(old('tema', $submission->tema), ['D-TECH (DeepTech Acceleration Research to Challenge)', 'D-MARC (DeepTack Medical Acceleraton Research to Challenge)']) ? 'selected' : '' }}>
-                                D-TECH (DeepTech Acceleration Research / D-MARC)
+                            <option value="D-MARC (DeepTech Acceleration Research to Challenge)" {{ (!str_contains(old('tema', $submission->tema) ?? '', 'D-FARM') && old('tema', $submission->tema)) ? 'selected' : '' }}>
+                                D-MARC (DeepTech Acceleration Research to Challenge)
                             </option>
                         </select>
                         <p class="text-[11px] text-gray-500 mt-1">Fokus tema yang Anda pilih saat mendaftarkan proposal.</p>

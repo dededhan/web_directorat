@@ -123,7 +123,7 @@
                             @endphp
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold {{ $isDFarm ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
                                 <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1 text-[10px]"></i>
-                                {{ $isDFarm ? 'D-FARM' : 'D-TECH' }} — {{ $submission->tema_label ?? $submission->tema }}
+                                {{ $isDFarm ? 'D-FARM' : 'D-MARC' }} — {{ $submission->tema_label ?? $submission->tema }}
                             </span>
                         </div>
                     @endif

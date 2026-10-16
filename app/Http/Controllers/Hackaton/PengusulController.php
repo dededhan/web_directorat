@@ -48,12 +48,13 @@ class PengusulController extends Controller
             ->where('user_id', Auth::id())
             ->get();
 
-        $submissionDFarm = $submissions->first(fn($s) => $s->kategori === 'd-farm' || str_contains($s->tema, 'D-FARM'));
-        $submissionDTech = $submissions->first(fn($s) => $s->kategori === 'd-tech' || str_contains($s->tema, 'D-MARC') || str_contains($s->tema, 'D-TECH'));
+        $submissionDFarm = $submissions->first(fn($s) => $s->kategori === 'd-farm' || str_contains($s->tema ?? '', 'D-FARM'));
+        $submissionDTech = $submissions->first(fn($s) => in_array($s->kategori, ['d-tech', 'd-marc']) || str_contains($s->tema ?? '', 'D-MARC') || str_contains($s->tema ?? '', 'D-TECH'));
+        $submissionDMarc = $submissionDTech;
 
         $existingSubmission = $submissions->first();
 
-        return view('subdirektorat-inovasi.hackaton.pengusul.sessions.show', compact('session', 'submissions', 'submissionDFarm', 'submissionDTech', 'existingSubmission'));
+        return view('subdirektorat-inovasi.hackaton.pengusul.sessions.show', compact('session', 'submissions', 'submissionDFarm', 'submissionDTech', 'submissionDMarc', 'existingSubmission'));
     }
 
     /**
@@ -78,26 +79,25 @@ class PengusulController extends Controller
 
         $request->validate([
             'tema'     => 'required|string|max:255',
-            'kategori' => 'nullable|string|in:d-farm,d-tech',
+            'kategori' => 'nullable|string|in:d-farm,d-tech,d-marc',
         ], [
             'tema.required' => 'Silakan pilih tema inovasi terlebih dahulu sebelum mendaftarkan proposal.',
         ]);
 
-        $kategori = $request->kategori;
-        if (!$kategori) {
-            $kategori = str_contains($request->tema, 'D-FARM') ? 'd-farm' : 'd-tech';
-        }
-
-        $kategoriLabel = $kategori === 'd-farm' ? 'D-FARM' : 'D-TECH';
+        $kategoriInput = $request->kategori;
+        $isDFarm = ($kategoriInput === 'd-farm') || str_contains($request->tema, 'D-FARM');
+        $kategori = $isDFarm ? 'd-farm' : 'd-tech';
+        $kategoriLabel = $isDFarm ? 'D-FARM' : 'D-MARC';
 
         $existing = HackatonSubmission::where('hackaton_session_id', $session->id)
             ->where('user_id', Auth::id())
-            ->where(function ($q) use ($kategori) {
-                $q->where('kategori', $kategori);
-                if ($kategori === 'd-farm') {
-                    $q->orWhere('tema', 'like', '%D-FARM%');
+            ->where(function ($q) use ($isDFarm) {
+                if ($isDFarm) {
+                    $q->where('kategori', 'd-farm')
+                      ->orWhere('tema', 'like', '%D-FARM%');
                 } else {
-                    $q->orWhere('tema', 'like', '%D-MARC%')
+                    $q->whereIn('kategori', ['d-tech', 'd-marc'])
+                      ->orWhere('tema', 'like', '%D-MARC%')
                       ->orWhere('tema', 'like', '%D-TECH%');
                 }
             })
@@ -843,11 +843,21 @@ class PengusulController extends Controller
         );
 
         if ($request->filled('tema')) {
-            $newKategori = str_contains($request->tema, 'D-FARM') ? 'd-farm' : 'd-tech';
+            $isDFarm = str_contains($request->tema, 'D-FARM');
+            $newKategori = $isDFarm ? 'd-farm' : 'd-tech';
             $hasConflict = HackatonSubmission::where('hackaton_session_id', $submission->hackaton_session_id)
                 ->where('user_id', $submission->user_id)
                 ->where('id', '!=', $submission->id)
-                ->where('kategori', $newKategori)
+                ->where(function ($q) use ($isDFarm) {
+                    if ($isDFarm) {
+                        $q->where('kategori', 'd-farm')
+                          ->orWhere('tema', 'like', '%D-FARM%');
+                    } else {
+                        $q->whereIn('kategori', ['d-tech', 'd-marc'])
+                          ->orWhere('tema', 'like', '%D-MARC%')
+                          ->orWhere('tema', 'like', '%D-TECH%');
+                    }
+                })
                 ->exists();
 
             if ($hasConflict) {

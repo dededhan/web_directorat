@@ -377,7 +377,7 @@
                                 <div class="space-y-1">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">{{ $sub->session->nama_sesi }}</span>
-                                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full {{ ($sub->kategori ?? '') === 'd-tech' ? 'bg-sky-100 text-sky-800 border border-sky-300' : 'bg-emerald-100 text-emerald-800 border border-emerald-300' }}">
+                                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full {{ $sub->isDFarm() ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300' }}">
                                             {{ $sub->kategori_label }}
                                         </span>
                                     </div>

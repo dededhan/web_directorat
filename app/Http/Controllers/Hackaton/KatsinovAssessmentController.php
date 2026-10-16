@@ -261,21 +261,123 @@ class KatsinovAssessmentController extends Controller
     }
 
     /**
+     * Show Katsinov Self-Assessment in dashboard view-only mode.
+     */
+    public function show(HackatonKatsinovAssessment $katsinov)
+    {
+        $userId = Auth::id();
+        $user = Auth::user();
+
+        // Eager load relations
+        $katsinov->load([
+            'submission.session',
+            'submission.user',
+            'submission.members.user',
+            'submission.reviewers',
+            'submission.identitas',
+            'user',
+        ]);
+
+        $submission = $katsinov->submission;
+
+        // Authorization check (defense in depth in addition to middleware)
+        $isAdmin = in_array($user->role ?? '', [
+            'admin_hackaton',
+            'superadmin',
+            'admin',
+            'admin_inovasi',
+            'admin_inovchalenge',
+            'admin_direktorat',
+        ]);
+        $isReviewer = in_array($user->role ?? '', ['reviewer_hackaton', 'reviewer_inovchalenge', 'reviewer_equity'])
+            || ($submission && $submission->reviewers()->where('users.id', $userId)->exists());
+        $isOwnerOrTeam = ($katsinov->user_id === $userId)
+            || ($submission && ($submission->user_id === $userId || $submission->members()->where('user_id', $userId)->exists()));
+
+        abort_unless($isAdmin || $isReviewer || $isOwnerOrTeam, 403, 'Akses ditolak. Dokumen KATSINOV ini bersifat privat dan hanya dapat dilihat oleh pengusul yang bersangkutan, reviewer, atau admin.');
+
+        $aspects = HackatonKatsinovService::getAspects();
+        $questions = HackatonKatsinovService::getQuestions();
+
+        $ketua = $submission ? $submission->user : $katsinov->user;
+        $members = $submission ? $submission->members : collect([]);
+
+        // Calculate stats per indicator for display
+        $indicatorStats = [];
+        $responses = $katsinov->responses ?? [];
+        $notes = $katsinov->notes ?? [];
+
+        foreach ($questions as $lvl => $qList) {
+            $totalCount = count($qList);
+            $maxScore = $totalCount * 5;
+            $earned = 0;
+            $answeredCount = 0;
+
+            foreach ($qList as $q) {
+                $key = "i{$lvl}_q{$q['no']}";
+                if (isset($responses[$key]) && $responses[$key] !== '' && $responses[$key] !== null) {
+                    $earned += (int) $responses[$key];
+                    $answeredCount++;
+                }
+            }
+
+            $pct = $maxScore > 0 ? round(($earned / $maxScore) * 100, 1) : 0.0;
+            $isPassed = $pct >= HackatonKatsinovService::MIN_THRESHOLD;
+
+            $indicatorStats[$lvl] = [
+                'earned' => $earned,
+                'max' => $maxScore,
+                'percentage' => $pct,
+                'answeredCount' => $answeredCount,
+                'totalCount' => $totalCount,
+                'isPassed' => $isPassed,
+            ];
+        }
+
+        $canEdit = $isAdmin || ($submission ? $submission->canUserEdit($userId) : ($katsinov->user_id === $userId));
+
+        return view('subdirektorat-inovasi.hackaton.katsinov.show', compact(
+            'katsinov',
+            'submission',
+            'ketua',
+            'members',
+            'aspects',
+            'questions',
+            'indicatorStats',
+            'responses',
+            'notes',
+            'canEdit',
+            'isAdmin',
+            'isReviewer'
+        ));
+    }
+
+    /**
      * Download Katsinov Self-Assessment Report as PDF.
      */
     public function downloadPdf(HackatonKatsinovAssessment $katsinov)
     {
         $userId = Auth::id();
-        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin']);
+        $user = Auth::user();
+        $isAdmin = in_array($user->role ?? '', [
+            'admin_hackaton',
+            'superadmin',
+            'admin',
+            'admin_inovasi',
+            'admin_inovchalenge',
+            'admin_direktorat',
+        ]);
+        $isReviewer = in_array($user->role ?? '', ['reviewer_hackaton', 'reviewer_inovchalenge', 'reviewer_equity']);
 
         if ($katsinov->hackaton_submission_id) {
-            $katsinov->load('submission.members.user', 'submission.user', 'submission.identitas', 'submission.session');
-            abort_unless($katsinov->submission->canUserView($userId) || $isAdmin, 403, 'Akses ditolak.');
+            $katsinov->load('submission.members.user', 'submission.user', 'submission.identitas', 'submission.session', 'submission.reviewers');
             $submission = $katsinov->submission;
+            $isAssignedReviewer = $submission->reviewers()->where('users.id', $userId)->exists();
+            abort_unless($submission->canUserView($userId) || $isAdmin || $isReviewer || $isAssignedReviewer, 403, 'Akses ditolak.');
             $ketua = $submission->user;
             $members = $submission->members()->with('user')->get();
         } else {
-            abort_unless($katsinov->user_id === $userId || $isAdmin, 403, 'Akses ditolak.');
+            abort_unless($katsinov->user_id === $userId || $isAdmin || $isReviewer, 403, 'Akses ditolak.');
             $submission = null;
             $ketua = $katsinov->user;
             $members = collect([]);
@@ -353,7 +455,7 @@ class KatsinovAssessmentController extends Controller
         $katsinov->signed_at = now();
         $katsinov->save();
 
-        $shareUrl = route('hackaton.katsinov.show_public', $katsinov->share_token);
+        $shareUrl = route('hackaton.katsinov.show', $katsinov->id);
         $downloadUrl = route('hackaton.katsinov.download_pdf', $katsinov->id);
 
         return response()->json([
@@ -369,25 +471,13 @@ class KatsinovAssessmentController extends Controller
     }
 
     /**
-     * Public verification view for a Katsinov Assessment via share_token.
+     * Public verification redirect into internal dashboard view.
      */
     public function showPublic($token)
     {
-        $katsinov = HackatonKatsinovAssessment::with(['submission.session', 'submission.user', 'submission.members.user', 'user'])
-            ->where('share_token', $token)
-            ->firstOrFail();
+        $katsinov = HackatonKatsinovAssessment::where('share_token', $token)->firstOrFail();
 
-        $aspects = HackatonKatsinovService::getAspects();
-        $questions = HackatonKatsinovService::getQuestions();
-
-        return view('subdirektorat-inovasi.hackaton.katsinov.public_view', [
-            'assessment' => $katsinov,
-            'submission' => $katsinov->submission,
-            'ketua' => $katsinov->submission ? $katsinov->submission->user : $katsinov->user,
-            'members' => $katsinov->submission ? $katsinov->submission->members : collect([]),
-            'aspects' => $aspects,
-            'questions' => $questions,
-        ]);
+        return redirect()->route('hackaton.katsinov.show', $katsinov->id);
     }
 
     /**

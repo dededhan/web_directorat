@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            {{-- Action Registration Dual Category (D-FARM & D-TECH) --}}
+            {{-- Action Registration Dual Category (D-FARM & D-MARC) --}}
             <div class="pt-6 border-t border-gray-100 space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
@@ -61,7 +61,7 @@
                             <i class="fas fa-bullseye text-amber-500"></i> Pendaftaran Kategori Proposal Inovasi
                         </h3>
                         <p class="text-xs text-gray-500 mt-0.5">
-                            Setiap peserta dapat mengajukan <strong>1 proposal pada kategori D-FARM</strong> dan <strong>1 proposal pada kategori D-TECH</strong>.
+                            Setiap peserta dapat mengajukan <strong>1 proposal pada kategori D-FARM</strong> dan <strong>1 proposal pada kategori D-MARC</strong>.
                         </p>
                     </div>
                     <div class="flex items-center gap-2 self-start sm:self-auto">
@@ -71,7 +71,7 @@
                         </span>
                         <span class="inline-flex items-center text-[11px] font-bold px-3 py-1 rounded-full border {{ $submissionDTech ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-rose-50 text-rose-800 border-rose-200' }}">
                             <i class="fas {{ $submissionDTech ? 'fa-check-circle text-emerald-600' : 'fa-circle text-rose-500' }} mr-1.5"></i>
-                            D-TECH: {{ $submissionDTech ? 'Terdaftar' : 'Belum' }}
+                            D-MARC: {{ $submissionDTech ? 'Terdaftar' : 'Belum' }}
                         </span>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                         <span class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
                             <i class="fas fa-check-double text-sm"></i>
                         </span>
-                        <span>Kuota proposal Anda untuk sesi ini telah lengkap (1 proposal D-FARM dan 1 proposal D-TECH). Silakan lanjutkan pengisian tahapan pada masing-masing proposal di bawah.</span>
+                        <span>Kuota proposal Anda untuk sesi ini telah lengkap (1 proposal D-FARM dan 1 proposal D-MARC). Silakan lanjutkan pengisian tahapan pada masing-masing proposal di bawah.</span>
                     </div>
                 @endif
 
@@ -150,7 +150,7 @@
                         </div>
                     </div>
 
-                    {{-- ── Card Kategori 2: D-TECH ── --}}
+                    {{-- ── Card Kategori 2: D-MARC ── --}}
                     <div class="rounded-2xl border-2 {{ $submissionDTech ? 'border-emerald-500 bg-white ring-2 ring-emerald-200' : 'border-rose-400 bg-rose-50/30' }} p-6 flex flex-col justify-between transition-all shadow-sm">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between gap-3">
@@ -169,13 +169,13 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <h4 class="text-lg font-black text-gray-900">D-TECH</h4>
+                                        <h4 class="text-lg font-black text-gray-900">D-MARC</h4>
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <p class="text-xs font-bold text-gray-800">DeepTech Acceleration Research (MedTech &amp; Teknologi)</p>
+                                <p class="text-xs font-bold text-gray-800">DeepTech Acceleration Research (MedTech &amp; Teknologi Kesehatan)</p>
                                 <p class="text-xs text-gray-600 mt-1 leading-relaxed">
                                     Akselerasi riset inovasi teknologi medis, perangkat kesehatan preventif &amp; diagnostik, biomedika, biosensor, IoMT, serta implementasi teknologi mendalam (DeepTech).
                                 </p>
@@ -198,16 +198,16 @@
                             @if ($submissionDTech)
                                 <a href="{{ route('hackaton.submissions.show', $submissionDTech) }}"
                                     class="w-full inline-flex items-center justify-center px-5 py-3 bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow">
-                                    <i class="fas fa-folder-open mr-2"></i> Buka / Lanjutkan Proposal D-TECH
+                                    <i class="fas fa-folder-open mr-2"></i> Buka / Lanjutkan Proposal D-MARC
                                 </a>
                             @else
                                 <form action="{{ route('hackaton.submissions.store', $session) }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="kategori" value="d-tech">
-                                    <input type="hidden" name="tema" value="D-TECH (DeepTech Acceleration Research to Challenge)">
+                                    <input type="hidden" name="kategori" value="d-marc">
+                                    <input type="hidden" name="tema" value="D-MARC (DeepTech Acceleration Research to Challenge)">
                                     <button type="submit"
                                         class="w-full inline-flex items-center justify-center px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-black text-xs uppercase tracking-wider rounded-xl transition shadow">
-                                        <i class="fas fa-plus mr-2"></i> Ajukan Proposal D-TECH →
+                                        <i class="fas fa-plus mr-2"></i> Ajukan Proposal D-MARC →
                                     </button>
                                 </form>
                             @endif

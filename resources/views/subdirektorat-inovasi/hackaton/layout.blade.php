@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', (in_array(auth()->user()->role ?? '', ['reviewer_hackaton', 'reviewer_inovchalenge']) ? 'Dashboard Reviewer | Hackaton UNJ' : 'Dashboard Peserta | Hackaton UNJ'))</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/4/46/Lambang_baru_UNJ.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
