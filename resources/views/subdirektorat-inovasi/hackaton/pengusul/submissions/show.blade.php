@@ -151,41 +151,44 @@
         @php
             $katsinovAss = $submission->katsinovAssessment;
         @endphp
-        <div class="bg-white rounded-2xl border border-amber-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-amber-50/40 via-white to-white">
+        <div class="bg-[#047857] rounded-2xl border border-emerald-600 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-white">
             <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0 border border-amber-300">
+                <div class="w-12 h-12 rounded-xl bg-white/20 text-white flex items-center justify-center text-xl shrink-0 border border-white/30">
                     <i class="fas fa-award"></i>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h2 class="text-base font-bold text-gray-900">Pengukuran Mandiri KATSINOV</h2>
+                        <h2 class="text-base font-bold text-white">Pengukuran Mandiri KATSINOV</h2>
                         @if($katsinovAss)
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
                                 Level {{ $katsinovAss->achieved_level }} ({{ number_format($katsinovAss->overall_percentage, 1) }}%)
                             </span>
                         @else
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400 text-gray-900">
                                 Belum Diisi
                             </span>
                         @endif
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">
-                        Ukur tingkat kesiapan inovasi (Level 1 s/d 6) secara mandiri tanpa reviewer untuk menghasilkan dokumen resmi bertanda tangan peserta (diunggah pada form Tahap 1: <em>Hasil Katsinov</em>).
+                    <p class="text-xs text-white/95 mt-1 leading-relaxed">
+                        Ukur tingkat kesiapan inovasi (Level 1 s/d 6) secara mandiri tanpa reviewer untuk menghasilkan dokumen resmi bertanda tangan peserta (diunggah pada form Tahap 1: <em class="underline decoration-white/40">Hasil Katsinov</em>).
                     </p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 shrink-0 flex-wrap">
                 @if($katsinovAss)
-                    <a href="{{ route('hackaton.katsinov.download_pdf', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow">
-                        <i class="fas fa-file-pdf mr-1.5"></i> Unduh PDF
+                    <a href="{{ route('hackaton.katsinov.show', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-xl transition border border-white/30">
+                        <i class="fas fa-eye mr-1.5"></i> Lihat Detail
                     </a>
-                    <a href="{{ route('hackaton.katsinov.edit', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 text-xs font-bold rounded-xl transition shadow-sm">
+                    <a href="{{ route('hackaton.katsinov.download_pdf', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-900 text-xs font-bold rounded-xl transition shadow">
+                        <i class="fas fa-file-pdf mr-1.5 text-emerald-700"></i> Unduh PDF
+                    </a>
+                    <a href="{{ route('hackaton.katsinov.edit', $katsinovAss->id) }}" class="inline-flex items-center px-4 py-2.5 bg-black/40 hover:bg-black/60 text-white border border-white/30 text-xs font-bold rounded-xl transition">
                         <i class="fas fa-edit mr-1.5"></i> Edit Assessment
                     </a>
                 @else
-                    <a href="{{ route('hackaton.katsinov.create', ['submission_id' => $submission->id]) }}" class="inline-flex items-center px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition shadow">
-                        <i class="fas fa-play mr-2"></i> Mulai Self-Assessment
+                    <a href="{{ route('hackaton.katsinov.create', ['submission_id' => $submission->id]) }}" class="inline-flex items-center px-5 py-2.5 bg-white hover:bg-gray-100 text-gray-900 text-xs font-bold rounded-xl transition shadow">
+                        <i class="fas fa-play mr-2 text-emerald-700"></i> Mulai Self-Assessment
                     </a>
                 @endif
             </div>

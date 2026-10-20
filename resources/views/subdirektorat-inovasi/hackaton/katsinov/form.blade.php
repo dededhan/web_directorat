@@ -547,7 +547,7 @@
                 <div class="text-[11px] text-gray-300 bg-white/5 rounded-xl p-3 flex items-start gap-2.5">
                     <i class="fas fa-info-circle text-amber-400 mt-0.5"></i>
                     <span>
-                        <strong>Aturan Standar Minimal:</strong> Sebuah level dinyatakan lulus jika skor mencapai minimal <strong>80.0%</strong>. Jika misal Indikator 3 berhasil ($\ge 80\%$) dan Indikator 4 belum mencapai standar ($< 80\%$), seluruh jawaban Indikator 4 <strong>tetap tersimpan</strong> di sistem dan capaian resmi Anda tercatat di <strong>KATSINOV 3</strong>.
+                        <strong>Aturan Standar Minimal:</strong> Sebuah level dinyatakan lulus jika skor mencapai minimal <strong>80.0%</strong>. Sebagai contoh, jika Indikator 3 berhasil <strong>(≥ 80%)</strong> sedangkan Indikator 4 belum mencapai standar <strong>(&lt; 80%)</strong>, seluruh jawaban Indikator 4 <strong>tetap tersimpan</strong> di sistem dan capaian resmi Anda tercatat pada <strong>KATSINOV 3</strong>.
                     </span>
                 </div>
             </div>
