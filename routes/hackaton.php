@@ -183,10 +183,12 @@ Route::prefix('hackathon')
         // Katsinov Self-Assessment View-Only & PDF (Accessible by Pengusul/Team, Reviewer, and Admin)
         Route::get('katsinov/{katsinov}', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'show'])
             ->name('katsinov.show')
-            ->middleware('katsinov.viewer');
+            ->middleware('katsinov.viewer')
+            ->whereNumber('katsinov');
         Route::get('katsinov/{katsinov}/download-pdf', [\App\Http\Controllers\Hackaton\KatsinovAssessmentController::class, 'downloadPdf'])
             ->name('katsinov.download_pdf')
-            ->middleware('katsinov.viewer');
+            ->middleware('katsinov.viewer')
+            ->whereNumber('katsinov');
 
         // ── Khusus Pengusul (Semua Role Peserta & Admin) ─────────────────────
         Route::middleware(['role:hackaton_dosen,hackaton_dosen_eksternal,hackaton_tendik,hackaton_alumni,hackaton_peneliti,hackaton_dudi,hackaton_mahasiswa,dosen,tendik,admin_hackaton,superadmin'])->group(function () {

@@ -67,7 +67,7 @@ class KatsinovAssessmentController extends Controller
     public function create(Request $request)
     {
         $userId = Auth::id();
-        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin']);
+        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin', 'admin', 'admin_inovasi', 'admin_inovchalenge', 'admin_direktorat']);
 
         $submission = null;
         if ($request->filled('submission_id')) {
@@ -115,7 +115,7 @@ class KatsinovAssessmentController extends Controller
     public function edit(HackatonKatsinovAssessment $katsinov)
     {
         $userId = Auth::id();
-        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin']);
+        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin', 'admin', 'admin_inovasi', 'admin_inovchalenge', 'admin_direktorat']);
 
         if ($katsinov->hackaton_submission_id) {
             $katsinov->load('submission.members.user', 'submission.user', 'submission.identitas', 'submission.session');
@@ -144,7 +144,7 @@ class KatsinovAssessmentController extends Controller
     public function store(Request $request)
     {
         $userId = Auth::id();
-        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin']);
+        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin', 'admin', 'admin_inovasi', 'admin_inovchalenge', 'admin_direktorat']);
 
         $validated = $request->validate([
             'assessment_id' => 'nullable|integer|exists:hackaton_katsinov_assessments,id',
@@ -416,7 +416,7 @@ class KatsinovAssessmentController extends Controller
     public function saveSignature(Request $request, HackatonKatsinovAssessment $katsinov)
     {
         $userId = Auth::id();
-        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin']);
+        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin', 'admin', 'admin_inovasi', 'admin_inovchalenge', 'admin_direktorat']);
 
         if ($katsinov->hackaton_submission_id) {
             abort_unless($katsinov->submission->canUserEdit($userId) || $isAdmin, 403, 'Akses ditolak.');
@@ -486,7 +486,7 @@ class KatsinovAssessmentController extends Controller
     public function destroy(HackatonKatsinovAssessment $katsinov)
     {
         $userId = Auth::id();
-        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin']);
+        $isAdmin = in_array(Auth::user()->role ?? '', ['admin_hackaton', 'superadmin', 'admin', 'admin_inovasi', 'admin_inovchalenge', 'admin_direktorat']);
 
         if ($katsinov->hackaton_submission_id) {
             abort_unless($katsinov->submission->user_id === $userId || $isAdmin, 403, 'Hanya Ketua Tim atau Admin yang dapat menghapus assessment ini.');
