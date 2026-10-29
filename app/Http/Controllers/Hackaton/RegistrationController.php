@@ -21,9 +21,24 @@ class RegistrationController extends Controller
 
     public function register(Request $request)
     {
+        // Normalize phone number (strip formatting, standardize to 08...)
+        if ($request->filled('phone_number')) {
+            $rawPhone = preg_replace('/[^\d]/', '', (string)$request->input('phone_number'));
+            if (str_starts_with($rawPhone, '62')) {
+                $rawPhone = '0' . substr($rawPhone, 2);
+            }
+            $request->merge(['phone_number' => $rawPhone]);
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email', 'unique:hackaton_registrations,email'],
+            'phone_number' => [
+                'required',
+                'regex:/^08[1-9][0-9]{7,11}$/',
+                'unique:users,phone_number',
+                'unique:hackaton_registrations,phone_number',
+            ],
             'password' => ['required', 'confirmed', Password::min(8)],
             'role' => ['required', 'in:' . implode(',', array_keys(HackatonRegistration::ROLE_LABELS))],
         ], [
@@ -31,6 +46,9 @@ class RegistrationController extends Controller
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
+            'phone_number.required' => 'Nomor WhatsApp / HP wajib diisi.',
+            'phone_number.regex' => 'Format nomor WhatsApp / HP tidak valid (contoh: 081234567890, 10-14 digit).',
+            'phone_number.unique' => 'Nomor WhatsApp / HP sudah terdaftar.',
             'password.required' => 'Password wajib diisi.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'password.min' => 'Password minimal 8 karakter.',
@@ -41,6 +59,7 @@ class RegistrationController extends Controller
         HackatonRegistration::create([
             'name' => $request->string('name')->toString(),
             'email' => $request->string('email')->toString(),
+            'phone_number' => $request->string('phone_number')->toString(),
             'password' => Hash::make($request->string('password')->toString()),
             'role' => $request->string('role')->toString(),
             'status' => 'pending',

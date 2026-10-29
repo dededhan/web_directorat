@@ -18,6 +18,16 @@
     </div>
 
     <nav class="flex-1 overflow-y-auto px-4 py-8">
+        @php
+            $sidebarUser = auth()->user();
+            $isExemptRole = in_array($sidebarUser?->role ?? '', [
+                'superadmin', 'super_admin', 'admin', 'admin_hackaton', 'admin_inovasi',
+                'admin_inovchalenge', 'admin_direktorat', 'reviewer_hackaton',
+                'reviewer_inovchalenge', 'reviewer_equity', 'reviewer_hibah'
+            ], true);
+            $isLockedPhone = $sidebarUser && !$isExemptRole && !$sidebarUser->hasPhoneNumber();
+        @endphp
+
         <p class="mb-3 px-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white/50">Navigasi</p>
         <div class="border-t border-white">
             <a href="{{ route('hackaton.dashboard') }}"
@@ -28,27 +38,31 @@
 
             @if(in_array(auth()->user()?->role ?? '', ['hackaton_dosen', 'hackaton_dosen_eksternal', 'hackaton_tendik', 'hackaton_alumni', 'hackaton_peneliti', 'hackaton_dudi', 'hackaton_mahasiswa', 'dosen', 'tendik', 'admin_hackaton', 'superadmin']))
                 <a href="{{ route('hackaton.sessions.index') }}"
-                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.sessions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ $isLockedPhone ? 'opacity-60' : '' }} {{ request()->routeIs('hackaton.sessions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">02</span>
                     <span>Sesi HackAthon</span>
+                    @if($isLockedPhone) <span class="ml-auto text-[10px] text-amber-400 font-bold"><i class="fas fa-lock"></i></span> @endif
                 </a>
 
                 <a href="{{ route('hackaton.submissions.index') }}"
-                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.submissions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ $isLockedPhone ? 'opacity-60' : '' }} {{ request()->routeIs('hackaton.submissions.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">03</span>
                     <span>Proposal Saya</span>
+                    @if($isLockedPhone) <span class="ml-auto text-[10px] text-amber-400 font-bold"><i class="fas fa-lock"></i></span> @endif
                 </a>
 
                 <a href="{{ route('hackaton.members.team_index') }}"
-                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.members.team_index') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ $isLockedPhone ? 'opacity-60' : '' }} {{ request()->routeIs('hackaton.members.team_index') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">04</span>
                     <span>Proposal Tim Lain</span>
+                    @if($isLockedPhone) <span class="ml-auto text-[10px] text-amber-400 font-bold"><i class="fas fa-lock"></i></span> @endif
                 </a>
 
                 <a href="{{ route('hackaton.katsinov.index') }}"
-                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('hackaton.katsinov.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                    class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ $isLockedPhone ? 'opacity-60' : '' }} {{ request()->routeIs('hackaton.katsinov.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
                     <span class="mr-3 text-[10px]">05</span>
                     <span>Generator Katsinov</span>
+                    @if($isLockedPhone) <span class="ml-auto text-[10px] text-amber-400 font-bold"><i class="fas fa-lock"></i></span> @endif
                 </a>
             @endif
 

@@ -3,6 +3,62 @@
 @section('title', 'Dashboard ' . $roleLabel . ' | Hackaton UNJ')
 
 @section('content_hackaton')
+    @php
+        $isExemptRole = in_array($user->role, [
+            'superadmin', 'super_admin', 'admin', 'admin_hackaton', 'admin_inovasi',
+            'admin_inovchalenge', 'admin_direktorat', 'reviewer_hackaton',
+            'reviewer_inovchalenge', 'reviewer_equity', 'reviewer_hibah'
+        ], true);
+        $needsPhoneCompletion = !$isExemptRole && !$user->hasPhoneNumber();
+    @endphp
+
+    @if ($needsPhoneCompletion)
+        {{-- Unclosable Phone Completion Modal --}}
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/85 backdrop-blur-sm p-4 overflow-y-auto"
+             role="dialog" aria-modal="true" aria-labelledby="phone-modal-title">
+            <div class="relative w-full max-w-lg border-4 border-gray-950 bg-white p-6 sm:p-8 shadow-2xl">
+                <div class="inline-flex items-center gap-2 border-2 border-emerald-700 bg-emerald-50 px-3 py-1 text-xs font-black uppercase tracking-wider text-emerald-800 mb-4">
+                    <i class="fas fa-exclamation-circle text-emerald-700"></i> Wajib Dilengkapi
+                </div>
+
+                <h2 id="phone-modal-title" class="text-2xl sm:text-3xl font-black text-gray-950 leading-tight">
+                    Lengkapi Nomor WhatsApp / HP Aktif
+                </h2>
+
+                <p class="mt-3 text-sm text-gray-700 leading-relaxed">
+                    Untuk membuka dan melanjutkan semua fitur Hackathon (akses sesi, pembuatan proposal, serta kolaborasi tim), akun Anda wajib memiliki nomor kontak yang valid untuk koordinasi resmi panitia.
+                </p>
+
+                @if ($errors->has('phone_number'))
+                    <div class="mt-4 border-2 border-red-700 bg-red-50 p-3 text-xs font-bold text-red-900">
+                        {{ $errors->first('phone_number') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('hackaton.phone.update') }}" method="POST" class="mt-6 space-y-4">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label for="modal_phone_number" class="block text-xs font-black uppercase tracking-wider text-gray-950 mb-1.5">
+                            Nomor WhatsApp / HP Aktif <span class="text-red-700">*</span>
+                        </label>
+                        <input type="tel" id="modal_phone_number" name="phone_number" value="{{ old('phone_number') }}" required autofocus
+                            class="w-full border-2 border-gray-950 bg-white px-4 py-3 text-base text-gray-950 placeholder:text-gray-400 focus:border-emerald-700 focus:outline-none"
+                            placeholder="Contoh: 081234567890">
+                        <p class="mt-1 text-[11px] text-gray-500">Format: 10-14 digit angka (dimulai dengan 08 / 628).</p>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black text-sm uppercase tracking-wider px-6 py-3.5 transition flex items-center justify-center gap-2">
+                            <i class="fas fa-check-circle"></i> Simpan & Lanjutkan ke Dashboard
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
     <div class="space-y-6" x-data="{ activeTab: '{{ $pendingInvitations->count() > 0 ? 'participations' : 'biodata' }}' }">
         {{-- Hero Welcome Banner --}}
         <section class="border-b-4 border-gray-950 pb-8">
@@ -21,6 +77,41 @@
                 @endif
             </div>
         </section>
+
+        {{-- Announcements Banner (If active) --}}
+        @if (isset($announcements) && $announcements->isNotEmpty())
+            <section aria-label="Pengumuman Resmi" class="space-y-3">
+                @foreach ($announcements as $announcement)
+                    <div class="border-2 border-gray-950 bg-white p-5 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div class="space-y-1.5 flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="border px-2 py-0.5 text-[10px] font-black uppercase tracking-wider {{ $announcement->badge_class }}">
+                                    <i class="fas {{ $announcement->icon }} mr-1"></i> {{ $announcement->type_label }}
+                                </span>
+                                <span class="text-[11px] text-gray-500 font-semibold">
+                                    {{ $announcement->created_at->translatedFormat('d M Y, H:i') }}
+                                </span>
+                            </div>
+                            <h2 class="text-base font-black text-gray-950">
+                                {{ $announcement->title }}
+                            </h2>
+                            <p class="text-xs text-gray-700 leading-relaxed whitespace-pre-line">
+                                {{ $announcement->content }}
+                            </p>
+                        </div>
+                        @if ($announcement->link_url)
+                            <div class="shrink-0 pt-1 md:pt-0">
+                                <a href="{{ $announcement->link_url }}" target="_blank" rel="noopener noreferrer"
+                                    class="inline-flex items-center px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs uppercase tracking-wider transition shadow-sm">
+                                    <span>{{ $announcement->link_text ?: 'Buka Tautan' }}</span>
+                                    <i class="fas fa-arrow-right ml-1.5 text-[10px]"></i>
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </section>
+        @endif
 
         {{-- Navigation Tabs --}}
         <div class="border-b border-gray-200 flex flex-wrap gap-2">
@@ -80,7 +171,7 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block font-bold text-gray-700 mb-1">Nama Lengkap *</label>
                                 <input type="text" name="name" value="{{ old('name', $user->name) }}" required
@@ -92,6 +183,14 @@
                                 <label class="block font-bold text-gray-700 mb-1">Email Akun</label>
                                 <input type="email" value="{{ $user->email }}" disabled
                                     class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-500 cursor-not-allowed">
+                            </div>
+
+                            <div>
+                                <label class="block font-bold text-gray-700 mb-1">Nomor WhatsApp / HP *</label>
+                                <input type="tel" name="phone_number" value="{{ old('phone_number', $user->phone_number ?? $user->profile?->no_hp) }}" required
+                                    class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500"
+                                    placeholder="08xxxxxxxxxx">
+                                @error('phone_number') <p class="text-rose-600 mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
 

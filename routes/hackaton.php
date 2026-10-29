@@ -6,11 +6,13 @@ use App\Http\Controllers\Hackaton\Admin\SessionController as HackatonAdminSessio
 use App\Http\Controllers\Hackaton\Admin\TahapController as HackatonAdminTahapController;
 use App\Http\Controllers\Hackaton\Admin\SubmissionAdminController as HackatonAdminSubmissionController;
 use App\Http\Controllers\Hackaton\Admin\AccountManagementController as HackatonAdminAccountController;
+use App\Http\Controllers\Hackaton\Admin\AnnouncementController as HackatonAdminAnnouncementController;
 use App\Http\Controllers\Hackaton\ParticipantDashboardController;
 use App\Http\Controllers\Hackaton\PengusulController;
 use App\Http\Controllers\Hackaton\MemberController;
 use App\Http\Controllers\Hackaton\ReviewerController;
 use App\Http\Controllers\Hackaton\RegistrationController;
+use App\Models\HackatonAnnouncement;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,8 +22,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 // ── Public Info & Registration ──────────────────────────────────────────
-Route::view('subdirektorat-inovasi/hackathon', 'subdirektorat-inovasi.hackaton.index')
-    ->name('hackaton.info');
+Route::get('subdirektorat-inovasi/hackathon', function () {
+    $announcements = HackatonAnnouncement::active()->latest()->get();
+    return view('subdirektorat-inovasi.hackaton.index', compact('announcements'));
+})->name('hackaton.info');
 Route::redirect('subdirektorat-inovasi/hackaton', '/subdirektorat-inovasi/hackathon', 301);
 
 Route::get('hackathon', function () {
@@ -146,6 +150,18 @@ Route::prefix('admin-hackathon')
             ->name('accounts.update');
         Route::delete('accounts/{user}', [HackatonAdminAccountController::class, 'destroy'])
             ->name('accounts.destroy');
+
+        // Announcements Management
+        Route::get('announcements', [HackatonAdminAnnouncementController::class, 'index'])
+            ->name('announcements.index');
+        Route::post('announcements', [HackatonAdminAnnouncementController::class, 'store'])
+            ->name('announcements.store');
+        Route::put('announcements/{announcement}', [HackatonAdminAnnouncementController::class, 'update'])
+            ->name('announcements.update');
+        Route::patch('announcements/{announcement}/toggle', [HackatonAdminAnnouncementController::class, 'toggle'])
+            ->name('announcements.toggle');
+        Route::delete('announcements/{announcement}', [HackatonAdminAnnouncementController::class, 'destroy'])
+            ->name('announcements.destroy');
     });
 
 // Fallback redirects for legacy admin URL
@@ -157,7 +173,7 @@ $allParticipantAndReviewerRoles = 'hackaton_dosen,hackaton_dosen_eksternal,hacka
 
 Route::prefix('hackathon')
     ->name('hackaton.')
-    ->middleware(['auth', "role:{$allParticipantAndReviewerRoles}"])
+    ->middleware(['auth', "role:{$allParticipantAndReviewerRoles}", 'hackaton.phone'])
     ->group(function () {
 
         // Dashboard Terpadu (Dinamis Menyesuaikan Role)
@@ -165,6 +181,8 @@ Route::prefix('hackathon')
             ->name('dashboard');
         Route::get('templates/{field}/download', [PengusulController::class, 'downloadTemplate'])
             ->name('templates.download');
+        Route::put('dashboard/phone', [ParticipantDashboardController::class, 'updatePhone'])
+            ->name('phone.update');
         Route::put('dashboard/profile', [ParticipantDashboardController::class, 'updateProfile'])
             ->name('profile.update');
 

@@ -30,7 +30,15 @@
                             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-100 text-lg font-bold text-amber-700">{{ strtoupper(substr($registration->name, 0, 1)) }}</div>
                             <div>
                                 <h2 class="font-bold text-gray-800">{{ $registration->name }}</h2>
-                                <p class="text-sm text-gray-500">{{ $registration->email }}</p>
+                                <p class="text-sm text-gray-500 flex items-center gap-2">
+                                    <span>{{ $registration->email }}</span>
+                                    @if ($registration->phone_number)
+                                        <span>•</span>
+                                        <a href="https://wa.me/{{ preg_replace('/^0/', '62', $registration->phone_number) }}" target="_blank" rel="noopener noreferrer" class="text-emerald-700 hover:text-emerald-800 font-medium inline-flex items-center gap-1">
+                                            <i class="fab fa-whatsapp"></i> {{ $registration->phone_number }}
+                                        </a>
+                                    @endif
+                                </p>
                                 <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
                                     <span class="rounded-full bg-blue-100 px-2.5 py-1 font-semibold text-blue-800">{{ $registration->role_label }}</span>
                                     <span class="text-gray-400">{{ $registration->created_at->format('d M Y, H:i') }}</span>

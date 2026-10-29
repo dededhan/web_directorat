@@ -37,6 +37,12 @@
                 <span class="mr-3 text-[10px]">04</span>
                 <span>Kelola Akun</span>
             </a>
+
+            <a href="{{ route('admin_hackaton.announcements.index') }}"
+                class="flex items-center border-b border-white px-2 py-4 text-xs font-semibold uppercase tracking-[0.12em] transition-colors {{ request()->routeIs('admin_hackaton.announcements.*') ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black' }}">
+                <span class="mr-3 text-[10px]">05</span>
+                <span>Pengumuman</span>
+            </a>
         </div>
     </nav>
 

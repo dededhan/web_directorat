@@ -50,6 +50,11 @@
                         <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email" class="w-full border-2 border-gray-950 bg-white px-4 py-3 text-base text-gray-950 placeholder:text-gray-500 focus:border-emerald-700 focus:outline-none" placeholder="contoh@email.com">
                     </div>
                     <div>
+                        <label for="phone_number" class="mb-2 block text-base font-black text-gray-950">Nomor WhatsApp / HP Aktif <span class="text-red-700">*</span></label>
+                        <input id="phone_number" name="phone_number" type="tel" value="{{ old('phone_number') }}" required autocomplete="tel" class="w-full border-2 border-gray-950 bg-white px-4 py-3 text-base text-gray-950 placeholder:text-gray-500 focus:border-emerald-700 focus:outline-none" placeholder="08xxxxxxxxxx">
+                        <p class="mt-1.5 text-xs text-gray-600">Digunakan untuk koordinasi tim dan verifikasi akun resmi.</p>
+                    </div>
+                    <div>
                         <label for="role" class="mb-2 block text-base font-black text-gray-950">Daftar sebagai <span class="text-red-700">*</span></label>
                         <select id="role" name="role" required class="w-full border-2 border-gray-950 bg-white px-4 py-3 text-base text-gray-950 focus:border-emerald-700 focus:outline-none">
                             <option value="">Pilih role peserta</option>

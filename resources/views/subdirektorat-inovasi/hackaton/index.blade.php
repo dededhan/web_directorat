@@ -3,7 +3,45 @@
 @section('title', 'Hackathon Deep Tech UNJ 2026 | From Real-World Challenges to Deep Tech Innovation')
 
 @section('content_public_hackaton')
-    <div class="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-12 lg:py-14 space-y-16 lg:space-y-24">
+    <div class="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-12 lg:py-14 space-y-12 lg:space-y-16">
+
+        {{-- 0. ANNOUNCEMENTS BANNER SECTION (IF ANY ACTIVE) --}}
+        @if (isset($announcements) && $announcements->isNotEmpty())
+            <section aria-label="Pengumuman Resmi Hackathon" class="space-y-4">
+                @foreach ($announcements as $announcement)
+                    <div class="border-4 border-gray-950 bg-white p-5 sm:p-6 shadow-md transition-all">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div class="space-y-2 flex-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center gap-1.5 border px-2.5 py-0.5 text-xs font-black uppercase tracking-wider {{ $announcement->badge_class }}">
+                                        <i class="fas {{ $announcement->icon }}"></i>
+                                        <span>{{ $announcement->type_label }}</span>
+                                    </span>
+                                    <span class="text-xs font-semibold text-gray-500">
+                                        {{ $announcement->created_at->translatedFormat('d F Y') }}
+                                    </span>
+                                </div>
+                                <h2 class="text-xl sm:text-2xl font-black text-gray-950 leading-tight">
+                                    {{ $announcement->title }}
+                                </h2>
+                                <p class="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-line">
+                                    {{ $announcement->content }}
+                                </p>
+                            </div>
+                            @if ($announcement->link_url)
+                                <div class="shrink-0 pt-2 md:pt-0">
+                                    <a href="{{ $announcement->link_url }}" target="_blank" rel="noopener noreferrer"
+                                        class="inline-flex min-h-11 items-center justify-center border-2 border-gray-950 bg-emerald-700 px-5 py-2.5 text-sm font-black text-white hover:bg-emerald-800 transition">
+                                        <span>{{ $announcement->link_text ?: 'Buka Tautan' }}</span>
+                                        <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </section>
+        @endif
 
         {{-- 1. HERO SECTION --}}
         <section class="border-b-4 border-gray-950 pb-12 lg:pb-16">

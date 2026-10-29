@@ -24,6 +24,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
         'role',
         'google_id',
@@ -31,6 +32,11 @@ class User extends Authenticatable
         'email_verified_at',
         'status',
     ];
+
+    public function hasPhoneNumber(): bool
+    {
+        return !empty($this->phone_number) || !empty($this->profile?->no_hp);
+    }
 
 
     protected $hidden = [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Hackaton;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fakultas;
+use App\Models\HackatonAnnouncement;
 use App\Models\HackatonRegistration;
 use App\Models\HackatonReview;
 use App\Models\HackatonSession;
@@ -134,6 +135,7 @@ class ParticipantDashboardController extends Controller
 
         $fakultasList = Fakultas::orderBy('name')->get();
         $prodiList = Prodi::orderBy('name')->get();
+        $announcements = HackatonAnnouncement::active()->latest()->get();
 
         return view('subdirektorat-inovasi.hackaton.dashboard', compact(
             'user',
@@ -155,8 +157,50 @@ class ParticipantDashboardController extends Controller
             'reviewedCount',
             'assignedSubmissions',
             'fakultasList',
-            'prodiList'
+            'prodiList',
+            'announcements'
         ));
+    }
+
+    /**
+     * Quick update for phone number (modal on dashboard).
+     */
+    public function updatePhone(Request $request)
+    {
+        $user = Auth::user();
+
+        // Normalize phone number (strip formatting, standardize to 08...)
+        if ($request->filled('phone_number')) {
+            $rawPhone = preg_replace('/[^\d]/', '', (string)$request->input('phone_number'));
+            if (str_starts_with($rawPhone, '62')) {
+                $rawPhone = '0' . substr($rawPhone, 2);
+            }
+            $request->merge(['phone_number' => $rawPhone]);
+        }
+
+        $validated = $request->validate([
+            'phone_number' => [
+                'required',
+                'regex:/^08[1-9][0-9]{7,11}$/',
+                Rule::unique('users', 'phone_number')->ignore($user->id),
+            ],
+        ], [
+            'phone_number.required' => 'Nomor WhatsApp / HP wajib diisi.',
+            'phone_number.regex' => 'Format nomor WhatsApp / HP tidak valid (contoh: 081234567890, 10-14 digit).',
+            'phone_number.unique' => 'Nomor WhatsApp / HP sudah terdaftar oleh pengguna lain.',
+        ]);
+
+        $phone = $validated['phone_number'];
+
+        $user->update(['phone_number' => $phone]);
+
+        $user->profile()->updateOrCreate(
+            ['user_id' => $user->id],
+            ['no_hp' => $phone]
+        );
+
+        return redirect()->route('hackaton.dashboard')
+            ->with('success', 'Nomor telepon berhasil disimpan. Semua fitur Hackathon kini dapat diakses!');
     }
 
     /**
@@ -167,28 +211,54 @@ class ParticipantDashboardController extends Controller
         $user = Auth::user();
         $profileId = $user->profile?->id;
 
+        // Normalize phone number if present
+        if ($request->filled('phone_number')) {
+            $rawPhone = preg_replace('/[^\d]/', '', (string)$request->input('phone_number'));
+            if (str_starts_with($rawPhone, '62')) {
+                $rawPhone = '0' . substr($rawPhone, 2);
+            }
+            $request->merge(['phone_number' => $rawPhone]);
+        }
+
         $validated = $request->validate([
             'name'              => 'required|string|max:255',
+            'phone_number'      => [
+                'nullable',
+                'regex:/^08[1-9][0-9]{7,11}$/',
+                Rule::unique('users', 'phone_number')->ignore($user->id),
+            ],
             'identifier_number' => ['required', 'string', 'max:255'],
             'alamat'            => 'nullable|string|max:500',
             'kode_pos'          => 'nullable|string|max:10',
             'institusi'         => $user->role === 'hackaton_dudi' ? 'required|string|max:255' : 'nullable|string|max:255',
             'fakultas_id'       => 'nullable|exists:equity_fakultas,id',
             'prodi_id'          => 'nullable|exists:equity_prodi,id',
+        ], [
+            'phone_number.regex' => 'Format nomor WhatsApp / HP tidak valid (contoh: 081234567890, 10-14 digit).',
+            'phone_number.unique' => 'Nomor WhatsApp / HP sudah terdaftar oleh pengguna lain.',
         ]);
 
-        $user->update(['name' => $validated['name']]);
+        $userData = ['name' => $validated['name']];
+        if (isset($validated['phone_number'])) {
+            $userData['phone_number'] = $validated['phone_number'];
+        }
+        $user->update($userData);
+
+        $profileData = [
+            'identifier_number' => $validated['identifier_number'],
+            'alamat'            => $validated['alamat'] ?? null,
+            'kode_pos'          => $validated['kode_pos'] ?? null,
+            'institusi'         => $validated['institusi'] ?? null,
+            'fakultas_id'       => $validated['fakultas_id'] ?? null,
+            'prodi_id'          => $validated['prodi_id'] ?? null,
+        ];
+        if (!empty($validated['phone_number'])) {
+            $profileData['no_hp'] = $validated['phone_number'];
+        }
 
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
-            [
-                'identifier_number' => $validated['identifier_number'],
-                'alamat'            => $validated['alamat'] ?? null,
-                'kode_pos'          => $validated['kode_pos'] ?? null,
-                'institusi'         => $validated['institusi'] ?? null,
-                'fakultas_id'       => $validated['fakultas_id'] ?? null,
-                'prodi_id'          => $validated['prodi_id'] ?? null,
-            ]
+            $profileData
         );
 
         return back()->with('success', 'Profil berhasil diperbarui.');

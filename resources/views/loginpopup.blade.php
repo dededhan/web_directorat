@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNJ Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Removed Google Fonts import for Roboto -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <style>
-        * {
-            font-family: Arial, sans-serif !important;
+        #loginModal {
+            font-family: Arial, sans-serif;
         }
         
-        body {
+        #loginModal *:not(.fas):not(.far):not(.fab):not(.fa):not([class*="fa-"]):not([class*="fa-solid"]) {
             font-family: Arial, sans-serif;
         }
 

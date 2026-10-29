@@ -32,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'checked' => EnsureUserLoggedIn::class,
             'role' => EnsureUserRoleIsCorrect::class,
             'katsinov.viewer' => \App\Http\Middleware\EnsureCanViewHackatonKatsinov::class,
+            'hackaton.phone' => \App\Http\Middleware\EnsureHackatonParticipantHasPhone::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -39,19 +39,31 @@ class RegistrationController extends Controller
     {
         abort_if($registration->status !== 'pending', 403, 'Pendaftaran ini sudah diproses.');
 
-        $alreadyExists = User::where('email', $registration->email)->exists();
+        $user = User::where('email', $registration->email)->first();
 
-        DB::transaction(function () use ($request, $registration, $alreadyExists) {
+        DB::transaction(function () use ($request, $registration, &$user) {
+            $alreadyExists = (bool) $user;
+
             if (! $alreadyExists) {
-                User::create([
+                $user = User::create([
                     'name' => $registration->name,
                     'email' => $registration->email,
+                    'phone_number' => $registration->phone_number,
                     'password' => $registration->password,
                     'role' => str_starts_with($registration->role, 'hackaton_')
                         ? $registration->role
                         : 'hackaton_' . $registration->role,
                     'status' => 'active',
                 ]);
+            } elseif (empty($user->phone_number) && !empty($registration->phone_number)) {
+                $user->update(['phone_number' => $registration->phone_number]);
+            }
+
+            if (!empty($registration->phone_number)) {
+                $user->profile()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    ['no_hp' => $registration->phone_number]
+                );
             }
 
             $adminNotes = $request->input('admin_notes');
