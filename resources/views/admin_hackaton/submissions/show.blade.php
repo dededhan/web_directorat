@@ -327,12 +327,6 @@
                 </form>
             </div>
         </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
 
         {{-- Penugasan Reviewer --}}
         <div class="border-2 border-gray-950 bg-white p-6 space-y-4">
