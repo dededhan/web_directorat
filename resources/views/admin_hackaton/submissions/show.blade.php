@@ -1,10 +1,14 @@
 @extends('admin_hackaton.index')
 
 @section('contentadmin_hackaton')
+    @php
+        $sortedSubmissionTahap = $submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0)->values();
+        $defaultActiveTahapKe = $sortedSubmissionTahap->first()?->tahap?->tahap_ke ?? 1;
+    @endphp
     <script>
-        function adminSubmissionDetails() {
+        window.adminSubmissionDetails = function () {
             return {
-                activeTahapTab: 1,
+                activeTahapTab: {{ (int) $defaultActiveTahapKe }},
                 showAssignReviewer: false,
                 showAddMember: false,
                 showEditMemberModal: false,
@@ -15,6 +19,10 @@
                 editMemberInstitusi: '',
                 editMemberPeranIc: '',
                 editMemberDeskripsi: '',
+                showFilePreviewModal: false,
+                previewFileUrl: '',
+                previewFileLabel: '',
+                previewFileType: 'other',
                 openEditMember(id, peran, name, identifier, institusi, peranIc, deskripsi) {
                     const baseUrl = "{{ route('admin_hackaton.submissions.members.update', [$session, $submission, 'PLACEHOLDER_ID']) }}";
                     this.editMemberAction = baseUrl.replace('PLACEHOLDER_ID', id);
@@ -25,9 +33,22 @@
                     this.editMemberPeranIc = peranIc;
                     this.editMemberDeskripsi = deskripsi;
                     this.showEditMemberModal = true;
+                },
+                openFilePreview(url, label) {
+                    this.previewFileUrl = url;
+                    this.previewFileLabel = label;
+                    const cleanUrl = (url || '').split('?')[0].toLowerCase();
+                    if (cleanUrl.endsWith('.pdf')) {
+                        this.previewFileType = 'pdf';
+                    } else if (/\.(png|jpg|jpeg|gif|webp|svg)$/.test(cleanUrl)) {
+                        this.previewFileType = 'image';
+                    } else {
+                        this.previewFileType = 'other';
+                    }
+                    this.showFilePreviewModal = true;
                 }
             };
-        }
+        };
     </script>
 
     <div class="space-y-8" x-data="adminSubmissionDetails()">
@@ -49,6 +70,12 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('hackaton.submissions.show', $submission) }}" target="_blank" class="border-2 border-gray-950 bg-amber-400 hover:bg-amber-500 text-gray-950 text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
+                    <i class="fas fa-eye mr-1.5"></i> Preview Tampilan Pengusul
+                </a>
+                <a href="{{ route('admin_hackaton.submissions.export_single', [$session, $submission]) }}" class="border-2 border-emerald-900 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
+                    <i class="fas fa-file-excel mr-1.5"></i> Export Proposal
+                </a>
                 <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="border-2 border-emerald-800 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
                     <i class="fas fa-file-signature mr-1.5"></i> Lembar Pengesahan
                 </a>
@@ -63,12 +90,15 @@
 
         {{-- Tracker Tahapan Horizontal --}}
         <div class="border-2 border-gray-950 bg-white p-6">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Linimasa Progres Tahapan</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Linimasa Progres Tahapan (Klik tahap untuk melihat isian & berkas)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                @foreach ($sortedSubmissionTahap as $st)
                     @php
                         $tk = $st->tahap->tahap_ke ?? $loop->iteration;
                         $tracking = $st->getTrackingStatus($hasReviewer ?? false);
+                        $fVals = $st->loadedFieldValues ?? collect();
+                        $totalFieldsCount = $st->tahap?->fields?->count() ?? 0;
+                        $filledFieldsCount = $fVals->filter(fn($fv) => filled($fv->value))->count();
                         $boxBg = match ($tracking['key']) {
                             'lolos' => 'border-emerald-600 bg-emerald-50 text-emerald-900',
                             'perbaikan' => 'border-amber-500 bg-amber-50 text-amber-900',
@@ -78,18 +108,23 @@
                             default => 'border-gray-300 bg-gray-50 text-gray-600'
                         };
                     @endphp
-                    <div class="border-2 p-4 flex items-start gap-3 {{ $boxBg }}">
+                    <button type="button" @click="activeTahapTab = {{ (int) $tk }}"
+                        class="text-left border-2 p-4 flex items-start gap-3 transition hover:border-gray-950 {{ $boxBg }}"
+                        :class="activeTahapTab === {{ (int) $tk }} ? 'ring-2 ring-gray-950 border-gray-950' : ''">
                         <span class="w-8 h-8 rounded-none bg-gray-950 text-white font-black text-sm flex items-center justify-center shrink-0">
                             {{ $tk }}
                         </span>
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-wider">Tahap {{ $tk }}: {{ $st->tahap->nama_tahap }}</p>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs font-bold uppercase tracking-wider truncate">Tahap {{ $tk }}: {{ $st->tahap->nama_tahap }}</p>
                             <p class="font-black text-sm mt-0.5">{{ $tracking['label'] }}</p>
+                            <p class="text-[11px] font-semibold mt-1 opacity-80">
+                                <i class="fas fa-tasks mr-1"></i> {{ $filledFieldsCount }} / {{ $totalFieldsCount }} isian terisi
+                            </p>
                             @if ($st->nominal_evaluasi)
                                 <p class="text-[11px] font-bold mt-1 text-emerald-700">Dana: Rp {{ number_format($st->nominal_evaluasi, 0, ',', '.') }}</p>
                             @endif
                         </div>
-                    </div>
+                    </button>
                 @endforeach
             </div>
         </div>
@@ -121,9 +156,10 @@
                     @if ($submission->tema)
                         <div>
                             <span class="font-bold text-gray-500 uppercase tracking-wider text-[10px]">Fokus Tema Inovasi</span>
-                                @php
-                                    $isDFarm = $submission->kategori === 'd-farm' || str_contains($submission->tema, 'D-FARM');
-                                @endphp
+                            @php
+                                $isDFarm = $submission->kategori === 'd-farm' || str_contains($submission->tema, 'D-FARM');
+                            @endphp
+                            <div class="mt-1">
                                 <span class="inline-flex items-center px-2.5 py-1 text-xs font-black {{ $isDFarm ? 'bg-amber-100 text-amber-950 border border-amber-300' : 'bg-rose-100 text-rose-950 border border-rose-300' }}">
                                     <i class="fas {{ $isDFarm ? 'fa-wheat-awn' : 'fa-heart-pulse' }} mr-1.5"></i>
                                     {{ $isDFarm ? 'D-FARM' : 'D-MARC' }} — {{ $submission->tema_label ?? $submission->tema }}
@@ -384,22 +420,29 @@
         {{-- Tabs Tahapan Evaluasi & Penilaian --}}
         <div class="space-y-4">
             <div class="flex flex-wrap border-b-2 border-gray-950">
-                @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
+                @foreach ($sortedSubmissionTahap as $st)
                     @php
-                        $tk = $st->tahap->tahap_ke ?? $loop->iteration;
+                        $tk = (int) ($st->tahap->tahap_ke ?? $loop->iteration);
+                        $fVals = $st->loadedFieldValues ?? collect();
+                        $totalF = $st->tahap?->fields?->count() ?? 0;
+                        $filledF = $fVals->filter(fn($fv) => filled($fv->value))->count();
                     @endphp
                     <button type="button" @click="activeTahapTab = {{ $tk }}"
-                        class="px-6 py-3 text-xs font-black uppercase tracking-wider border-r-2 border-gray-950 transition"
+                        class="px-5 py-3 text-xs font-black uppercase tracking-wider border-r-2 border-gray-950 transition flex items-center gap-2"
                         :class="activeTahapTab === {{ $tk }} ? 'bg-gray-950 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'">
-                        Tahap {{ $tk }}: {{ $st->tahap->nama_tahap }}
+                        <span>Tahap {{ $tk }}: {{ $st->tahap->nama_tahap }}</span>
+                        <span class="px-1.5 py-0.5 text-[10px] border"
+                            :class="activeTahapTab === {{ $tk }} ? 'bg-amber-400 text-gray-950 border-amber-500' : 'bg-gray-100 text-gray-700 border-gray-300'">
+                            {{ $filledF }}/{{ $totalF }}
+                        </span>
                     </button>
                 @endforeach
             </div>
 
             {{-- Tab Contents --}}
-            @foreach ($submission->submissionTahap->sortBy(fn($st) => $st->tahap->tahap_ke ?? 0) as $st)
+            @foreach ($sortedSubmissionTahap as $st)
                 @php
-                    $tk = $st->tahap->tahap_ke ?? $loop->iteration;
+                    $tk = (int) ($st->tahap->tahap_ke ?? $loop->iteration);
                 @endphp
                 <div x-show="activeTahapTab === {{ $tk }}" x-cloak class="space-y-6">
 
@@ -487,13 +530,26 @@
 
                     {{-- Isian Form Tahap (Field Values) --}}
                     <div class="border-2 border-gray-950 bg-white p-6 space-y-4">
-                        <div class="border-b border-gray-200 pb-3 flex items-center justify-between">
-                            <h3 class="font-bold text-gray-950 uppercase tracking-wider text-xs flex items-center gap-2">
-                                <i class="fas fa-file-invoice"></i> Berkas & Isian Pengusul (Tahap {{ $tk }})
-                            </h3>
-                            <span class="text-xs font-bold text-gray-500 uppercase">
-                                Status Pengisian: {{ strtoupper($st->status) }}
-                            </span>
+                        <div class="border-b border-gray-200 pb-3 flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <h3 class="font-bold text-gray-950 uppercase tracking-wider text-xs flex items-center gap-2">
+                                    <i class="fas fa-file-invoice"></i> Berkas & Isian Pengusul (Tahap {{ $tk }}: {{ $st->tahap->nama_tahap }})
+                                </h3>
+                                @if ($st->submitted_at)
+                                    <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">
+                                        <i class="fas fa-check-circle mr-1"></i> Disubmit pada: {{ $st->submitted_at->format('d M Y, H:i') }}
+                                    </p>
+                                @endif
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-xs font-bold px-2.5 py-1 border border-gray-300 bg-gray-100 text-gray-700 uppercase">
+                                    Status Pengisian: {{ strtoupper($st->status) }}
+                                </span>
+                                <a href="{{ route('hackaton.team.tahap', [$submission, $st->hackaton_tahap_id]) }}" target="_blank"
+                                    class="inline-flex items-center gap-1.5 border border-gray-950 bg-amber-100 hover:bg-amber-200 text-gray-950 px-3 py-1 text-xs font-bold uppercase transition">
+                                    <i class="fas fa-external-link-alt"></i> Preview Form Tahap {{ $tk }}
+                                </a>
+                            </div>
                         </div>
 
                         @php
@@ -520,14 +576,28 @@
                                             <div class="font-bold text-gray-700">{{ $f->field_label }}</div>
                                             <div class="sm:col-span-2 text-gray-900">
                                                 @if ($f->field_type === 'file' && $val)
-                                                    <a href="{{ asset('storage/' . $val) }}" target="_blank" class="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:underline">
-                                                        <i class="fas fa-download"></i> Unduh Berkas Lampiran
-                                                    </a>
+                                                    @php
+                                                        $fileUrl = asset('storage/' . $val);
+                                                        $ext = strtolower(pathinfo($val, PATHINFO_EXTENSION));
+                                                        $isPreviewable = in_array($ext, ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg']);
+                                                    @endphp
+                                                    <div class="flex flex-wrap items-center gap-2">
+                                                        @if ($isPreviewable)
+                                                            <button type="button"
+                                                                @click="openFilePreview('{{ addslashes($fileUrl) }}', '{{ addslashes($f->field_label) }}')"
+                                                                class="inline-flex items-center gap-1.5 font-bold bg-gray-950 text-white px-3 py-1.5 hover:bg-gray-800 transition">
+                                                                <i class="fas fa-eye"></i> Preview Berkas
+                                                            </button>
+                                                        @endif
+                                                        <a href="{{ $fileUrl }}" target="_blank" download class="inline-flex items-center gap-1.5 font-bold border border-blue-700 bg-blue-50 text-blue-800 px-3 py-1.5 hover:bg-blue-100 transition">
+                                                            <i class="fas fa-download"></i> Unduh Berkas ({{ strtoupper($ext ?: 'FILE') }})
+                                                        </a>
+                                                    </div>
                                                 @elseif ($f->field_type === 'url' && $val)
                                                     <a href="{{ $val }}" target="_blank" class="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:underline break-all">
                                                         <i class="fas fa-external-link-alt"></i> {{ $val }}
                                                     </a>
-                                                @elseif ($val)
+                                                @elseif (filled($val))
                                                     <p class="whitespace-pre-line leading-relaxed">{{ $val }}</p>
                                                 @else
                                                     <span class="text-gray-400 italic">— Belum diisi —</span>
@@ -555,14 +625,28 @@
                                             <div class="font-bold text-gray-700">{{ $f->field_label }}</div>
                                             <div class="sm:col-span-2 text-gray-900">
                                                 @if ($f->field_type === 'file' && $val)
-                                                    <a href="{{ asset('storage/' . $val) }}" target="_blank" class="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:underline">
-                                                        <i class="fas fa-download"></i> Unduh Berkas
-                                                    </a>
+                                                    @php
+                                                        $fileUrl = asset('storage/' . $val);
+                                                        $ext = strtolower(pathinfo($val, PATHINFO_EXTENSION));
+                                                        $isPreviewable = in_array($ext, ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg']);
+                                                    @endphp
+                                                    <div class="flex flex-wrap items-center gap-2">
+                                                        @if ($isPreviewable)
+                                                            <button type="button"
+                                                                @click="openFilePreview('{{ addslashes($fileUrl) }}', '{{ addslashes($f->field_label) }}')"
+                                                                class="inline-flex items-center gap-1.5 font-bold bg-gray-950 text-white px-3 py-1.5 hover:bg-gray-800 transition">
+                                                                <i class="fas fa-eye"></i> Preview Berkas
+                                                            </button>
+                                                        @endif
+                                                        <a href="{{ $fileUrl }}" target="_blank" download class="inline-flex items-center gap-1.5 font-bold border border-blue-700 bg-blue-50 text-blue-800 px-3 py-1.5 hover:bg-blue-100 transition">
+                                                            <i class="fas fa-download"></i> Unduh Berkas ({{ strtoupper($ext ?: 'FILE') }})
+                                                        </a>
+                                                    </div>
                                                 @elseif ($f->field_type === 'url' && $val)
                                                     <a href="{{ $val }}" target="_blank" class="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:underline break-all">
                                                         <i class="fas fa-external-link-alt"></i> {{ $val }}
                                                     </a>
-                                                @elseif ($val)
+                                                @elseif (filled($val))
                                                     <p class="whitespace-pre-line leading-relaxed">{{ $val }}</p>
                                                 @else
                                                     <span class="text-gray-400 italic">— Belum diisi —</span>
@@ -576,6 +660,41 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        {{-- Modal Preview Berkas --}}
+        <div x-show="showFilePreviewModal" x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-gray-950/70 backdrop-blur-sm">
+            <div class="bg-white border-2 border-gray-950 max-w-5xl w-full overflow-hidden flex flex-col max-h-[90vh]"
+                @click.away="showFilePreviewModal = false">
+                <div class="flex items-center justify-between border-b-2 border-gray-950 bg-gray-100 px-5 py-3">
+                    <h3 class="font-black text-gray-950 text-sm uppercase tracking-wider truncate" x-text="'Preview Berkas: ' + previewFileLabel"></h3>
+                    <div class="flex items-center gap-2">
+                        <a :href="previewFileUrl" target="_blank" class="bg-gray-950 text-white px-3 py-1 text-xs font-bold uppercase hover:bg-gray-800">
+                            <i class="fas fa-external-link-alt mr-1"></i> Buka di Tab Baru
+                        </a>
+                        <button type="button" @click="showFilePreviewModal = false" class="text-gray-600 hover:text-gray-950 font-bold text-sm px-2 py-1">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 flex-1 overflow-auto flex items-center justify-center min-h-[65vh]">
+                    <template x-if="previewFileType === 'pdf'">
+                        <iframe :src="previewFileUrl" class="w-full h-[70vh] border border-gray-300 bg-white"></iframe>
+                    </template>
+                    <template x-if="previewFileType === 'image'">
+                        <img :src="previewFileUrl" :alt="previewFileLabel" class="max-h-[70vh] max-w-full object-contain border border-gray-300 bg-white">
+                    </template>
+                    <template x-if="previewFileType === 'other'">
+                        <div class="text-center space-y-3 p-8">
+                            <p class="text-sm text-gray-700 font-semibold">Format berkas ini tidak dapat ditampilkan langsung di dalam browser.</p>
+                            <a :href="previewFileUrl" target="_blank" download class="inline-flex items-center gap-2 bg-gray-950 text-white px-4 py-2 text-xs font-bold uppercase">
+                                <i class="fas fa-download"></i> Unduh Berkas
+                            </a>
+                        </div>
+                    </template>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

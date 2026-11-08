@@ -17,18 +17,36 @@ use Illuminate\Support\Facades\Auth;
 class SubmissionAdminController extends Controller
 {
     /**
-     * List submissions for a specific session.
+     * Build filtered query for session submissions (shared by index & export).
      */
-    public function index(Request $request, HackatonSession $session)
+    protected function buildFilteredSubmissionsQuery(Request $request, HackatonSession $session)
     {
-        $query = HackatonSubmission::with(['user', 'submissionTahap.tahap', 'members', 'reviewers'])
+        $query = HackatonSubmission::with([
+            'user.profile.fakultas',
+            'identitas',
+            'submissionTahap.tahap',
+            'members',
+            'reviewers',
+            'reviews',
+        ])
             ->withCount('reviewers')
             ->where('hackaton_session_id', $session->id);
 
-        // Search by user name
+        // Search by user name, email, product name, bidang, or member name
         if ($request->filled('search')) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%');
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($uq) use ($search) {
+                    $uq->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+                ->orWhereHas('identitas', function ($iq) use ($search) {
+                    $iq->where('nama_produk', 'like', "%{$search}%")
+                        ->orWhere('bidang_utama_produk', 'like', "%{$search}%");
+                })
+                ->orWhereHas('members', function ($mq) use ($search) {
+                    $mq->where('nama_lengkap', 'like', "%{$search}%");
+                });
             });
         }
 
@@ -47,6 +65,89 @@ class SubmissionAdminController extends Controller
             });
         }
 
+        // Filter by submission status (including 'submitted' shortcut for non-draft/submitted proposals)
+        if ($request->filled('status')) {
+            $status = $request->status;
+            if ($status === 'submitted') {
+                $query->where(function ($q) {
+                    $q->where('status', '!=', 'draft')
+                      ->orWhereHas('submissionTahap', function ($tq) {
+                          $tq->where('status', 'diajukan');
+                      });
+                });
+            } else {
+                $query->where('status', $status);
+            }
+        }
+
+        // Filter by Ketua / Pengusul role
+        if ($request->filled('role')) {
+            $role = $request->role;
+            $roleMatches = match ($role) {
+                'hackaton_dosen' => ['hackaton_dosen', 'dosen'],
+                'hackaton_tendik' => ['hackaton_tendik', 'tendik'],
+                default => [$role],
+            };
+            $query->whereHas('user', function ($uq) use ($roleMatches) {
+                $uq->whereIn('role', $roleMatches);
+            });
+        }
+
+        // Filter by Skema Inovasi
+        if ($request->filled('skema')) {
+            $skema = $request->skema;
+            $query->whereHas('identitas', function ($iq) use ($skema) {
+                $iq->where('skema_inovasi', $skema);
+            });
+        }
+
+        // Filter by Tahap & Tahap Status
+        if ($request->filled('tahap_id') || $request->filled('tahap_status')) {
+            $tahapId = $request->tahap_id;
+            $tahapStatus = $request->tahap_status;
+
+            $query->whereHas('submissionTahap', function ($tq) use ($tahapId, $tahapStatus) {
+                if ($tahapId) {
+                    $tq->where('hackaton_tahap_id', $tahapId);
+                }
+                if ($tahapStatus) {
+                    match ($tahapStatus) {
+                        'diajukan' => $tq->where('status', 'diajukan'),
+                        'draft' => $tq->where('status', 'draft'),
+                        'belum_diisi' => $tq->where('status', 'belum_diisi'),
+                        'lolos' => $tq->whereIn('admin_status', ['disetujui', 'selesai']),
+                        'perbaikan' => $tq->where('admin_status', 'perbaikan'),
+                        'menunggu_admin' => $tq->where('status', 'diajukan')->where('admin_status', 'menunggu'),
+                        default => null,
+                    };
+                }
+            });
+        }
+
+        // Filter by Reviewer assignment
+        if ($request->filled('reviewer_status')) {
+            $revStatus = $request->reviewer_status;
+            if ($revStatus === 'assigned') {
+                $query->has('reviewers');
+            } elseif ($revStatus === 'unassigned') {
+                $query->doesntHave('reviewers');
+            } elseif (is_numeric($revStatus)) {
+                $query->whereHas('reviewers', function ($rq) use ($revStatus) {
+                    $rq->where('users.id', (int) $revStatus);
+                });
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * List submissions for a specific session.
+     */
+    public function index(Request $request, HackatonSession $session)
+    {
+        $query = $this->buildFilteredSubmissionsQuery($request, $session);
+
         $submissions = $query->latest()->paginate(15)->withQueryString();
 
         $dFarmCount = HackatonSubmission::where('hackaton_session_id', $session->id)
@@ -63,13 +164,52 @@ class SubmissionAdminController extends Controller
             $hasReviewerMap[$sub->id] = $sub->reviewers->isNotEmpty();
         }
 
-        return view('admin_hackaton.submissions.index', compact('submissions', 'session', 'hasReviewerMap', 'dFarmCount', 'dTechCount', 'dMarcCount'));
+        $skemaList = \App\Models\HackatonSubmissionIdentitas::whereHas('submission', function ($q) use ($session) {
+            $q->where('hackaton_session_id', $session->id);
+        })
+            ->whereNotNull('skema_inovasi')
+            ->where('skema_inovasi', '!=', '')
+            ->distinct()
+            ->pluck('skema_inovasi');
+
+        $availableReviewers = User::whereIn('role', ['reviewer_hackaton', 'reviewer_inovchalenge', 'admin_hackaton'])
+            ->orderBy('name')
+            ->get();
+
+        return view('admin_hackaton.submissions.index', compact(
+            'submissions',
+            'session',
+            'hasReviewerMap',
+            'dFarmCount',
+            'dTechCount',
+            'dMarcCount',
+            'skemaList',
+            'availableReviewers'
+        ));
     }
 
     /**
-     * Show submission detail — per-Tahap accordion with field values, anggota, reviews.
+     * Export filtered submissions list to Excel.
      */
-    public function show(HackatonSession $session, HackatonSubmission $submission)
+    public function exportSubmissions(Request $request, HackatonSession $session)
+    {
+        $submissions = $this->buildFilteredSubmissionsQuery($request, $session)
+            ->latest()
+            ->get();
+
+        $slug = \Illuminate\Support\Str::slug($session->nama_sesi);
+        $fileName = "Proposal-Hackaton-{$slug}-" . now()->format('Ymd-His') . '.xlsx';
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\Hackaton\SubmissionsExport($session, $submissions),
+            $fileName
+        );
+    }
+
+    /**
+     * Export a single submitted proposal detail to Excel.
+     */
+    public function exportSingleSubmission(HackatonSession $session, HackatonSubmission $submission)
     {
         abort_if($submission->hackaton_session_id !== $session->id, 404);
 
@@ -84,6 +224,57 @@ class SubmissionAdminController extends Controller
             'reviews.reviewer',
             'reviews.tahap',
             'identitas',
+        ]);
+
+        foreach ($submission->submissionTahap as $st) {
+            $st->loadedFieldValues = HackatonSubmissionFieldValue::where('hackaton_submission_id', $submission->id)
+                ->where('hackaton_tahap_id', $st->hackaton_tahap_id)
+                ->get()
+                ->keyBy('hackaton_tahap_field_id');
+        }
+
+        $produkSlug = \Illuminate\Support\Str::slug($submission->identitas?->nama_produk ?: ($submission->user?->name ?: 'proposal'));
+        $fileName = "Detail-Proposal-{$produkSlug}-" . now()->format('Ymd-His') . '.xlsx';
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\Hackaton\SingleSubmissionExport($submission),
+            $fileName
+        );
+    }
+
+    /**
+     * Show submission detail — per-Tahap accordion with field values, anggota, reviews.
+     */
+    public function show(HackatonSession $session, HackatonSubmission $submission)
+    {
+        abort_if($submission->hackaton_session_id !== $session->id, 404);
+
+        // Ensure all session tahap have a corresponding HackatonSubmissionTahap record
+        $session->load('tahap');
+        $existingTahapIds = $submission->submissionTahap()->pluck('hackaton_tahap_id')->all();
+        foreach ($session->tahap as $thp) {
+            if (!in_array($thp->id, $existingTahapIds)) {
+                HackatonSubmissionTahap::create([
+                    'hackaton_submission_id' => $submission->id,
+                    'hackaton_tahap_id'      => $thp->id,
+                    'status'                 => 'belum_diisi',
+                    'admin_status'           => 'menunggu',
+                ]);
+            }
+        }
+
+        $submission->load([
+            'session',
+            'user',
+            'submissionTahap.tahap.fields',
+            'submissionTahap.tahap.sections.fields',
+            'submissionTahap.tahap.unsectionedFields',
+            'members.user',
+            'reviewers',
+            'reviews.reviewer',
+            'reviews.tahap',
+            'identitas',
+            'katsinovAssessment',
             'statusLogs.tahap',
             'statusLogs.causer',
         ]);
@@ -185,7 +376,7 @@ class SubmissionAdminController extends Controller
         $submissionTahap->update([
             'admin_status'     => $request->admin_status,
             'catatan_admin'    => $request->catatan_admin,
-            'nominal_evaluasi' => $request->nominal_evaluasi,
+            'nominal_evaluasi' => $request->has('nominal_evaluasi') ? $request->nominal_evaluasi : $submissionTahap->nominal_evaluasi,
         ]);
 
         $keterangan = 'Status Tahap ' . $tahapKe . ' diubah menjadi ' . ucfirst($request->admin_status) . ' oleh admin';

@@ -14,7 +14,11 @@
                 <p class="mt-2 text-base text-gray-700">Proposal pengusul untuk sesi: <strong>{{ $session->nama_sesi }}</strong></p>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin_hackaton.submissions.export', array_merge(['session' => $session], request()->query())) }}"
+                    class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-3 transition flex items-center gap-2 border border-black">
+                    <i class="fas fa-file-excel"></i> Export Proposal
+                </a>
                 <a href="{{ route('admin_hackaton.submissions.scores', $session) }}" class="bg-amber-500 hover:bg-amber-600 text-gray-950 text-xs font-bold uppercase tracking-wider px-4 py-3 transition flex items-center gap-2 border border-black">
                     <i class="fas fa-trophy"></i> Ranking Nilai
                 </a>
@@ -25,40 +29,154 @@
         </div>
 
         {{-- Filter & Search --}}
+        @php
+            $hasActiveFilter = request()->anyFilled(['search', 'kategori', 'status', 'role', 'skema', 'tahap_id', 'tahap_status', 'reviewer_status']);
+            $roleFilterOptions = [
+                'hackaton_dosen' => 'Dosen Internal UNJ',
+                'hackaton_dosen_eksternal' => 'Dosen Eksternal UNJ',
+                'hackaton_tendik' => 'Tendik',
+                'hackaton_mahasiswa' => 'Mahasiswa',
+                'hackaton_alumni' => 'Alumni',
+                'hackaton_peneliti' => 'Peneliti',
+                'hackaton_dudi' => 'DUDI',
+            ];
+            $statusFilterOptions = [
+                'submitted' => 'Semua Proposal Diajukan (Non-Draft)',
+                'draft' => 'Draft',
+                'diajukan' => 'Diajukan',
+                'menunggu_direview' => 'Menunggu Direview',
+                'sedang_direview' => 'Sedang Direview',
+                'perbaikan_diperlukan' => 'Perbaikan Diperlukan',
+                'proses_tahap_selanjutnya' => 'Proses Tahap Selanjutnya',
+                'selesai' => 'Selesai',
+            ];
+            $tahapStatusOptions = [
+                'diajukan' => 'Sudah Submit (Diajukan)',
+                'lolos' => 'Lolos / Disetujui Admin',
+                'menunggu_admin' => 'Menunggu Keputusan Admin',
+                'perbaikan' => 'Perbaikan Diperlukan',
+                'draft' => 'Masih Draft',
+                'belum_diisi' => 'Belum Diisi',
+            ];
+        @endphp
         <div class="border-2 border-gray-950 bg-white p-5 space-y-4">
-            <div class="flex flex-wrap items-center gap-2 border-b border-gray-200 pb-3">
-                <span class="text-xs font-bold uppercase tracking-wider text-gray-500 mr-2">Filter Kategori:</span>
-                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'search' => request('search')]) }}"
-                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ !request('kategori') ? 'bg-gray-950 text-white border-gray-950' : 'bg-white text-gray-700 border-gray-300 hover:border-black' }}">
-                    Semua ({{ $session->submissions->count() }})
-                </a>
-                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'kategori' => 'd-farm', 'search' => request('search')]) }}"
-                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ request('kategori') === 'd-farm' ? 'bg-amber-500 text-gray-950 border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:border-amber-400' }}">
-                    <i class="fas fa-wheat-awn mr-1"></i> D-FARM ({{ $dFarmCount ?? 0 }})
-                </a>
-                <a href="{{ route('admin_hackaton.submissions.index', [$session, 'kategori' => 'd-marc', 'search' => request('search')]) }}"
-                    class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ in_array(request('kategori'), ['d-marc', 'd-tech']) ? 'bg-rose-600 text-white border-rose-700' : 'bg-rose-50 text-rose-900 border-rose-200 hover:border-rose-400' }}">
-                    <i class="fas fa-heart-pulse mr-1"></i> D-MARC ({{ $dMarcCount ?? $dTechCount ?? 0 }})
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-500 mr-2">Filter Kategori:</span>
+                    <a href="{{ route('admin_hackaton.submissions.index', array_merge(['session' => $session], request()->except(['kategori', 'page']))) }}"
+                        class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ !request('kategori') ? 'bg-gray-950 text-white border-gray-950' : 'bg-white text-gray-700 border-gray-300 hover:border-black' }}">
+                        Semua ({{ $session->submissions->count() }})
+                    </a>
+                    <a href="{{ route('admin_hackaton.submissions.index', array_merge(['session' => $session, 'kategori' => 'd-farm'], request()->except(['kategori', 'page']))) }}"
+                        class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ request('kategori') === 'd-farm' ? 'bg-amber-500 text-gray-950 border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:border-amber-400' }}">
+                        <i class="fas fa-wheat-awn mr-1"></i> D-FARM ({{ $dFarmCount ?? 0 }})
+                    </a>
+                    <a href="{{ route('admin_hackaton.submissions.index', array_merge(['session' => $session, 'kategori' => 'd-marc'], request()->except(['kategori', 'page']))) }}"
+                        class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider border {{ in_array(request('kategori'), ['d-marc', 'd-tech']) ? 'bg-rose-600 text-white border-rose-700' : 'bg-rose-50 text-rose-900 border-rose-200 hover:border-rose-400' }}">
+                        <i class="fas fa-heart-pulse mr-1"></i> D-MARC ({{ $dMarcCount ?? $dTechCount ?? 0 }})
+                    </a>
+                </div>
+
+                <a href="{{ route('admin_hackaton.submissions.export', array_merge(['session' => $session], request()->query())) }}"
+                    class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider border border-black transition">
+                    <i class="fas fa-download"></i> Export Sesuai Filter ({{ $submissions->total() }})
                 </a>
             </div>
 
-            <form method="GET" action="{{ route('admin_hackaton.submissions.index', $session) }}" class="flex flex-col sm:flex-row gap-3">
+            <form method="GET" action="{{ route('admin_hackaton.submissions.index', $session) }}" class="space-y-4">
                 @if (request('kategori'))
                     <input type="hidden" name="kategori" value="{{ request('kategori') }}">
                 @endif
-                <div class="flex-1">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama pengusul atau ketua..."
-                        class="w-full border-2 border-gray-950 px-4 py-2.5 text-sm focus:bg-amber-50 focus:outline-none">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="sm:col-span-2">
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Pencarian</label>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Cari nama ketua, email, nama produk, bidang, atau anggota..."
+                            class="w-full border-2 border-gray-950 px-3.5 py-2 text-xs focus:bg-amber-50 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Status Proposal</label>
+                        <select name="status" class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                            <option value="">-- Semua Status Proposal --</option>
+                            @foreach ($statusFilterOptions as $sKey => $sLabel)
+                                <option value="{{ $sKey }}" {{ request('status') === $sKey ? 'selected' : '' }}>{{ $sLabel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Role Ketua Pengusul</label>
+                        <select name="role" class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                            <option value="">-- Semua Role Ketua --</option>
+                            @foreach ($roleFilterOptions as $rKey => $rLabel)
+                                <option value="{{ $rKey }}" {{ request('role') === $rKey ? 'selected' : '' }}>{{ $rLabel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Tahap Evaluasi</label>
+                        <select name="tahap_id" class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                            <option value="">-- Semua Tahap --</option>
+                            @foreach ($session->tahap as $thp)
+                                <option value="{{ $thp->id }}" {{ (string) request('tahap_id') === (string) $thp->id ? 'selected' : '' }}>
+                                    Tahap {{ $thp->tahap_ke }}: {{ $thp->nama_tahap }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Status pada Tahap</label>
+                        <select name="tahap_status" class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                            <option value="">-- Semua Status Tahap --</option>
+                            @foreach ($tahapStatusOptions as $tsKey => $tsLabel)
+                                <option value="{{ $tsKey }}" {{ request('tahap_status') === $tsKey ? 'selected' : '' }}>{{ $tsLabel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Skema Inovasi</label>
+                        <select name="skema" class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                            <option value="">-- Semua Skema --</option>
+                            @foreach ($skemaList ?? [] as $skemaItem)
+                                <option value="{{ $skemaItem }}" {{ request('skema') === $skemaItem ? 'selected' : '' }}>{{ $skemaItem }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">Penugasan Reviewer</label>
+                        <select name="reviewer_status" class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white focus:outline-none">
+                            <option value="">-- Semua Reviewer --</option>
+                            <option value="assigned" {{ request('reviewer_status') === 'assigned' ? 'selected' : '' }}>Sudah Ada Reviewer</option>
+                            <option value="unassigned" {{ request('reviewer_status') === 'unassigned' ? 'selected' : '' }}>Belum Diassign Reviewer</option>
+                            @if (!empty($availableReviewers) && $availableReviewers->isNotEmpty())
+                                <optgroup label="Filter Nama Reviewer">
+                                    @foreach ($availableReviewers as $rev)
+                                        <option value="{{ $rev->id }}" {{ (string) request('reviewer_status') === (string) $rev->id ? 'selected' : '' }}>
+                                            {{ $rev->name }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                        </select>
+                    </div>
                 </div>
-                <div class="flex gap-2">
-                    <button type="submit" class="bg-gray-950 text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-gray-800">
-                        <i class="fas fa-search mr-1"></i> Cari
-                    </button>
-                    @if (request('search') || request('kategori'))
-                        <a href="{{ route('admin_hackaton.submissions.index', $session) }}" class="border-2 border-gray-950 bg-white px-4 py-2.5 text-xs font-bold uppercase text-gray-700 hover:bg-gray-100">
-                            Reset
+
+                <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-gray-100">
+                    @if ($hasActiveFilter)
+                        <a href="{{ route('admin_hackaton.submissions.index', $session) }}"
+                            class="border-2 border-gray-950 bg-white px-4 py-2 text-xs font-bold uppercase text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-undo mr-1"></i> Reset Filter
                         </a>
                     @endif
+                    <button type="submit" class="bg-gray-950 text-white px-5 py-2 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 border-2 border-gray-950">
+                        <i class="fas fa-filter mr-1"></i> Terapkan Filter
+                    </button>
                 </div>
             </form>
         </div>
@@ -162,6 +280,10 @@
                                     <div class="inline-flex items-center gap-1">
                                         <a href="{{ route('admin_hackaton.submissions.show', [$session, $sub]) }}" class="bg-gray-950 text-white text-xs font-bold uppercase tracking-wider px-3 py-2 hover:bg-gray-800 transition">
                                             Detail & Review
+                                        </a>
+
+                                        <a href="{{ route('admin_hackaton.submissions.export_single', [$session, $sub]) }}" class="border border-emerald-300 bg-white text-emerald-700 p-2 text-xs hover:bg-emerald-50 transition" title="Export Proposal Ini (Excel)">
+                                            <i class="fas fa-file-excel"></i>
                                         </a>
 
                                         <form action="{{ route('admin_hackaton.submissions.destroy', [$session, $sub]) }}" method="POST" class="inline" onsubmit="return confirm('Hapus submission ini?')">

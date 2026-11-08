@@ -303,13 +303,6 @@
                             </div>
                         @endif
 
-                        @if ($st->nominal_evaluasi)
-                            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-800 font-bold flex items-center gap-2">
-                                <i class="fas fa-coins text-emerald-600"></i>
-                                <span>Pencairan Dana Tahap {{ $tk }}: Rp {{ number_format($st->nominal_evaluasi, 0, ',', '.') }}</span>
-                            </div>
-                        @endif
-
                         {{-- Action Button --}}
                         <div class="pt-3 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                             <div class="flex items-center gap-2 flex-wrap">
