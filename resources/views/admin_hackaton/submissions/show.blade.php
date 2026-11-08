@@ -120,9 +120,6 @@
                             <p class="text-[11px] font-semibold mt-1 opacity-80">
                                 <i class="fas fa-tasks mr-1"></i> {{ $filledFieldsCount }} / {{ $totalFieldsCount }} isian terisi
                             </p>
-                            @if ($st->nominal_evaluasi)
-                                <p class="text-[11px] font-bold mt-1 text-emerald-700">Dana: Rp {{ number_format($st->nominal_evaluasi, 0, ',', '.') }}</p>
-                            @endif
                         </div>
                     </button>
                 @endforeach
@@ -461,21 +458,14 @@
                             @csrf
                             @method('PATCH')
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                                <div>
-                                    <label class="block font-bold mb-1 uppercase tracking-wider">Keputusan Status *</label>
-                                    <select name="admin_status" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-bold">
-                                        <option value="menunggu" {{ $st->admin_status === 'menunggu' ? 'selected' : '' }}>MENUNGGU (Belum Diputuskan)</option>
-                                        <option value="disetujui" {{ $st->admin_status === 'disetujui' ? 'selected' : '' }}>DISETUJUI / LOLOS (Buka Tahap Berikutnya)</option>
-                                        <option value="perbaikan" {{ $st->admin_status === 'perbaikan' ? 'selected' : '' }}>PERBAIKAN (Kembalikan ke Pengusul untuk Revisi)</option>
-                                        <option value="selesai" {{ $st->admin_status === 'selesai' ? 'selected' : '' }}>SELESAI (Final Tahap)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block font-bold mb-1 uppercase tracking-wider">Nominal Dana Evaluasi (Rp)</label>
-                                    <input type="number" name="nominal_evaluasi" value="{{ old('nominal_evaluasi', $st->nominal_evaluasi) }}" step="1000" min="0"
-                                        class="w-full border-2 border-gray-950 px-3 py-2 bg-white" placeholder="Contoh: 15000000">
-                                </div>
+                            <div class="text-xs">
+                                <label class="block font-bold mb-1 uppercase tracking-wider">Keputusan Status *</label>
+                                <select name="admin_status" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-bold">
+                                    <option value="menunggu" {{ $st->admin_status === 'menunggu' ? 'selected' : '' }}>MENUNGGU (Belum Diputuskan)</option>
+                                    <option value="disetujui" {{ $st->admin_status === 'disetujui' ? 'selected' : '' }}>DISETUJUI / LOLOS (Buka Tahap Berikutnya)</option>
+                                    <option value="perbaikan" {{ $st->admin_status === 'perbaikan' ? 'selected' : '' }}>PERBAIKAN (Kembalikan ke Pengusul untuk Revisi)</option>
+                                    <option value="selesai" {{ $st->admin_status === 'selesai' ? 'selected' : '' }}>SELESAI (Final Tahap)</option>
+                                </select>
                             </div>
 
                             <div class="text-xs">
