@@ -444,10 +444,10 @@ class SubmissionAdminController extends Controller
 
         $validated = $request->validate([
             'nama_lengkap'       => 'required|string|max:255',
-            'nik_nim_nip'        => 'required|string|max:100',
+            'nik_nim_nip'        => 'nullable|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
             'peran_ic'           => "required|in:{$peranIcOptions}",
-            'deskripsi_peran'    => 'required|string|max:1000',
+            'deskripsi_peran'    => 'nullable|string|max:1000',
         ]);
 
         $member->update($validated);

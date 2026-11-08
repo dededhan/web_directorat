@@ -98,17 +98,34 @@ class MemberController extends Controller
     {
         $this->authorizeKetua($submission);
         abort_if($member->hackaton_submission_id !== $submission->id, 404);
-        abort_if($member->peran === 'Ketua', 403, 'Ketua tidak dapat diubah.');
-        abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat diubah oleh Admin.');
 
         $peranIcOptions = implode(',', HackatonSubmissionMember::PERAN_IC_OPTIONS);
+
+        if ($member->peran === 'Ketua') {
+            $validated = $request->validate([
+                'peran_ic'        => "required|in:{$peranIcOptions}",
+                'deskripsi_peran' => 'nullable|string|max:1000',
+            ], [
+                'peran_ic.required' => 'Pilih Peran IC.',
+                'peran_ic.in'       => 'Peran IC tidak valid.',
+            ]);
+
+            $member->update([
+                'peran_ic'        => $validated['peran_ic'],
+                'deskripsi_peran' => $validated['deskripsi_peran'] ?? $member->deskripsi_peran,
+            ]);
+
+            return back()->with('success', 'Peran IC Ketua tim berhasil diperbarui.');
+        }
+
+        abort_if($member->approval_status === 'approved', 403, 'Anggota yang sudah disetujui hanya dapat diubah oleh Admin.');
 
         $validated = $request->validate([
             'nama_lengkap'       => 'required|string|max:255',
             'nik_nim_nip'        => 'required|string|max:100',
             'institusi_fakultas' => 'nullable|string|max:255',
             'peran_ic'           => "required|in:{$peranIcOptions}",
-            'deskripsi_peran'    => 'required|string|max:1000',
+            'deskripsi_peran'    => 'nullable|string|max:1000',
         ]);
 
         $member->update($validated);

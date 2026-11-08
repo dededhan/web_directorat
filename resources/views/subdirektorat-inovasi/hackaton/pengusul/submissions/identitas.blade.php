@@ -87,6 +87,23 @@
                     </div>
 
                     <div>
+                        <label class="block font-bold text-gray-700 mb-1">
+                            Peran IC Ketua Tim <span class="text-rose-600">*</span>
+                        </label>
+                        @php
+                            $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
+                            $currentKetuaPeranIc = old('ketua_peran_ic', $ketuaMember?->peran_ic ?? 'Hacker');
+                        @endphp
+                        <select name="ketua_peran_ic" required
+                            class="w-full rounded-xl border border-purple-300 bg-purple-50/40 px-4 py-2.5 text-sm font-bold text-purple-900 focus:border-purple-500 focus:ring-purple-500">
+                            <option value="Hacker" {{ $currentKetuaPeranIc === 'Hacker' ? 'selected' : '' }}>Hacker (Teknologi & Produk)</option>
+                            <option value="Hustler" {{ $currentKetuaPeranIc === 'Hustler' ? 'selected' : '' }}>Hustler (Bisnis, Model & Pasar)</option>
+                            <option value="Hipster" {{ $currentKetuaPeranIc === 'Hipster' ? 'selected' : '' }}>Hipster (Desain, Branding & UI/UX)</option>
+                        </select>
+                        <p class="text-[11px] text-gray-500 mt-1">Peran IC (Innovation & Commercialization) Ketua Tim.</p>
+                    </div>
+
+                    <div>
                         <label class="block font-bold text-gray-700 mb-1">Skema Hackaton <span class="text-rose-600">*</span></label>
                         <select name="skema_inovasi" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-500 focus:ring-amber-500 font-medium">
                             <option value="">— Pilih Skema Inovasi —</option>
@@ -98,7 +115,7 @@
                         </select>
                     </div>
 
-                    <div>
+                    <div class="sm:col-span-2">
                         <label class="block font-bold text-gray-700 mb-1">Bidang Utama Produk <span class="text-rose-600">*</span></label>
                         <input type="text" name="bidang_utama_produk" value="{{ old('bidang_utama_produk', $submission->identitas?->bidang_utama_produk) }}" required
                             class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-500 focus:ring-amber-500"
@@ -256,7 +273,7 @@
                             </p>
                         </div>
 
-                        <div class="flex items-center gap-3 shrink-0">
+                        <div class="flex items-center gap-2 shrink-0">
                             @php
                                 $badge = $member->getApprovalBadge();
                             @endphp
@@ -264,7 +281,25 @@
                                 <i class="{{ $badge['icon'] }} mr-1"></i> {{ $badge['label'] }}
                             </span>
 
+                            @if ($submission->user_id === auth()->id() && $member->peran === 'Ketua')
+                                {{-- Tombol Ubah Peran IC Ketua --}}
+                                <button type="button"
+                                    @click="openEditKetua({{ $member->id }}, '{{ $member->peran_ic }}', '{{ addslashes(str_replace(["\r", "\n"], ' ', $member->deskripsi_peran ?? '')) }}')"
+                                    class="inline-flex items-center px-2.5 py-1 text-[11px] font-bold text-purple-900 bg-purple-100 hover:bg-purple-200 border border-purple-300 rounded-lg transition shadow-sm"
+                                    title="Ubah Peran IC Ketua">
+                                    <i class="fas fa-user-tag mr-1 text-[10px]"></i> Ubah Peran IC
+                                </button>
+                            @endif
+
                             @if ($submission->user_id === auth()->id() && $member->peran !== 'Ketua')
+                                @if ($member->approval_status !== 'approved')
+                                    <button type="button"
+                                        @click="openEditMember({{ $member->id }}, '{{ addslashes($member->nama_lengkap) }}', '{{ $member->nik_nim_nip }}', '{{ addslashes(str_replace(["\r", "\n"], ' ', $member->institusi_fakultas ?? '')) }}', '{{ $member->peran_ic }}', '{{ addslashes(str_replace(["\r", "\n"], ' ', $member->deskripsi_peran ?? '')) }}')"
+                                        class="text-blue-600 hover:text-blue-800 p-1" title="Edit Anggota">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                @endif
+
                                 <form action="{{ route('hackaton.members.destroy', [$submission, $member]) }}" method="POST" class="inline" onsubmit="return confirm('Hapus anggota ini dari tim?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="text-rose-500 hover:text-rose-700 p-1" title="Hapus Anggota">
@@ -275,6 +310,169 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
+        </div>
+
+        {{-- Modal Ubah Peran IC Ketua --}}
+        <div x-show="showEditKetuaModal" x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 space-y-5"
+                @click.away="showEditKetuaModal = false">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold shadow-sm">
+                            <i class="fas fa-user-tag"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-base">Ubah Peran IC Ketua Tim</h3>
+                            <p class="text-[11px] text-gray-500">Sesuaikan peran Innovation &amp; Commercialization (IC) Ketua</p>
+                        </div>
+                    </div>
+                    <button type="button" @click="showEditKetuaModal = false" class="text-gray-400 hover:text-gray-600 text-sm p-1">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form :action="editKetuaAction" method="POST" class="space-y-4 text-xs">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-2">Pilih Peran IC <span class="text-rose-600">*</span></label>
+                        <div class="grid grid-cols-1 gap-2.5">
+                            <label class="flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition hover:bg-gray-50"
+                                :class="editKetuaPeranIc === 'Hacker' ? 'border-purple-500 bg-purple-50/50 ring-1 ring-purple-400' : 'border-gray-200'">
+                                <input type="radio" name="peran_ic" value="Hacker" x-model="editKetuaPeranIc" class="mt-0.5 text-purple-600 focus:ring-purple-500" required>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-black text-gray-900 text-sm">Hacker</span>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">Teknologi &amp; Produk</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500 mt-0.5">Fokus pada rekayasa teknis, arsitektur sistem, pembuatan prototipe, dan implementasi teknologi produk inovasi.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition hover:bg-gray-50"
+                                :class="editKetuaPeranIc === 'Hustler' ? 'border-purple-500 bg-purple-50/50 ring-1 ring-purple-400' : 'border-gray-200'">
+                                <input type="radio" name="peran_ic" value="Hustler" x-model="editKetuaPeranIc" class="mt-0.5 text-purple-600 focus:ring-purple-500" required>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-black text-gray-900 text-sm">Hustler</span>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Bisnis &amp; Pasar</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500 mt-0.5">Fokus pada model bisnis, strategi pasar, validasi target pengguna, revenue stream, kemitraan, dan pitching.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition hover:bg-gray-50"
+                                :class="editKetuaPeranIc === 'Hipster' ? 'border-purple-500 bg-purple-50/50 ring-1 ring-purple-400' : 'border-gray-200'">
+                                <input type="radio" name="peran_ic" value="Hipster" x-model="editKetuaPeranIc" class="mt-0.5 text-purple-600 focus:ring-purple-500" required>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-black text-gray-900 text-sm">Hipster</span>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-pink-100 text-pink-800">Desain &amp; UI/UX</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500 mt-0.5">Fokus pada pengalaman pengguna (UI/UX), perancangan visual produk, branding, storytelling karya, dan estetika presentasi.</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Deskripsi Tugas Spesifik Ketua (Opsional)</label>
+                        <textarea name="deskripsi_peran" x-model="editKetuaDeskripsi" rows="2"
+                            placeholder="Contoh: Mengkoordinasikan arsitektur sistem dan implementasi teknologi produk..."
+                            class="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs focus:ring-1 focus:ring-purple-500 focus:border-purple-500"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                        <button type="button" @click="showEditKetuaModal = false"
+                            class="px-4 py-2 font-bold text-gray-600 hover:text-gray-900 text-xs">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow-sm">
+                            <i class="fas fa-save mr-1"></i> Simpan Peran IC
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Modal Edit Anggota --}}
+        <div x-show="showEditMemberModal" x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 space-y-4"
+                @click.away="showEditMemberModal = false">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <h3 class="font-bold text-gray-900 text-base">Edit Data Anggota Tim</h3>
+                    <button type="button" @click="showEditMemberModal = false" class="text-gray-400 hover:text-gray-600 text-sm p-1">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form :action="editMemberAction" method="POST" class="space-y-3 text-xs">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Nama Lengkap *</label>
+                        <input type="text" name="nama_lengkap" x-model="editMemberName" required
+                            class="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">NIM / NIP / NIK *</label>
+                            <input type="text" name="nik_nim_nip" x-model="editMemberIdentifier" required
+                                class="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Fakultas / Instansi</label>
+                            <input type="text" name="institusi_fakultas" x-model="editMemberInstitusi"
+                                class="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Peran IC *</label>
+                        <select name="peran_ic" x-model="editMemberPeranIc" required
+                            class="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs bg-white">
+                            <option value="Hacker">Hacker (Teknologi &amp; Produk)</option>
+                            <option value="Hustler">Hustler (Bisnis, Model &amp; Pasar)</option>
+                            <option value="Hipster">Hipster (Desain, Branding &amp; UI/UX)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Deskripsi Tugas Spesifik Anggota *</label>
+                        <textarea name="deskripsi_peran" x-model="editMemberDeskripsi" required rows="2"
+                            class="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                        <button type="button" @click="showEditMemberModal = false"
+                            class="px-4 py-2 font-bold text-gray-600 hover:text-gray-900 text-xs">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow-sm">
+                            <i class="fas fa-save mr-1"></i> Perbarui Anggota
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -290,6 +488,39 @@
                 selectedName: '',
                 selectedIdentifier: '',
                 selectedInstitusi: '',
+
+                // Edit Ketua Peran IC
+                showEditKetuaModal: false,
+                editKetuaAction: '',
+                editKetuaPeranIc: 'Hacker',
+                editKetuaDeskripsi: '',
+                openEditKetua(id, peranIc, deskripsi) {
+                    const baseUrl = "{{ route('hackaton.members.update', [$submission, 'PLACEHOLDER_ID']) }}";
+                    this.editKetuaAction = baseUrl.replace('PLACEHOLDER_ID', id);
+                    this.editKetuaPeranIc = peranIc || 'Hacker';
+                    this.editKetuaDeskripsi = deskripsi || '';
+                    this.showEditKetuaModal = true;
+                },
+
+                // Edit Anggota
+                showEditMemberModal: false,
+                editMemberAction: '',
+                editMemberName: '',
+                editMemberIdentifier: '',
+                editMemberInstitusi: '',
+                editMemberPeranIc: '',
+                editMemberDeskripsi: '',
+                openEditMember(id, name, identifier, institusi, peranIc, deskripsi) {
+                    const baseUrl = "{{ route('hackaton.members.update', [$submission, 'PLACEHOLDER_ID']) }}";
+                    this.editMemberAction = baseUrl.replace('PLACEHOLDER_ID', id);
+                    this.editMemberName = name;
+                    this.editMemberIdentifier = identifier;
+                    this.editMemberInstitusi = institusi;
+                    this.editMemberPeranIc = peranIc;
+                    this.editMemberDeskripsi = deskripsi;
+                    this.showEditMemberModal = true;
+                },
+
                 resetSearch() {
                     this.searchQuery = '';
                     this.searchResults = [];

@@ -145,10 +145,15 @@ class PengusulController extends Controller
                 $tipe = 'dosen';
             }
 
+            $defaultPeranIc = $request->input('peran_ic', 'Hacker');
+            if (!in_array($defaultPeranIc, HackatonSubmissionMember::PERAN_IC_OPTIONS)) {
+                $defaultPeranIc = 'Hacker';
+            }
+
             $submission->members()->create([
                 'user_id'            => $user->id,
                 'peran'              => 'Ketua',
-                'peran_ic'           => 'Hustler',
+                'peran_ic'           => $defaultPeranIc,
                 'tipe_anggota'       => $tipe,
                 'nama_lengkap'       => $user->name,
                 'nik_nim_nip'        => $user->profile?->identifier_number,
@@ -831,16 +836,30 @@ class PengusulController extends Controller
     {
         $this->authorizeEdit($submission);
 
+        $peranIcOptions = implode(',', HackatonSubmissionMember::PERAN_IC_OPTIONS);
+
         $validated = $request->validate([
             'nama_produk'         => 'required|string|max:255',
             'skema_inovasi'       => 'required|string|max:255',
             'bidang_utama_produk' => 'required|string|max:255',
+            'ketua_peran_ic'      => "nullable|in:{$peranIcOptions}",
         ]);
 
         HackatonSubmissionIdentitas::updateOrCreate(
             ['hackaton_submission_id' => $submission->id],
-            $validated
+            [
+                'nama_produk'         => $validated['nama_produk'],
+                'skema_inovasi'       => $validated['skema_inovasi'],
+                'bidang_utama_produk' => $validated['bidang_utama_produk'],
+            ]
         );
+
+        if (!empty($validated['ketua_peran_ic'])) {
+            $ketuaMember = $submission->members()->where('peran', 'Ketua')->first();
+            if ($ketuaMember) {
+                $ketuaMember->update(['peran_ic' => $validated['ketua_peran_ic']]);
+            }
+        }
 
         if ($request->filled('tema')) {
             $isDFarm = str_contains($request->tema, 'D-FARM');

@@ -6,7 +6,26 @@
             return {
                 activeTahapTab: 1,
                 showAssignReviewer: false,
-                showAddMember: false
+                showAddMember: false,
+                showEditMemberModal: false,
+                editMemberAction: '',
+                editMemberPeran: '',
+                editMemberName: '',
+                editMemberIdentifier: '',
+                editMemberInstitusi: '',
+                editMemberPeranIc: '',
+                editMemberDeskripsi: '',
+                openEditMember(id, peran, name, identifier, institusi, peranIc, deskripsi) {
+                    const baseUrl = "{{ route('admin_hackaton.submissions.members.update', [$session, $submission, 'PLACEHOLDER_ID']) }}";
+                    this.editMemberAction = baseUrl.replace('PLACEHOLDER_ID', id);
+                    this.editMemberPeran = peran;
+                    this.editMemberName = name;
+                    this.editMemberIdentifier = identifier;
+                    this.editMemberInstitusi = institusi;
+                    this.editMemberPeranIc = peranIc;
+                    this.editMemberDeskripsi = deskripsi;
+                    this.showEditMemberModal = true;
+                }
             };
         }
     </script>
@@ -223,6 +242,12 @@
                                     <span class="px-2 py-0.5 text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">Ditolak</span>
                                 @endif
 
+                                <button type="button"
+                                    @click="openEditMember({{ $m->id }}, '{{ $m->peran }}', '{{ addslashes($m->nama_lengkap) }}', '{{ $m->nik_nim_nip }}', '{{ addslashes(str_replace(["\r", "\n"], ' ', $m->institusi_fakultas ?? '')) }}', '{{ $m->peran_ic }}', '{{ addslashes(str_replace(["\r", "\n"], ' ', $m->deskripsi_peran ?? '')) }}')"
+                                    class="text-blue-600 hover:text-blue-800 p-1 text-xs font-bold" title="Edit Anggota / Peran IC">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
                                 @if ($m->peran !== 'Ketua')
                                     <form action="{{ route('admin_hackaton.submissions.members.destroy', [$session, $submission, $m]) }}" method="POST" class="inline" onsubmit="return confirm('Hapus anggota ini?')">
                                         @csrf @method('DELETE')
@@ -231,6 +256,77 @@
                                         </button>
                                     </form>
                                 @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Edit Member (Admin) --}}
+        <div x-show="showEditMemberModal" x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm">
+            <div class="bg-white border-2 border-gray-950 max-w-lg w-full p-6 space-y-4 shadow-xl"
+                @click.away="showEditMemberModal = false">
+                <div class="flex items-center justify-between border-b-2 border-gray-950 pb-3">
+                    <h3 class="font-black text-gray-950 text-sm uppercase tracking-wider" x-text="editMemberPeran === 'Ketua' ? 'Ubah Data Ketua / Peran IC' : 'Ubah Data Anggota'"></h3>
+                    <button type="button" @click="showEditMemberModal = false" class="text-gray-500 hover:text-gray-950 font-bold text-sm">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form :action="editMemberAction" method="POST" class="space-y-3 text-xs">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label class="block font-bold text-gray-900 mb-1">Nama Lengkap *</label>
+                        <input type="text" name="nama_lengkap" x-model="editMemberName" required
+                            class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-gray-900 mb-1">NIM / NIP / NIK</label>
+                            <input type="text" name="nik_nim_nip" x-model="editMemberIdentifier"
+                                class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-900 mb-1">Institusi / Fakultas</label>
+                            <input type="text" name="institusi_fakultas" x-model="editMemberInstitusi"
+                                class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-900 mb-1">Peran IC (Hacker / Hustler / Hipster) *</label>
+                        <select name="peran_ic" x-model="editMemberPeranIc" required
+                            class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white font-bold">
+                            <option value="Hacker">Hacker (Teknis / Developer)</option>
+                            <option value="Hustler">Hustler (Bisnis / Manajerial)</option>
+                            <option value="Hipster">Hipster (Desain / Kreatif)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-900 mb-1">Deskripsi Tugas Spesifik</label>
+                        <textarea name="deskripsi_peran" x-model="editMemberDeskripsi" rows="2"
+                            class="w-full border-2 border-gray-950 px-3 py-2 text-xs bg-white"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2 border-t-2 border-gray-100">
+                        <button type="button" @click="showEditMemberModal = false"
+                            class="px-3 py-1 font-bold text-xs uppercase border-2 border-gray-300 hover:bg-gray-100">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-1 bg-gray-950 hover:bg-gray-800 text-white font-bold text-xs uppercase">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
                             </div>
                         </div>
                     @endforeach
