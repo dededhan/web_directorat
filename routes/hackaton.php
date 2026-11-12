@@ -110,12 +110,16 @@ Route::prefix('admin-hackathon')
             ->name('submissions.index');
         Route::get('sessions/{session}/submissions/export', [HackatonAdminSubmissionController::class, 'exportSubmissions'])
             ->name('submissions.export');
+        Route::get('sessions/{session}/submissions/export-zip', [HackatonAdminSubmissionController::class, 'exportSubmissionsZip'])
+            ->name('submissions.export_zip');
         Route::get('sessions/{session}/submissions/scores', [HackatonAdminSubmissionController::class, 'scores'])
             ->name('submissions.scores');
         Route::get('sessions/{session}/submissions/scores/export', [HackatonAdminSubmissionController::class, 'exportExcel'])
             ->name('submissions.scores.export');
         Route::get('sessions/{session}/submissions/{submission}/export', [HackatonAdminSubmissionController::class, 'exportSingleSubmission'])
             ->name('submissions.export_single');
+        Route::get('sessions/{session}/submissions/{submission}/export-zip', [HackatonAdminSubmissionController::class, 'exportSingleSubmissionZip'])
+            ->name('submissions.export_single_zip');
         Route::get('sessions/{session}/submissions/{submission}', [HackatonAdminSubmissionController::class, 'show'])
             ->name('submissions.show');
         Route::delete('sessions/{session}/submissions/{submission}', [HackatonAdminSubmissionController::class, 'destroy'])

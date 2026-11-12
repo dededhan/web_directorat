@@ -1,7 +1,55 @@
 @extends('admin_hackaton.index')
 
 @section('contentadmin_hackaton')
-    <div class="space-y-8">
+    <script>
+        window.adminHackatonZipExportModal = function () {
+            const allItems = @json($exportZipItems ?? []);
+            return {
+                showZipModal: false,
+                selectedTahapId: @json((string) request('tahap_id', '')),
+                exportMode: 'multi_zip', // 'multi_zip' | 'folders' | 'nested_zip'
+                items: allItems,
+                selectedIds: allItems.map(item => item.id),
+                isDownloadingMulti: false,
+                multiProgress: 0,
+                toggleAll(checked) {
+                    this.selectedIds = checked ? this.items.map(i => i.id) : [];
+                },
+                startMultiZipDownload() {
+                    const chosen = this.items.filter(i => this.selectedIds.includes(i.id));
+                    if (chosen.length === 0) {
+                        Swal.fire({ icon: 'warning', title: 'Pilih minimal 1 proposal untuk diexport.' });
+                        return;
+                    }
+                    this.isDownloadingMulti = true;
+                    this.multiProgress = 0;
+
+                    chosen.forEach((item, index) => {
+                        setTimeout(() => {
+                            let url = item.singleZipUrl;
+                            if (this.selectedTahapId) {
+                                url += (url.includes('?') ? '&' : '?') + 'tahap_id=' + encodeURIComponent(this.selectedTahapId);
+                            }
+                            const iframe = document.createElement('iframe');
+                            iframe.style.display = 'none';
+                            iframe.src = url;
+                            document.body.appendChild(iframe);
+                            setTimeout(() => iframe.remove(), 60000);
+
+                            this.multiProgress = index + 1;
+                            if (this.multiProgress >= chosen.length) {
+                                setTimeout(() => {
+                                    this.isDownloadingMulti = false;
+                                }, 1200);
+                            }
+                        }, index * 900);
+                    });
+                }
+            };
+        };
+    </script>
+
+    <div class="space-y-8" x-data="adminHackatonZipExportModal()">
         {{-- Breadcrumb & Header --}}
         <div class="border-b-4 border-gray-950 pb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
@@ -17,8 +65,12 @@
             <div class="flex flex-wrap items-center gap-2">
                 <a href="{{ route('admin_hackaton.submissions.export', array_merge(['session' => $session], request()->query())) }}"
                     class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-3 transition flex items-center gap-2 border border-black">
-                    <i class="fas fa-file-excel"></i> Export Proposal
+                    <i class="fas fa-file-excel"></i> Export Proposal (Excel)
                 </a>
+                <button type="button" @click="showZipModal = true"
+                    class="bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-3 transition flex items-center gap-2 border border-black">
+                    <i class="fas fa-file-archive"></i> Export Berkas & Isian (ZIP)
+                </button>
                 <a href="{{ route('admin_hackaton.submissions.scores', $session) }}" class="bg-amber-500 hover:bg-amber-600 text-gray-950 text-xs font-bold uppercase tracking-wider px-4 py-3 transition flex items-center gap-2 border border-black">
                     <i class="fas fa-trophy"></i> Ranking Nilai
                 </a>
@@ -77,10 +129,16 @@
                     </a>
                 </div>
 
-                <a href="{{ route('admin_hackaton.submissions.export', array_merge(['session' => $session], request()->query())) }}"
-                    class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider border border-black transition">
-                    <i class="fas fa-download"></i> Export Sesuai Filter ({{ $submissions->total() }})
-                </a>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('admin_hackaton.submissions.export', array_merge(['session' => $session], request()->query())) }}"
+                        class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider border border-black transition">
+                        <i class="fas fa-file-excel"></i> Export Excel ({{ $submissions->total() }})
+                    </a>
+                    <button type="button" @click="showZipModal = true"
+                        class="inline-flex items-center gap-1.5 bg-indigo-700 hover:bg-indigo-800 text-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider border border-black transition">
+                        <i class="fas fa-file-archive"></i> Export ZIP Berkas & Field ({{ $submissions->total() }})
+                    </button>
+                </div>
             </div>
 
             <form method="GET" action="{{ route('admin_hackaton.submissions.index', $session) }}" class="space-y-4">
@@ -286,6 +344,10 @@
                                             <i class="fas fa-file-excel"></i>
                                         </a>
 
+                                        <a href="{{ route('admin_hackaton.submissions.export_single_zip', [$session, $sub]) }}" class="border border-indigo-300 bg-white text-indigo-700 p-2 text-xs hover:bg-indigo-50 transition" title="Export Berkas & Isian Proposal Ini (ZIP)">
+                                            <i class="fas fa-file-archive"></i>
+                                        </a>
+
                                         <form action="{{ route('admin_hackaton.submissions.destroy', [$session, $sub]) }}" method="POST" class="inline" onsubmit="return confirm('Hapus submission ini?')">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="border border-rose-300 bg-white text-rose-600 p-2 text-xs hover:bg-rose-50" title="Hapus Proposal">
@@ -311,6 +373,160 @@
                     {{ $submissions->links() }}
                 </div>
             @endif
+        </div>
+
+        {{-- Modal Pengaturan Export Berkas & Isian (ZIP) --}}
+        <div x-show="showZipModal" x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm">
+            <div class="bg-white border-2 border-gray-950 max-w-2xl w-full p-6 space-y-5"
+                @click.away="if (!isDownloadingMulti) showZipModal = false">
+                <div class="flex items-center justify-between border-b-2 border-gray-950 pb-3">
+                    <div>
+                        <h3 class="font-black text-gray-950 text-base uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-file-archive text-indigo-700"></i> Export Laporan Berkas & Isian (ZIP)
+                        </h3>
+                        <p class="text-xs text-gray-600 mt-0.5">
+                            Berkas di dalam ZIP otomatis di-rename: <code class="bg-gray-100 px-1.5 py-0.5 font-mono text-[11px] border border-gray-300">{Kategori}_{Nama_Produk}_Tahap-{N}_{Label_Field}.{ext}</code> + Rekap Excel Isian Field.
+                        </p>
+                    </div>
+                    <button type="button" @click="showZipModal = false" class="text-gray-500 hover:text-gray-950 font-bold text-sm">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form method="GET" action="{{ route('admin_hackaton.submissions.export_zip', $session) }}" class="space-y-4 text-xs">
+                    {{-- Carry over active filters --}}
+                    @foreach (['search', 'kategori', 'status', 'role', 'skema', 'tahap_status', 'reviewer_status'] as $filterKey)
+                        @if (request()->filled($filterKey))
+                            <input type="hidden" name="{{ $filterKey }}" value="{{ request($filterKey) }}">
+                        @endif
+                    @endforeach
+
+                    {{-- 1. Pilih Tahap --}}
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-gray-800 mb-1">1. Pilih Tahap Evaluasi</label>
+                        <select name="tahap_id" x-model="selectedTahapId" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-semibold focus:outline-none">
+                            <option value="">Semua Tahap (Seluruh Berkas & Isian)</option>
+                            @foreach ($session->tahap as $thp)
+                                <option value="{{ $thp->id }}">
+                                    Tahap {{ $thp->tahap_ke }}: {{ $thp->nama_tahap }} ({{ $thp->fields->count() }} Field)
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- 2. Pilih Mode Paket ZIP --}}
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-gray-800 mb-1.5">2. Mode Pemisahan File ZIP</label>
+                        <div class="grid grid-cols-1 gap-2">
+                            <label class="border-2 p-3 flex items-start gap-2.5 cursor-pointer transition"
+                                :class="exportMode === 'multi_zip' ? 'border-indigo-700 bg-indigo-50/70' : 'border-gray-300 bg-white hover:border-gray-950'">
+                                <input type="radio" name="_ui_mode" value="multi_zip" x-model="exportMode" class="mt-0.5 w-4 h-4">
+                                <div>
+                                    <p class="font-black text-gray-950">Pisah File ZIP per Pengusul (Multi-ZIP Terpisah)</p>
+                                    <p class="text-[11px] text-gray-600 mt-0.5">
+                                        Setiap pengusul diekstrak menjadi 1 file <code class="font-mono">.zip</code> sendiri-sendiri (misal 5 pengusul dipilih &rarr; mengunduh 5 file <code class="font-mono">.zip</code> terpisah).
+                                    </p>
+                                </div>
+                            </label>
+
+                            <label class="border-2 p-3 flex items-start gap-2.5 cursor-pointer transition"
+                                :class="exportMode === 'folders' ? 'border-indigo-700 bg-indigo-50/70' : 'border-gray-300 bg-white hover:border-gray-950'">
+                                <input type="radio" name="_ui_mode" value="folders" x-model="exportMode" class="mt-0.5 w-4 h-4">
+                                <div>
+                                    <p class="font-black text-gray-950">1 File ZIP Utama (Dipisah Folder per Nama Pengusul)</p>
+                                    <p class="text-[11px] text-gray-600 mt-0.5">
+                                        Mengunduh 1 file <code class="font-mono">.zip</code> gabungan yang berisi folder masing-masing pengusul beserta Master Excel Rekap seluruh isian field.
+                                    </p>
+                                </div>
+                            </label>
+
+                            <label class="border-2 p-3 flex items-start gap-2.5 cursor-pointer transition"
+                                :class="exportMode === 'nested_zip' ? 'border-indigo-700 bg-indigo-50/70' : 'border-gray-300 bg-white hover:border-gray-950'">
+                                <input type="radio" name="_ui_mode" value="nested_zip" x-model="exportMode" class="mt-0.5 w-4 h-4">
+                                <div>
+                                    <p class="font-black text-gray-950">1 File ZIP Utama (Berisi File .zip per Pengusul di Dalamnya)</p>
+                                    <p class="text-[11px] text-gray-600 mt-0.5">
+                                        Mengunduh 1 file <code class="font-mono">.zip</code> induk yang di dalamnya terdapat file <code class="font-mono">.zip</code> terpisah untuk tiap pengusul + Master Excel Rekap.
+                                    </p>
+                                </div>
+                            </label>
+                        </div>
+                        <input type="hidden" name="pack_mode" :value="exportMode === 'nested_zip' ? 'nested_zip' : 'folders'">
+                    </div>
+
+                    {{-- 3. Daftar Pengusul yang Akan Diexport --}}
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="font-bold uppercase tracking-wider text-gray-800">
+                                3. Pilih Pengusul / Proposal (<span x-text="selectedIds.length"></span> / <span x-text="items.length"></span> dipilih)
+                            </label>
+                            <div class="flex items-center gap-2 text-[11px] font-bold">
+                                <button type="button" @click="toggleAll(true)" class="text-indigo-700 hover:underline">Pilih Semua</button>
+                                <span class="text-gray-300">|</span>
+                                <button type="button" @click="toggleAll(false)" class="text-gray-600 hover:underline">Hapus Pilihan</button>
+                            </div>
+                        </div>
+
+                        <div class="border-2 border-gray-950 max-h-48 overflow-y-auto divide-y divide-gray-200 bg-gray-50">
+                            <template x-for="(item, idx) in items" :key="item.id">
+                                <label class="flex items-center justify-between gap-3 px-3 py-2 hover:bg-amber-50 cursor-pointer bg-white">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <input type="checkbox" name="submission_ids[]" :value="item.id" x-model="selectedIds"
+                                            class="w-4 h-4 border-2 border-gray-950 shrink-0">
+                                        <div class="min-w-0">
+                                            <p class="font-bold text-gray-950 truncate">
+                                                <span class="text-gray-400 mr-1" x-text="(idx + 1) + '.'"></span>
+                                                <span x-text="item.ketua"></span>
+                                                <span class="font-normal text-gray-500" x-text="'— ' + item.produk"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-0.5 text-[10px] font-black shrink-0 border"
+                                        :class="item.kategori === 'D-FARM' ? 'bg-amber-100 text-amber-950 border-amber-300' : 'bg-rose-100 text-rose-950 border-rose-300'"
+                                        x-text="item.kategori">
+                                    </span>
+                                </label>
+                            </template>
+                            <div x-show="items.length === 0" class="p-4 text-center text-gray-500 italic">
+                                Tidak ada proposal pada filter saat ini.
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Progress Indicator for Multi-ZIP --}}
+                    <div x-show="isDownloadingMulti" class="border-2 border-indigo-700 bg-indigo-50 p-3 text-indigo-950 font-bold flex items-center justify-between">
+                        <span>
+                            <i class="fas fa-spinner fa-spin mr-1.5"></i>
+                            Mengekstrak & mengunduh ZIP per pengusul... (<span x-text="multiProgress"></span> / <span x-text="selectedIds.length"></span>)
+                        </span>
+                    </div>
+
+                    {{-- Footer Actions --}}
+                    <div class="flex items-center justify-end gap-2 pt-3 border-t-2 border-gray-200">
+                        <button type="button" @click="showZipModal = false"
+                            class="px-4 py-2 border-2 border-gray-400 text-xs font-bold uppercase text-gray-700 hover:bg-gray-100">
+                            Tutup
+                        </button>
+
+                        <template x-if="exportMode === 'multi_zip'">
+                            <button type="button" @click="startMultiZipDownload()" :disabled="selectedIds.length === 0 || isDownloadingMulti"
+                                class="px-5 py-2 bg-indigo-700 hover:bg-indigo-800 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider border-2 border-gray-950 flex items-center gap-2">
+                                <i class="fas fa-download"></i>
+                                <span>Unduh <span x-text="selectedIds.length"></span> File ZIP Terpisah</span>
+                            </button>
+                        </template>
+
+                        <template x-if="exportMode !== 'multi_zip'">
+                            <button type="submit" :disabled="selectedIds.length === 0"
+                                class="px-5 py-2 bg-indigo-700 hover:bg-indigo-800 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider border-2 border-gray-950 flex items-center gap-2">
+                                <i class="fas fa-file-archive"></i>
+                                <span>Unduh Paket ZIP (<span x-text="selectedIds.length"></span> Pengusul)</span>
+                            </button>
+                        </template>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Hackaton\Admin;
 
+use App\Exports\Hackaton\SubmissionFieldValuesExport;
 use App\Http\Controllers\Controller;
 use App\Models\HackatonSession;
 use App\Models\HackatonSubmission;
@@ -13,6 +14,8 @@ use App\Models\HackatonStatusLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class SubmissionAdminController extends Controller
 {
@@ -148,6 +151,7 @@ class SubmissionAdminController extends Controller
     {
         $query = $this->buildFilteredSubmissionsQuery($request, $session);
 
+        $exportableSubmissions = (clone $query)->latest()->get();
         $submissions = $query->latest()->paginate(15)->withQueryString();
 
         $dFarmCount = HackatonSubmission::where('hackaton_session_id', $session->id)
@@ -176,8 +180,23 @@ class SubmissionAdminController extends Controller
             ->orderBy('name')
             ->get();
 
+        $exportZipItems = $exportableSubmissions->map(function (HackatonSubmission $sub) use ($session) {
+            $isDFarm = $sub->kategori === 'd-farm' || str_contains($sub->tema ?? '', 'D-FARM');
+            $kategori = $isDFarm ? 'D-FARM' : 'D-MARC';
+            return [
+                'id'           => $sub->id,
+                'ketua'        => $sub->user?->name ?? 'Pengusul',
+                'email'        => $sub->user?->email ?? '-',
+                'produk'       => $sub->identitas?->nama_produk ?: 'Belum Diisi',
+                'kategori'     => $kategori,
+                'singleZipUrl' => route('admin_hackaton.submissions.export_single_zip', [$session, $sub]),
+            ];
+        })->values()->all();
+
         return view('admin_hackaton.submissions.index', compact(
             'submissions',
+            'exportableSubmissions',
+            'exportZipItems',
             'session',
             'hasReviewerMap',
             'dFarmCount',
@@ -240,6 +259,262 @@ class SubmissionAdminController extends Controller
             new \App\Exports\Hackaton\SingleSubmissionExport($submission),
             $fileName
         );
+    }
+
+    /**
+     * Export a single submission's uploaded files (renamed by Kategori, Nama Produk, Tahap, Field)
+     * plus its dynamic field answers Excel into a ZIP archive.
+     */
+    public function exportSingleSubmissionZip(Request $request, HackatonSession $session, HackatonSubmission $submission)
+    {
+        abort_if($submission->hackaton_session_id !== $session->id, 404);
+
+        $tahapId = $request->filled('tahap_id') ? (int) $request->input('tahap_id') : null;
+
+        $submission->load([
+            'session',
+            'user.profile.fakultas',
+            'members',
+            'identitas',
+            'submissionTahap.tahap',
+        ]);
+
+        $tempDir = storage_path('app/temp_exports');
+        if (!is_dir($tempDir)) {
+            @mkdir($tempDir, 0775, true);
+        }
+
+        $tempZipPath = $tempDir . '/hackaton_sub_' . $submission->id . '_' . uniqid() . '.zip';
+        $zip = new ZipArchive();
+        if ($zip->open($tempZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return back()->with('error', 'Gagal membuat arsip ZIP.');
+        }
+
+        $this->populateSubmissionZip($zip, $session, $submission, $tahapId, '');
+        $zip->close();
+
+        $isDFarm = $submission->kategori === 'd-farm' || str_contains($submission->tema ?? '', 'D-FARM');
+        $kategori = $isDFarm ? 'D-FARM' : 'D-MARC';
+        $produk = SubmissionFieldValuesExport::sanitizeSegment(
+            $submission->identitas?->nama_produk ?: ('Proposal-' . $submission->id),
+            'Proposal-' . $submission->id,
+            50
+        );
+        $ketua = SubmissionFieldValuesExport::sanitizeSegment(
+            $submission->user?->name ?: 'Pengusul',
+            'Pengusul',
+            40
+        );
+
+        $tahapSuffix = '';
+        if ($tahapId) {
+            $tahapObj = $session->tahap()->find($tahapId);
+            if ($tahapObj) {
+                $tahapSuffix = '_Tahap-' . $tahapObj->tahap_ke;
+            }
+        }
+
+        $downloadName = "{$kategori}_{$produk}_{$ketua}{$tahapSuffix}.zip";
+
+        return response()->download($tempZipPath, $downloadName)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Bulk export submissions' uploaded files (renamed by Kategori, Nama Produk, Tahap, Field)
+     * and dynamic field answers Excel into a ZIP archive, separated per pengusul.
+     */
+    public function exportSubmissionsZip(Request $request, HackatonSession $session)
+    {
+        $query = $this->buildFilteredSubmissionsQuery($request, $session);
+
+        if ($request->filled('submission_ids')) {
+            $ids = array_filter((array) $request->input('submission_ids'), fn($v) => is_numeric($v));
+            if (!empty($ids)) {
+                $query->whereIn('id', $ids);
+            }
+        }
+
+        $submissions = $query->latest()->get();
+
+        if ($submissions->isEmpty()) {
+            return back()->with('error', 'Tidak ada proposal yang sesuai filter untuk diexport ke ZIP.');
+        }
+
+        $tahapId = $request->filled('tahap_id') ? (int) $request->input('tahap_id') : null;
+        $packMode = $request->input('pack_mode', 'folders'); // 'folders' or 'nested_zip'
+
+        $tempDir = storage_path('app/temp_exports');
+        if (!is_dir($tempDir)) {
+            @mkdir($tempDir, 0775, true);
+        }
+
+        $masterZipPath = $tempDir . '/hackaton_bulk_' . $session->id . '_' . uniqid() . '.zip';
+        $zip = new ZipArchive();
+        if ($zip->open($masterZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return back()->with('error', 'Gagal membuat arsip ZIP.');
+        }
+
+        $nestedTempFiles = [];
+        $masterRenamedMap = [];
+
+        foreach ($submissions as $idx => $sub) {
+            $num = sprintf('%02d', $idx + 1);
+            $isDFarm = $sub->kategori === 'd-farm' || str_contains($sub->tema ?? '', 'D-FARM');
+            $kategori = $isDFarm ? 'D-FARM' : 'D-MARC';
+            $produk = SubmissionFieldValuesExport::sanitizeSegment(
+                $sub->identitas?->nama_produk ?: ('Proposal-' . $sub->id),
+                'Proposal-' . $sub->id,
+                45
+            );
+            $ketua = SubmissionFieldValuesExport::sanitizeSegment(
+                $sub->user?->name ?: 'Pengusul',
+                'Pengusul',
+                35
+            );
+
+            $personBaseName = "{$num}_{$ketua}_{$kategori}_{$produk}";
+
+            if ($packMode === 'nested_zip') {
+                $subZipPath = $tempDir . '/nested_' . $sub->id . '_' . uniqid() . '.zip';
+                $subZip = new ZipArchive();
+                if ($subZip->open($subZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                    $subMap = $this->populateSubmissionZip($subZip, $session, $sub, $tahapId, '');
+                    $subZip->close();
+                    $masterRenamedMap[$sub->id] = $subMap[$sub->id] ?? [];
+
+                    if (file_exists($subZipPath)) {
+                        $zip->addFile($subZipPath, "{$personBaseName}.zip");
+                        $nestedTempFiles[] = $subZipPath;
+                    }
+                }
+            } else {
+                $subMap = $this->populateSubmissionZip($zip, $session, $sub, $tahapId, "{$personBaseName}/");
+                $masterRenamedMap[$sub->id] = $subMap[$sub->id] ?? [];
+            }
+        }
+
+        $tahapSuffix = '';
+        if ($tahapId) {
+            $tahapObj = $session->tahap()->find($tahapId);
+            if ($tahapObj) {
+                $tahapSuffix = '_Tahap-' . $tahapObj->tahap_ke;
+            }
+        }
+
+        $masterExcelBytes = \Maatwebsite\Excel\Facades\Excel::raw(
+            new SubmissionFieldValuesExport($session, $submissions, $tahapId, $masterRenamedMap),
+            \Maatwebsite\Excel\Excel::XLSX
+        );
+        $zip->addFromString("Rekap_Seluruh_Isian_Field{$tahapSuffix}.xlsx", $masterExcelBytes);
+
+        $zip->close();
+
+        foreach ($nestedTempFiles as $nf) {
+            @unlink($nf);
+        }
+
+        $sessionSlug = SubmissionFieldValuesExport::sanitizeSegment($session->nama_sesi, 'Sesi-Hackaton', 40);
+        $downloadName = "Laporan-Berkas-Hackaton_{$sessionSlug}{$tahapSuffix}_" . now()->format('Ymd-His') . '.zip';
+
+        return response()->download($masterZipPath, $downloadName)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Populate a ZipArchive with a single submission's renamed uploaded files
+     * and its dynamic field values Excel sheet.
+     *
+     * @return array<int, array<int, string>> Renamed file map [submission_id][field_id] => filename
+     */
+    protected function populateSubmissionZip(
+        ZipArchive $zip,
+        HackatonSession $session,
+        HackatonSubmission $submission,
+        ?int $tahapId = null,
+        string $prefixDir = ''
+    ): array {
+        $tahapQuery = $session->tahap()
+            ->with(['fields' => fn($q) => $q->orderBy('urutan')->orderBy('id')])
+            ->orderBy('tahap_ke');
+
+        if ($tahapId) {
+            $tahapQuery->where('id', $tahapId);
+        }
+
+        $tahapList = $tahapQuery->get();
+
+        $fvQuery = HackatonSubmissionFieldValue::where('hackaton_submission_id', $submission->id);
+        if ($tahapId) {
+            $fvQuery->where('hackaton_tahap_id', $tahapId);
+        }
+        $fieldValues = $fvQuery->get()->keyBy('hackaton_tahap_field_id');
+
+        $renamedMap = [$submission->id => []];
+        $usedNames = [];
+
+        foreach ($tahapList as $tahap) {
+            $tahapKe = $tahap->tahap_ke ?? 1;
+
+            foreach ($tahap->fields as $field) {
+                if ($field->field_type !== 'file') {
+                    continue;
+                }
+
+                $fv = $fieldValues->get($field->id);
+                $rawPath = $fv?->value ? trim((string) $fv->value) : '';
+                if ($rawPath === '') {
+                    continue;
+                }
+
+                $fullPath = null;
+                if (Storage::disk('public')->exists($rawPath)) {
+                    $fullPath = Storage::disk('public')->path($rawPath);
+                } elseif (file_exists(public_path('storage/' . $rawPath))) {
+                    $fullPath = public_path('storage/' . $rawPath);
+                }
+
+                $dupIndex = 1;
+                do {
+                    $candidateName = SubmissionFieldValuesExport::formatRenamedFilename(
+                        $submission,
+                        $tahapKe,
+                        $field->field_label,
+                        $rawPath,
+                        $dupIndex > 1 ? $dupIndex : null
+                    );
+                    $dupIndex++;
+                } while (isset($usedNames[strtolower($candidateName)]));
+
+                $usedNames[strtolower($candidateName)] = true;
+                $renamedMap[$submission->id][$field->id] = $candidateName;
+
+                if ($fullPath && is_file($fullPath)) {
+                    $zip->addFile($fullPath, $prefixDir . $candidateName);
+                }
+            }
+        }
+
+        $isDFarm = $submission->kategori === 'd-farm' || str_contains($submission->tema ?? '', 'D-FARM');
+        $kategori = $isDFarm ? 'D-FARM' : 'D-MARC';
+        $produk = SubmissionFieldValuesExport::sanitizeSegment(
+            $submission->identitas?->nama_produk ?: ('Proposal-' . $submission->id),
+            'Proposal-' . $submission->id,
+            45
+        );
+        $tahapSuffix = '';
+        if ($tahapId && $tahapList->isNotEmpty()) {
+            $tahapSuffix = '_Tahap-' . ($tahapList->first()->tahap_ke ?? 1);
+        }
+
+        $singleExcelBytes = \Maatwebsite\Excel\Facades\Excel::raw(
+            new SubmissionFieldValuesExport($session, [$submission], $tahapId, $renamedMap),
+            \Maatwebsite\Excel\Excel::XLSX
+        );
+        $zip->addFromString(
+            $prefixDir . "Rekap_Isian_{$kategori}_{$produk}{$tahapSuffix}.xlsx",
+            $singleExcelBytes
+        );
+
+        return $renamedMap;
     }
 
     /**

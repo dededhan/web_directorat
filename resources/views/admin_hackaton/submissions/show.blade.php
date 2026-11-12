@@ -74,7 +74,10 @@
                     <i class="fas fa-eye mr-1.5"></i> Preview Tampilan Pengusul
                 </a>
                 <a href="{{ route('admin_hackaton.submissions.export_single', [$session, $submission]) }}" class="border-2 border-emerald-900 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
-                    <i class="fas fa-file-excel mr-1.5"></i> Export Proposal
+                    <i class="fas fa-file-excel mr-1.5"></i> Export Proposal (Excel)
+                </a>
+                <a href="{{ route('admin_hackaton.submissions.export_single_zip', [$session, $submission]) }}" class="border-2 border-indigo-950 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
+                    <i class="fas fa-file-archive mr-1.5"></i> Export Berkas & Isian (ZIP)
                 </a>
                 <a href="{{ route('hackaton.submissions.lembar_pengesahan', $submission) }}" class="border-2 border-emerald-800 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 transition shadow-sm inline-flex items-center">
                     <i class="fas fa-file-signature mr-1.5"></i> Lembar Pengesahan
@@ -535,6 +538,10 @@
                                 <span class="text-xs font-bold px-2.5 py-1 border border-gray-300 bg-gray-100 text-gray-700 uppercase">
                                     Status Pengisian: {{ strtoupper($st->status) }}
                                 </span>
+                                <a href="{{ route('admin_hackaton.submissions.export_single_zip', [$session, $submission, 'tahap_id' => $st->hackaton_tahap_id]) }}"
+                                    class="inline-flex items-center gap-1.5 border border-indigo-900 bg-indigo-700 hover:bg-indigo-800 text-white px-3 py-1 text-xs font-bold uppercase transition">
+                                    <i class="fas fa-file-archive"></i> Export ZIP Tahap {{ $tk }}
+                                </a>
                                 <a href="{{ route('hackaton.team.tahap', [$submission, $st->hackaton_tahap_id]) }}" target="_blank"
                                     class="inline-flex items-center gap-1.5 border border-gray-950 bg-amber-100 hover:bg-amber-200 text-gray-950 px-3 py-1 text-xs font-bold uppercase transition">
                                     <i class="fas fa-external-link-alt"></i> Preview Form Tahap {{ $tk }}
