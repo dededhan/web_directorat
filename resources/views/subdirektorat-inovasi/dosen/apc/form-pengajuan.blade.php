@@ -100,7 +100,7 @@
                                    id="link_scimagojr" 
                                    required 
                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 placeholder-gray-400 shadow-sm" 
-                                   placeholder="https://www.scimagojr.com/..."
+                                   placeholder=""
                                    value="{{ old('link_scimagojr') }}">
                         </div>
 

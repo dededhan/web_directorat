@@ -35,13 +35,14 @@ class SubmissionAdminController extends Controller
             ->withCount('reviewers')
             ->where('hackaton_session_id', $session->id);
 
-        // Search by user name, email, product name, bidang, or member name
+        // Search by user name, email, phone, product name, bidang, or member name
         if ($request->filled('search')) {
             $search = trim($request->search);
             $query->where(function ($q) use ($search) {
                 $q->whereHas('user', function ($uq) use ($search) {
                     $uq->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone_number', 'like', "%{$search}%");
                 })
                 ->orWhereHas('identitas', function ($iq) use ($search) {
                     $iq->where('nama_produk', 'like', "%{$search}%")

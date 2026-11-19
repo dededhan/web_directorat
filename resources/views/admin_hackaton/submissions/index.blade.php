@@ -283,6 +283,18 @@
                                 <td class="p-4">
                                     <div class="font-bold text-gray-950">{{ $sub->user->name ?? '-' }}</div>
                                     <div class="text-xs text-gray-500">{{ $sub->user->email ?? '-' }}</div>
+                                    @php
+                                        $rawPhone = $sub->user?->phone_number ?? $sub->user?->profile?->no_hp;
+                                        $waPhone = $rawPhone ? preg_replace('/^0/', '62', preg_replace('/[^\d]/', '', $rawPhone)) : null;
+                                    @endphp
+                                    @if ($rawPhone && $waPhone)
+                                        <div class="mt-1">
+                                            <a href="https://wa.me/{{ $waPhone }}" target="_blank" rel="noopener noreferrer"
+                                                class="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 hover:underline">
+                                                <i class="fab fa-whatsapp text-sm"></i> {{ $rawPhone }}
+                                            </a>
+                                        </div>
+                                    @endif
                                     <span class="inline-block mt-1 text-[10px] font-bold uppercase px-2 py-0.5 border border-gray-300 bg-gray-100 text-gray-700">
                                         {{ $roleName }}
                                     </span>

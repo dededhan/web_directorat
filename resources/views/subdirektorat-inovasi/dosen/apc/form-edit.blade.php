@@ -98,7 +98,7 @@
                                    id="link_scimagojr" 
                                    required 
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-slate-500 focus:ring-2 focus:ring-slate-200 transition-all duration-200 text-gray-900 placeholder-gray-400 shadow-sm" 
-                                   placeholder="https://www.scimagojr.com/..."
+                                   placeholder=""
                                    value="{{ old('link_scimagojr', $submission->link_scimagojr) }}">
                         </div>
 
