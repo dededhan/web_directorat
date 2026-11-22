@@ -9,6 +9,7 @@
         window.adminSubmissionDetails = function () {
             return {
                 activeTahapTab: {{ (int) $defaultActiveTahapKe }},
+                showEditOverallStatusModal: false,
                 showAssignReviewer: false,
                 showAddMember: false,
                 showEditMemberModal: false,
@@ -88,6 +89,112 @@
                 <a href="{{ route('admin_hackaton.submissions.index', $session) }}" class="border-2 border-gray-950 bg-white hover:bg-gray-100 text-gray-950 text-xs font-bold uppercase tracking-wider px-4 py-2.5">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali ke Daftar
                 </a>
+            </div>
+        </div>
+
+        {{-- Status & Kontrol Utama Proposal (Admin) --}}
+        @php
+            $rawStatus = is_object($submission->status) ? $submission->status->value : $submission->status;
+            $statusBadge = match ($rawStatus) {
+                'draft' => 'bg-amber-100 text-amber-900 border-amber-300',
+                'diajukan' => 'bg-blue-100 text-blue-900 border-blue-400',
+                'menunggu_direview' => 'bg-indigo-100 text-indigo-900 border-indigo-300',
+                'sedang_direview' => 'bg-purple-100 text-purple-900 border-purple-400',
+                'perbaikan_diperlukan' => 'bg-rose-100 text-rose-900 border-rose-400',
+                'proses_tahap_selanjutnya' => 'bg-emerald-100 text-emerald-900 border-emerald-400',
+                'selesai' => 'bg-gray-950 text-white border-gray-950',
+                default => 'bg-gray-100 text-gray-800 border-gray-300',
+            };
+            $statusLabel = match ($rawStatus) {
+                'draft' => 'DRAFT (Belum Diajukan / Form Terbuka)',
+                'diajukan' => 'DIAJUKAN (Menunggu Evaluasi Admin / Reviewer)',
+                'menunggu_direview' => 'MENUNGGU DIREVIEW',
+                'sedang_direview' => 'SEDANG DIREVIEW',
+                'perbaikan_diperlukan' => 'PERBAIKAN DIPERLUKAN (Revisi Pengusul)',
+                'proses_tahap_selanjutnya' => 'PROSES TAHAP SELANJUTNYA',
+                'selesai' => 'SELESAI',
+                default => ucfirst(str_replace('_', ' ', $rawStatus ?? '-')),
+            };
+        @endphp
+        <div class="border-2 border-gray-950 bg-white p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
+            <div class="space-y-1">
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Status Proposal Keseluruhan</span>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="inline-flex items-center px-3 py-1 text-xs font-black uppercase tracking-wider border {{ $statusBadge }}">
+                        <i class="fas fa-circle text-[8px] mr-1.5 opacity-80"></i> {{ $statusLabel }}
+                    </span>
+                    <span class="text-xs text-gray-600">
+                        &bull; ID Proposal: <strong>#{{ $submission->id }}</strong>
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+                <button type="button" @click="showEditOverallStatusModal = true"
+                    class="border-2 border-gray-950 bg-gray-950 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 transition inline-flex items-center shadow-sm">
+                    <i class="fas fa-sliders-h mr-1.5"></i> Ubah Status Proposal
+                </button>
+            </div>
+        </div>
+
+        {{-- Modal Ubah Status Proposal Keseluruhan --}}
+        <div x-show="showEditOverallStatusModal" x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-gray-950/60 backdrop-blur-sm">
+            <div class="bg-white border-2 border-gray-950 max-w-lg w-full p-6 space-y-4 shadow-2xl"
+                @click.away="showEditOverallStatusModal = false">
+                <div class="flex items-center justify-between border-b-2 border-gray-950 pb-3">
+                    <h3 class="font-black text-gray-950 text-base uppercase tracking-wider flex items-center gap-2">
+                        <i class="fas fa-sliders-h"></i> Ubah Status Proposal
+                    </h3>
+                    <button type="button" @click="showEditOverallStatusModal = false" class="text-gray-500 hover:text-gray-950 font-bold text-sm">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form action="{{ route('admin_hackaton.submissions.updateStatus', [$session, $submission]) }}" method="POST" class="space-y-4 text-xs">
+                    @csrf
+                    @method('PATCH')
+
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-gray-800 mb-1">Pilih Status Baru *</label>
+                        <select name="status" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-bold focus:outline-none">
+                            <option value="draft" {{ $rawStatus === 'draft' ? 'selected' : '' }}>DRAFT (Kembalikan ke Belum Diajukan / Buka Kunci Edit)</option>
+                            <option value="diajukan" {{ $rawStatus === 'diajukan' ? 'selected' : '' }}>DIAJUKAN (Sudah Submit / Kunci Form)</option>
+                            <option value="perbaikan_diperlukan" {{ $rawStatus === 'perbaikan_diperlukan' ? 'selected' : '' }}>PERBAIKAN DIPERLUKAN (Buka Kunci untuk Revisi)</option>
+                            <option value="menunggu_direview" {{ $rawStatus === 'menunggu_direview' ? 'selected' : '' }}>MENUNGGU DIREVIEW</option>
+                            <option value="sedang_direview" {{ $rawStatus === 'sedang_direview' ? 'selected' : '' }}>SEDANG DIREVIEW</option>
+                            <option value="proses_tahap_selanjutnya" {{ $rawStatus === 'proses_tahap_selanjutnya' ? 'selected' : '' }}>PROSES TAHAP SELANJUTNYA</option>
+                            <option value="selesai" {{ $rawStatus === 'selesai' ? 'selected' : '' }}>SELESAI (Final)</option>
+                        </select>
+                    </div>
+
+                    <div class="border-2 border-amber-300 bg-amber-50 p-3 space-y-1.5">
+                        <label class="flex items-start gap-2 cursor-pointer font-bold text-gray-900">
+                            <input type="checkbox" name="unlock_tahap" value="1" checked class="mt-0.5">
+                            <span>Buka kunci formulir pengisian tahap bagi pengusul</span>
+                        </label>
+                        <p class="text-[11px] text-gray-600 pl-5">
+                            Jika dicentang dan status diubah ke <strong>Draft</strong> atau <strong>Perbaikan</strong>, seluruh formulir tahap yang berstatus Diajukan otomatis dibuka kembali agar pengusul bisa mengedit data yang kurang.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-gray-800 mb-1">Catatan Perubahan Status (Opsional)</label>
+                        <textarea name="catatan" rows="3" class="w-full border-2 border-gray-950 px-3 py-2 bg-white focus:outline-none"
+                            placeholder="Tuliskan alasan perubahan status..."></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-200">
+                        <button type="button" @click="showEditOverallStatusModal = false"
+                            class="border-2 border-gray-300 bg-white hover:bg-gray-100 text-gray-800 font-bold px-4 py-2 uppercase tracking-wider">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="border-2 border-gray-950 bg-gray-950 hover:bg-gray-800 text-white font-bold px-5 py-2 uppercase tracking-wider">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -448,27 +555,50 @@
 
                     {{-- Form Keputusan Admin per Tahap --}}
                     <div class="border-2 border-gray-950 bg-white p-6 space-y-4">
-                        <div class="border-b border-gray-200 pb-3 flex items-center justify-between">
+                        <div class="border-b border-gray-200 pb-3 flex items-center justify-between flex-wrap gap-2">
                             <h3 class="font-bold text-gray-950 uppercase tracking-wider text-xs flex items-center gap-2">
                                 <i class="fas fa-gavel"></i> Keputusan & Evaluasi Admin (Tahap {{ $tk }})
                             </h3>
-                            <span class="text-xs font-bold uppercase px-2 py-0.5 border border-black bg-gray-100">
-                                Status Admin: {{ ucfirst($st->admin_status) }}
-                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold uppercase px-2 py-0.5 border border-black bg-gray-100">
+                                    Admin: {{ ucfirst($st->admin_status) }}
+                                </span>
+                                <span class="text-xs font-bold uppercase px-2 py-0.5 border {{ $st->status === 'diajukan' ? 'border-blue-500 bg-blue-50 text-blue-800' : 'border-amber-500 bg-amber-50 text-amber-800' }}">
+                                    Form: {{ ucfirst($st->status) }}
+                                </span>
+                            </div>
                         </div>
 
                         <form action="{{ route('admin_hackaton.submissions.updateTahapStatus', $st) }}" method="POST" class="space-y-4">
                             @csrf
                             @method('PATCH')
 
-                            <div class="text-xs">
-                                <label class="block font-bold mb-1 uppercase tracking-wider">Keputusan Status *</label>
-                                <select name="admin_status" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-bold">
-                                    <option value="menunggu" {{ $st->admin_status === 'menunggu' ? 'selected' : '' }}>MENUNGGU (Belum Diputuskan)</option>
-                                    <option value="disetujui" {{ $st->admin_status === 'disetujui' ? 'selected' : '' }}>DISETUJUI / LOLOS (Buka Tahap Berikutnya)</option>
-                                    <option value="perbaikan" {{ $st->admin_status === 'perbaikan' ? 'selected' : '' }}>PERBAIKAN (Kembalikan ke Pengusul untuk Revisi)</option>
-                                    <option value="selesai" {{ $st->admin_status === 'selesai' ? 'selected' : '' }}>SELESAI (Final Tahap)</option>
-                                </select>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div>
+                                    <label class="block font-bold mb-1 uppercase tracking-wider">Keputusan Status Admin *</label>
+                                    <select name="admin_status" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-bold">
+                                        <option value="menunggu" {{ $st->admin_status === 'menunggu' ? 'selected' : '' }}>MENUNGGU (Belum Diputuskan / Sedang Dievaluasi)</option>
+                                        <option value="disetujui" {{ $st->admin_status === 'disetujui' ? 'selected' : '' }}>DISETUJUI / LOLOS (Buka Tahap Berikutnya)</option>
+                                        <option value="perbaikan" {{ $st->admin_status === 'perbaikan' ? 'selected' : '' }}>PERBAIKAN (Kembalikan ke Pengusul untuk Revisi)</option>
+                                        <option value="kembali_ke_draft">KEMBALIKAN KE DRAFT (Buka Kunci Pengisian / Batalkan Pengajuan)</option>
+                                        <option value="selesai" {{ $st->admin_status === 'selesai' ? 'selected' : '' }}>SELESAI (Final Tahap)</option>
+                                    </select>
+                                    <p class="text-[11px] text-gray-500 mt-1">
+                                        Pilih <strong>PERBAIKAN</strong> atau <strong>KEMBALIKAN KE DRAFT</strong> agar pengusul bisa mengedit data yang kurang.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold mb-1 uppercase tracking-wider">Status Pengisian Formulir (Pengusul)</label>
+                                    <select name="tahap_status" class="w-full border-2 border-gray-950 px-3 py-2 bg-white font-bold">
+                                        <option value="diajukan" {{ $st->status === 'diajukan' ? 'selected' : '' }}>Diajukan (Formulir Terkunci untuk Pengusul)</option>
+                                        <option value="draft" {{ $st->status === 'draft' ? 'selected' : '' }}>Draft (Formulir Terbuka untuk Diedit Pengusul)</option>
+                                        <option value="belum_diisi" {{ $st->status === 'belum_diisi' ? 'selected' : '' }}>Belum Diisi</option>
+                                    </select>
+                                    <p class="text-[11px] text-gray-500 mt-1">
+                                        Status terkini: <strong>{{ ucfirst($st->status) }}</strong> @if($st->submitted_at) &bull; Diajukan: {{ $st->submitted_at->format('d/m/Y H:i') }} @endif
+                                    </p>
+                                </div>
                             </div>
 
                             <div class="text-xs">
@@ -477,8 +607,18 @@
                                     placeholder="Tuliskan catatan perbaikan atau feedback kelulusan...">{{ old('catatan_admin', $st->catatan_admin) }}</textarea>
                             </div>
 
-                            <div class="flex justify-end">
-                                <button type="submit" class="bg-gray-950 text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-gray-800">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-gray-100">
+                                <div>
+                                    @if ($st->status === 'diajukan')
+                                        <button type="submit" name="admin_status" value="kembali_ke_draft"
+                                            onclick="return confirm('Apakah Anda yakin ingin mengembalikan Tahap {{ $tk }} ke status DRAFT? Pengusul akan dapat mengedit kembali formulir tahap ini.')"
+                                            class="inline-flex items-center gap-1.5 border-2 border-amber-500 bg-amber-400 hover:bg-amber-500 text-gray-950 px-4 py-2 text-xs font-bold uppercase tracking-wider transition shadow-sm">
+                                            <i class="fas fa-undo"></i> Buka Kunci / Kembalikan ke Draft
+                                        </button>
+                                    @endif
+                                </div>
+
+                                <button type="submit" class="bg-gray-950 text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 transition">
                                     Simpan Keputusan Tahap {{ $tk }}
                                 </button>
                             </div>

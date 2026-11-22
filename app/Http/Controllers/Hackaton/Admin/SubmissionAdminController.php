@@ -615,22 +615,53 @@ class SubmissionAdminController extends Controller
     public function updateStatus(Request $request, HackatonSession $session, HackatonSubmission $submission)
     {
         $request->validate([
-            'status' => 'required|in:draft,diajukan,menunggu_direview,sedang_direview,perbaikan_diperlukan,proses_tahap_selanjutnya,selesai',
+            'status'       => 'required|in:draft,diajukan,menunggu_direview,sedang_direview,perbaikan_diperlukan,proses_tahap_selanjutnya,selesai',
+            'catatan'      => 'nullable|string|max:1000',
+            'unlock_tahap' => 'nullable|boolean',
         ]);
 
         $oldStatus = is_object($submission->status) ? $submission->status->value : $submission->status;
-        $submission->update(['status' => $request->status]);
+        $newStatus = $request->status;
+        $submission->update(['status' => $newStatus]);
+
+        // If changed to draft and unlock_tahap is requested (or default true), reset submitted stages so participant can edit
+        if ($newStatus === 'draft' && $request->boolean('unlock_tahap', true)) {
+            $submission->submissionTahap()
+                ->where('status', 'diajukan')
+                ->update([
+                    'status'       => 'draft',
+                    'admin_status' => 'menunggu',
+                    'submitted_at' => null,
+                ]);
+        } elseif ($newStatus === 'perbaikan_diperlukan') {
+            $latestSubmitted = $submission->submissionTahap()
+                ->where('status', 'diajukan')
+                ->latest('updated_at')
+                ->first();
+            if ($latestSubmitted) {
+                $latestSubmitted->update([
+                    'status'        => 'draft',
+                    'admin_status'  => 'perbaikan',
+                    'catatan_admin' => $request->catatan ?: $latestSubmitted->catatan_admin,
+                ]);
+            }
+        }
+
+        $logKeterangan = 'Status proposal diubah dari ' . ucfirst(str_replace('_', ' ', $oldStatus)) . ' menjadi ' . ucfirst(str_replace('_', ' ', $newStatus)) . ' oleh admin';
+        if ($request->catatan) {
+            $logKeterangan .= ': ' . $request->catatan;
+        }
 
         HackatonStatusLog::logSubmissionStatus(
             $submission->id,
             $oldStatus,
-            $request->status,
-            'Status submission diubah oleh admin',
+            $newStatus,
+            $logKeterangan,
             Auth::id(),
             'admin'
         );
 
-        return back()->with('success', 'Status submission berhasil diperbarui.');
+        return back()->with('success', 'Status proposal berhasil diperbarui menjadi ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.');
     }
 
     /**
@@ -639,7 +670,8 @@ class SubmissionAdminController extends Controller
     public function updateTahapStatus(Request $request, HackatonSubmissionTahap $submissionTahap)
     {
         $request->validate([
-            'admin_status'     => 'required|in:menunggu,disetujui,perbaikan,selesai',
+            'admin_status'     => 'required|in:menunggu,disetujui,perbaikan,selesai,kembali_ke_draft',
+            'tahap_status'     => 'nullable|in:diajukan,draft,belum_diisi',
             'catatan_admin'    => 'nullable|string|max:2000',
             'nominal_evaluasi' => 'nullable|numeric|min:0',
         ]);
@@ -648,14 +680,63 @@ class SubmissionAdminController extends Controller
         $tahapKe = $submissionTahap->tahap->tahap_ke ?? '?';
         $submissionId = $submissionTahap->hackaton_submission_id;
         $tahapId = $submissionTahap->hackaton_tahap_id;
+        $submission = $submissionTahap->submission;
 
-        $submissionTahap->update([
-            'admin_status'     => $request->admin_status,
+        // Opsi: Kembalikan ke Draft (Reset Pengajuan Tahap Ini agar bisa diedit pengusul)
+        if ($request->admin_status === 'kembali_ke_draft' || ($request->tahap_status === 'draft' && $request->admin_status === 'menunggu')) {
+            $submissionTahap->update([
+                'status'           => 'draft',
+                'admin_status'     => 'menunggu',
+                'submitted_at'     => null,
+                'catatan_admin'    => $request->catatan_admin,
+                'nominal_evaluasi' => $request->has('nominal_evaluasi') ? $request->nominal_evaluasi : $submissionTahap->nominal_evaluasi,
+            ]);
+
+            // Jika tidak ada tahap lain yang berstatus diajukan, kembalikan status proposal induk ke 'draft'
+            $otherSubmitted = HackatonSubmissionTahap::where('hackaton_submission_id', $submissionId)
+                ->where('id', '!=', $submissionTahap->id)
+                ->where('status', 'diajukan')
+                ->exists();
+
+            if (!$otherSubmitted && $submission) {
+                $submission->update(['status' => 'draft']);
+            }
+
+            $keterangan = "Tahap {$tahapKe} dikembalikan ke status Draft (sebelum diajukan) oleh admin. Formulir telah dibuka kembali untuk pengusul.";
+            if ($request->catatan_admin) {
+                $keterangan .= ' Catatan: ' . $request->catatan_admin;
+            }
+
+            HackatonStatusLog::logTahapStatus(
+                $submissionId,
+                $tahapId,
+                $oldAdminStatus,
+                'draft',
+                $keterangan,
+                Auth::id(),
+                'admin'
+            );
+
+            return back()->with('success', "Tahap {$tahapKe} berhasil dikembalikan ke status Draft. Formulir telah dibuka kembali untuk pengusul.");
+        }
+
+        $effectiveAdminStatus = in_array($request->admin_status, ['menunggu', 'disetujui', 'perbaikan', 'selesai'])
+            ? $request->admin_status
+            : 'menunggu';
+
+        $dataToUpdate = [
+            'admin_status'     => $effectiveAdminStatus,
             'catatan_admin'    => $request->catatan_admin,
             'nominal_evaluasi' => $request->has('nominal_evaluasi') ? $request->nominal_evaluasi : $submissionTahap->nominal_evaluasi,
-        ]);
+        ];
 
-        $keterangan = 'Status Tahap ' . $tahapKe . ' diubah menjadi ' . ucfirst($request->admin_status) . ' oleh admin';
+        if ($request->filled('tahap_status')) {
+            $dataToUpdate['status'] = $request->tahap_status;
+        }
+
+        $submissionTahap->update($dataToUpdate);
+
+        $keterangan = 'Status Tahap ' . $tahapKe . ' diubah menjadi ' . ucfirst($effectiveAdminStatus) . ' oleh admin';
         if ($request->catatan_admin) {
             $keterangan .= ': ' . $request->catatan_admin;
         }
@@ -663,14 +744,26 @@ class SubmissionAdminController extends Controller
             $submissionId,
             $tahapId,
             $oldAdminStatus,
-            $request->admin_status,
+            $effectiveAdminStatus,
             $keterangan,
             Auth::id(),
             'admin'
         );
 
-        if ($request->admin_status === 'perbaikan') {
+        if ($effectiveAdminStatus === 'perbaikan') {
             $submissionTahap->update(['status' => 'draft']);
+
+            if ($submission) {
+                $submission->update(['status' => 'perbaikan_diperlukan']);
+                HackatonStatusLog::logSubmissionStatus(
+                    $submissionId,
+                    is_object($submission->status) ? $submission->status->value : $submission->status,
+                    'perbaikan_diperlukan',
+                    "Proposal memerlukan perbaikan pada Tahap {$tahapKe}",
+                    Auth::id(),
+                    'admin'
+                );
+            }
 
             HackatonStatusLog::logTahapStatus(
                 $submissionId,
@@ -683,7 +776,7 @@ class SubmissionAdminController extends Controller
             );
         }
 
-        if (in_array($request->admin_status, ['disetujui', 'selesai'])) {
+        if (in_array($effectiveAdminStatus, ['disetujui', 'selesai'])) {
             $sessionId = $submissionTahap->tahap->hackaton_session_id;
             $nextTahap = \App\Models\HackatonTahap::where('hackaton_session_id', $sessionId)
                 ->where('tahap_ke', $tahapKe + 1)
@@ -691,22 +784,28 @@ class SubmissionAdminController extends Controller
 
             if ($nextTahap) {
                 $notifMsg = "Selamat! Anda dinyatakan lolos Tahap {$tahapKe}. Silakan lanjutkan ke Tahap " . ($tahapKe + 1) . ".";
+                if ($submission) {
+                    $submission->update(['status' => 'proses_tahap_selanjutnya']);
+                }
             } else {
                 $notifMsg = "Selamat! Anda dinyatakan lolos Tahap {$tahapKe}. Semua tahap telah selesai.";
+                if ($submission) {
+                    $submission->update(['status' => 'selesai']);
+                }
             }
 
             HackatonStatusLog::logTahapStatus(
                 $submissionId,
                 $tahapId,
                 $oldAdminStatus,
-                $request->admin_status,
+                $effectiveAdminStatus,
                 $notifMsg,
                 Auth::id(),
                 'admin'
             );
         }
 
-        return back()->with('success', 'Status tahap berhasil diperbarui.');
+        return back()->with('success', "Keputusan Tahap {$tahapKe} berhasil disimpan.");
     }
 
     /**

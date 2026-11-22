@@ -40,7 +40,7 @@ class HackatonSubmissionTahap extends Model
             || $this->admin_status === 'perbaikan';
 
         $tahap = $this->tahap;
-        $timingOk = $tahap ? $tahap->isOpen() : true;
+        $timingOk = ($this->admin_status === 'perbaikan') || ($tahap ? $tahap->isOpen() : true);
         $prevOk = $this->isPreviousTahapLolos();
 
         return $statusOk && $timingOk && $prevOk;
