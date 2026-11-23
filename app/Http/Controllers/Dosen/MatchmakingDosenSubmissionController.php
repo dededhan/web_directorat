@@ -22,9 +22,17 @@ class MatchmakingDosenSubmissionController extends Controller
     {
         $validated = $request->validate([
             'judul_proposal' => 'required|string|max:255',
+            'proposal_file' => 'required|file|mimes:pdf|max:10240',
+            'rab_file' => 'required|file|mimes:pdf,xlsx,xls|max:10240',
             'members' => 'required|array|min:1',
             'members.*.type' => 'required|in:unj,international',
-
+        ], [
+            'proposal_file.required' => 'File proposal wajib diunggah.',
+            'proposal_file.mimes' => 'File proposal harus berformat PDF.',
+            'proposal_file.max' => 'Ukuran file proposal maksimal 10MB.',
+            'rab_file.required' => 'File RAB wajib diunggah.',
+            'rab_file.mimes' => 'File RAB harus berformat PDF atau Excel (.xlsx, .xls).',
+            'rab_file.max' => 'Ukuran file RAB maksimal 10MB.',
         ]);
 
         $session = MatchmakingSession::findOrFail($sessionId);
@@ -38,7 +46,23 @@ class MatchmakingDosenSubmissionController extends Controller
                 'status' => 'diajukan',
             ]);
 
-                        $submission->addStatusLog('diajukan', 'Proposal berhasil dibuat dan diajukan oleh dosen.');
+            $proposerName = Str::slug(Auth::user()->name, '_');
+
+            if ($request->hasFile('proposal_file')) {
+                $file = $request->file('proposal_file');
+                $filename = "{$proposerName}_proposal.{$file->getClientOriginalExtension()}";
+                $submission->proposal_path = $file->storeAs("matchmaking_submissions/{$submission->id}", $filename, 'public');
+            }
+
+            if ($request->hasFile('rab_file')) {
+                $file = $request->file('rab_file');
+                $filename = "{$proposerName}_rab.{$file->getClientOriginalExtension()}";
+                $submission->rab_path = $file->storeAs("matchmaking_submissions/{$submission->id}", $filename, 'public');
+            }
+
+            $submission->save();
+
+            $submission->addStatusLog('diajukan', 'Proposal berhasil dibuat dan diajukan oleh dosen.');
 
             $this->syncMembers($request, $submission);
 
@@ -91,19 +115,47 @@ class MatchmakingDosenSubmissionController extends Controller
 
         $validated = $request->validate([
             'judul_proposal' => 'required|string|max:255',
+            'proposal_file' => 'nullable|file|mimes:pdf|max:10240',
+            'rab_file' => 'nullable|file|mimes:pdf,xlsx,xls|max:10240',
             'members' => 'required|array|min:1',
             'members.*.type' => 'required|in:unj,international',
-  
+        ], [
+            'proposal_file.mimes' => 'File proposal harus berformat PDF.',
+            'proposal_file.max' => 'Ukuran file proposal maksimal 10MB.',
+            'rab_file.mimes' => 'File RAB harus berformat PDF atau Excel (.xlsx, .xls).',
+            'rab_file.max' => 'Ukuran file RAB maksimal 10MB.',
         ]);
         
         DB::beginTransaction();
         try {
 
             $newStatus = $submission->status === 'revisi' ? 'diajukan' : $submission->status;
-            $submission->update([
+            $updateData = [
                 'judul_proposal' => $validated['judul_proposal'],
                 'status' => $newStatus,
-            ]);
+            ];
+
+            $proposerName = Str::slug(Auth::user()->name, '_');
+
+            if ($request->hasFile('proposal_file')) {
+                if ($submission->proposal_path && Storage::disk('public')->exists($submission->proposal_path)) {
+                    Storage::disk('public')->delete($submission->proposal_path);
+                }
+                $file = $request->file('proposal_file');
+                $filename = "{$proposerName}_proposal.{$file->getClientOriginalExtension()}";
+                $updateData['proposal_path'] = $file->storeAs("matchmaking_submissions/{$submission->id}", $filename, 'public');
+            }
+
+            if ($request->hasFile('rab_file')) {
+                if ($submission->rab_path && Storage::disk('public')->exists($submission->rab_path)) {
+                    Storage::disk('public')->delete($submission->rab_path);
+                }
+                $file = $request->file('rab_file');
+                $filename = "{$proposerName}_rab.{$file->getClientOriginalExtension()}";
+                $updateData['rab_path'] = $file->storeAs("matchmaking_submissions/{$submission->id}", $filename, 'public');
+            }
+
+            $submission->update($updateData);
 
 
             $existingMemberIds = [];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminEquity;
 use App\Http\Controllers\Controller;
 use App\Models\MatchmakingSubmission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -97,7 +98,14 @@ class MatchmakingSubmissionController extends Controller
     public function destroy(MatchmakingSubmission $submission)
     {
         $sessionId = $submission->matchmaking_session_id;
-        
+
+        if ($submission->proposal_path && Storage::disk('public')->exists($submission->proposal_path)) {
+            Storage::disk('public')->delete($submission->proposal_path);
+        }
+        if ($submission->rab_path && Storage::disk('public')->exists($submission->rab_path)) {
+            Storage::disk('public')->delete($submission->rab_path);
+        }
+
         $submission->delete();
 
         return redirect()->route('admin_equity.matchresearch.show', $sessionId)

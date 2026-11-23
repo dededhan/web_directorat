@@ -16,6 +16,8 @@ class MatchmakingSubmission extends Model
         'matchmaking_session_id',
         'user_id',
         'judul_proposal',
+        'proposal_path',
+        'rab_path',
         'status',
         'rejection_note',
         'status_history',

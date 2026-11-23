@@ -53,21 +53,38 @@
                 <div>
                     <dl class="space-y-4">
                         <div>
+                            <dt class="font-semibold text-gray-700">Dokumen Pengajuan</dt>
+                            <dd class="text-gray-600 mt-1">
+                                <ul class="space-y-1">
+                                    @if($submission->proposal_path)
+                                        <li><a href="{{ Storage::url($submission->proposal_path) }}" target="_blank" class="text-teal-600 hover:underline inline-flex items-center"><i class='bx bx-download mr-1'></i>Unduh Proposal Pengajuan</a></li>
+                                    @else
+                                        <li class="text-gray-400 italic">Proposal belum diunggah</li>
+                                    @endif
+                                    @if($submission->rab_path)
+                                        <li><a href="{{ Storage::url($submission->rab_path) }}" target="_blank" class="text-teal-600 hover:underline inline-flex items-center"><i class='bx bx-download mr-1'></i>Unduh RAB</a></li>
+                                    @else
+                                        <li class="text-gray-400 italic">RAB belum diunggah</li>
+                                    @endif
+                                </ul>
+                            </dd>
+                        </div>
+                        <div>
                             <dt class="font-semibold text-gray-700">Laporan & Dokumen</dt>
                             <dd class="text-gray-600 mt-1">
                                 @if($submission->report)
                                 <ul class="space-y-2">
                                     @if($submission->report->proposal_path)
-                                    <li><a href="#" class="text-teal-600 hover:underline">Unduh Proposal</a></li>
+                                    <li><a href="{{ Storage::url($submission->report->proposal_path) }}" target="_blank" class="text-teal-600 hover:underline">Unduh Proposal Laporan</a></li>
                                     @endif
                                     @if($submission->report->article_path)
-                                    <li><a href="#" class="text-teal-600 hover:underline">Unduh Artikel</a></li>
+                                    <li><a href="{{ Storage::url($submission->report->article_path) }}" target="_blank" class="text-teal-600 hover:underline">Unduh Artikel</a></li>
                                     @endif
                                     @if($submission->report->submit_proof_path)
-                                    <li><a href="#" class="text-teal-600 hover:underline">Unduh Bukti Submit</a></li>
+                                    <li><a href="{{ Storage::url($submission->report->submit_proof_path) }}" target="_blank" class="text-teal-600 hover:underline">Unduh Bukti Submit</a></li>
                                     @endif
                                      @if($submission->report->setneg_approval_path)
-                                    <li><a href="#" class="text-teal-600 hover:underline">Unduh Persetujuan Setneg</a></li>
+                                    <li><a href="{{ Storage::url($submission->report->setneg_approval_path) }}" target="_blank" class="text-teal-600 hover:underline">Unduh Persetujuan Setneg</a></li>
                                     @endif
                                 </ul>
                                 @else

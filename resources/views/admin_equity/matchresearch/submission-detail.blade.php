@@ -141,6 +141,25 @@ if (!function_exists('getPartnerTypeLabel')) {
                                 <p class="text-gray-800 font-semibold">{{ $submission->session->nama_sesi ?? 'N/A' }}</p>
                             </div>
                         </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                @include('admin_equity.matchresearch._report_file_item', [
+                                    'label' => 'Dokumen Proposal',
+                                    'path' => $submission->proposal_path,
+                                    'icon' => 'bx-file',
+                                    'color' => 'teal'
+                                ])
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                @include('admin_equity.matchresearch._report_file_item', [
+                                    'label' => 'Dokumen RAB',
+                                    'path' => $submission->rab_path,
+                                    'icon' => 'bx-spreadsheet',
+                                    'color' => 'teal'
+                                ])
+                            </div>
+                        </div>
                     </div>
                 </div>
 

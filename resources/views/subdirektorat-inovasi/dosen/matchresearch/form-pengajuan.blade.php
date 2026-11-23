@@ -61,13 +61,13 @@
             <form action="{{ route('subdirektorat-inovasi.dosen.matchresearch.store', $session->id) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
 
-                {{-- Judul Penelitian --}}
+                {{-- Judul Penelitian & Dokumen Pengajuan --}}
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                     <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 lg:px-8 py-6">
                         <div class="flex items-center text-white">
                             <h2 class="text-xl lg:text-2xl font-bold flex items-center">
                                 <i class='bx bx-text mr-3 text-2xl'></i>
-                                1. Judul 
+                                1. Judul & Dokumen Pengajuan
                             </h2>
                         </div>
                     </div>
@@ -95,6 +95,76 @@
                                         {{ $message }}
                                     </p> 
                                 @enderror
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                                {{-- Upload Proposal --}}
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-3">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bxs-file-pdf text-base text-teal-500'></i>
+                                            <span>Upload Proposal</span>
+                                            <span class="text-red-500">*</span>
+                                        </div>
+                                    </label>
+                                    <div class="p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 hover:border-teal-400 transition-colors" x-data="{ fileName: '' }">
+                                        <div class="flex items-center justify-center w-full">
+                                            <label for="proposal_file" class="flex flex-col items-center justify-center w-full h-32 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
+                                                    <i class='bx bxs-cloud-upload text-4xl text-gray-400'></i>
+                                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk mengunggah Proposal</span></p>
+                                                    <p class="text-xs text-gray-500">PDF (MAX. 10MB)</p>
+                                                </div>
+                                                <div class="flex flex-col items-center justify-center text-center p-4" x-show="fileName" style="display: none;">
+                                                    <i class='bx bxs-file-pdf text-4xl text-teal-500 mb-2'></i>
+                                                    <p class="text-sm font-semibold text-gray-700 truncate max-w-xs" x-text="fileName"></p>
+                                                    <p class="text-xs text-gray-500 mt-1">Klik untuk mengganti file</p>
+                                                </div>
+                                                <input id="proposal_file" type="file" name="proposal_file" class="hidden" accept=".pdf" required @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : ''" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @error('proposal_file') 
+                                        <p class="text-red-500 text-sm mt-2 flex items-center">
+                                            <i class='bx bx-error-circle mr-1'></i>
+                                            {{ $message }}
+                                        </p> 
+                                    @enderror
+                                </div>
+
+                                {{-- Upload RAB --}}
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-3">
+                                        <div class="flex items-center space-x-2">
+                                            <i class='bx bx-spreadsheet text-base text-teal-500'></i>
+                                            <span>Upload RAB</span>
+                                            <span class="text-red-500">*</span>
+                                        </div>
+                                    </label>
+                                    <div class="p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 hover:border-teal-400 transition-colors" x-data="{ fileName: '' }">
+                                        <div class="flex items-center justify-center w-full">
+                                            <label for="rab_file" class="flex flex-col items-center justify-center w-full h-32 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!fileName">
+                                                    <i class='bx bxs-cloud-upload text-4xl text-gray-400'></i>
+                                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk mengunggah RAB</span></p>
+                                                    <p class="text-xs text-gray-500">PDF, XLSX, XLS (MAX. 10MB)</p>
+                                                </div>
+                                                <div class="flex flex-col items-center justify-center text-center p-4" x-show="fileName" style="display: none;">
+                                                    <i class='bx bxs-file text-4xl text-teal-500 mb-2'></i>
+                                                    <p class="text-sm font-semibold text-gray-700 truncate max-w-xs" x-text="fileName"></p>
+                                                    <p class="text-xs text-gray-500 mt-1">Klik untuk mengganti file</p>
+                                                </div>
+                                                <input id="rab_file" type="file" name="rab_file" class="hidden" accept=".pdf,.xlsx,.xls" required @change="fileName = $event.target.files.length > 0 ? $event.target.files[0].name : ''" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @error('rab_file') 
+                                        <p class="text-red-500 text-sm mt-2 flex items-center">
+                                            <i class='bx bx-error-circle mr-1'></i>
+                                            {{ $message }}
+                                        </p> 
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
