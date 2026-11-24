@@ -68,9 +68,9 @@ class MemberController extends Controller
                 if (empty($validated['nik_nim_nip']) && $user->profile?->identifier_number) {
                     $validated['nik_nim_nip'] = $user->profile->identifier_number;
                 }
-                if (empty($validated['institusi_fakultas']) && $user->profile?->fakultas) {
-                    $fakName = $user->profile->fakultas->name;
-                    $prodiName = $user->profile->prodi?->name;
+                $fakName = $user->profile?->fakultas?->name ?? $user->profile?->fakultas_name;
+                $prodiName = $user->profile?->prodi?->name ?? $user->profile?->prodi_name;
+                if (empty($validated['institusi_fakultas']) && $fakName) {
                     $validated['institusi_fakultas'] = $prodiName ? "{$fakName} / {$prodiName}" : $fakName;
                 }
             }
@@ -175,10 +175,12 @@ class MemberController extends Controller
 
         $users = $query->limit(10)->get()->map(function ($u) {
             $institusi = null;
-            if ($u->profile?->fakultas) {
-                $institusi = $u->profile->fakultas->name;
-                if ($u->profile->prodi) {
-                    $institusi .= ' / ' . $u->profile->prodi->name;
+            $fakName = $u->profile?->fakultas?->name ?? $u->profile?->fakultas_name;
+            $prodiName = $u->profile?->prodi?->name ?? $u->profile?->prodi_name;
+            if ($fakName) {
+                $institusi = $fakName;
+                if ($prodiName) {
+                    $institusi .= ' / ' . $prodiName;
                 }
             } elseif ($u->profile?->institusi) {
                 $institusi = $u->profile->institusi;

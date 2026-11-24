@@ -222,29 +222,49 @@
 
                         @if ($role !== 'hackaton_dudi')
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block font-bold text-gray-700 mb-1">Fakultas</label>
-                                    <select name="fakultas_id" class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm">
-                                        <option value="">— Pilih Fakultas —</option>
-                                        @foreach ($fakultasList as $fak)
-                                            <option value="{{ $fak->id }}" {{ old('fakultas_id', $user->profile?->fakultas_id) == $fak->id ? 'selected' : '' }}>
-                                                {{ $fak->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @if (in_array($role, ['hackaton_dosen_eksternal', 'dosen_eksternal'], true))
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Fakultas</label>
+                                        <input type="text" name="fakultas_name"
+                                            value="{{ old('fakultas_name', $user->profile?->fakultas_name ?? $user->profile?->fakultas?->name) }}"
+                                            class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500"
+                                            placeholder="Masukkan nama fakultas...">
+                                        @error('fakultas_name') <p class="text-rose-600 mt-1">{{ $message }}</p> @enderror
+                                    </div>
 
-                                <div>
-                                    <label class="block font-bold text-gray-700 mb-1">Program Studi</label>
-                                    <select name="prodi_id" class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm">
-                                        <option value="">— Pilih Prodi —</option>
-                                        @foreach ($prodiList as $prd)
-                                            <option value="{{ $prd->id }}" {{ old('prodi_id', $user->profile?->prodi_id) == $prd->id ? 'selected' : '' }}>
-                                                {{ $prd->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Program Studi</label>
+                                        <input type="text" name="prodi_name"
+                                            value="{{ old('prodi_name', $user->profile?->prodi_name ?? $user->profile?->prodi?->name) }}"
+                                            class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-amber-500 focus:ring-amber-500"
+                                            placeholder="Masukkan nama program studi...">
+                                        @error('prodi_name') <p class="text-rose-600 mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                @else
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Fakultas</label>
+                                        <select name="fakultas_id" class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm">
+                                            <option value="">— Pilih Fakultas —</option>
+                                            @foreach ($fakultasList as $fak)
+                                                <option value="{{ $fak->id }}" {{ old('fakultas_id', $user->profile?->fakultas_id) == $fak->id ? 'selected' : '' }}>
+                                                    {{ $fak->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block font-bold text-gray-700 mb-1">Program Studi</label>
+                                        <select name="prodi_id" class="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm">
+                                            <option value="">— Pilih Prodi —</option>
+                                            @foreach ($prodiList as $prd)
+                                                <option value="{{ $prd->id }}" {{ old('prodi_id', $user->profile?->prodi_id) == $prd->id ? 'selected' : '' }}>
+                                                    {{ $prd->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                             </div>
                         @endif
 

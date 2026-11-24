@@ -76,6 +76,7 @@ class SubmissionsExport implements FromCollection, WithHeadings, WithMapping, Sh
         $ketuaMember = $submission->members->firstWhere('peran', 'Ketua');
         $institusiKetua = $ketuaMember?->institusi_fakultas
             ?? $submission->user?->profile?->fakultas?->name
+            ?? $submission->user?->profile?->fakultas_name
             ?? $submission->user?->profile?->institusi
             ?? '-';
 

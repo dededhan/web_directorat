@@ -220,6 +220,8 @@ class ParticipantDashboardController extends Controller
             $request->merge(['phone_number' => $rawPhone]);
         }
 
+        $isDosenEksternal = in_array($user->role, ['hackaton_dosen_eksternal', 'dosen_eksternal'], true);
+
         $validated = $request->validate([
             'name'              => 'required|string|max:255',
             'phone_number'      => [
@@ -233,6 +235,8 @@ class ParticipantDashboardController extends Controller
             'institusi'         => $user->role === 'hackaton_dudi' ? 'required|string|max:255' : 'nullable|string|max:255',
             'fakultas_id'       => 'nullable|exists:equity_fakultas,id',
             'prodi_id'          => 'nullable|exists:equity_prodi,id',
+            'fakultas_name'     => 'nullable|string|max:255',
+            'prodi_name'        => 'nullable|string|max:255',
         ], [
             'phone_number.regex' => 'Format nomor WhatsApp / HP tidak valid (contoh: 081234567890, 10-14 digit).',
             'phone_number.unique' => 'Nomor WhatsApp / HP sudah terdaftar oleh pengguna lain.',
@@ -249,8 +253,10 @@ class ParticipantDashboardController extends Controller
             'alamat'            => $validated['alamat'] ?? null,
             'kode_pos'          => $validated['kode_pos'] ?? null,
             'institusi'         => $validated['institusi'] ?? null,
-            'fakultas_id'       => $validated['fakultas_id'] ?? null,
-            'prodi_id'          => $validated['prodi_id'] ?? null,
+            'fakultas_id'       => $isDosenEksternal ? null : ($validated['fakultas_id'] ?? null),
+            'prodi_id'          => $isDosenEksternal ? null : ($validated['prodi_id'] ?? null),
+            'fakultas_name'     => $isDosenEksternal ? ($validated['fakultas_name'] ?? null) : null,
+            'prodi_name'        => $isDosenEksternal ? ($validated['prodi_name'] ?? null) : null,
         ];
         if (!empty($validated['phone_number'])) {
             $profileData['no_hp'] = $validated['phone_number'];

@@ -131,10 +131,12 @@ class PengusulController extends Controller
             $user->load('profile.fakultas', 'profile.prodi');
 
             $institusi = null;
-            if ($user->profile?->fakultas) {
-                $institusi = $user->profile->fakultas->name;
-                if ($user->profile->prodi) {
-                    $institusi .= ' / ' . $user->profile->prodi->name;
+            $fakultasName = $user->profile?->fakultas?->name ?? $user->profile?->fakultas_name;
+            $prodiName = $user->profile?->prodi?->name ?? $user->profile?->prodi_name;
+            if ($fakultasName) {
+                $institusi = $fakultasName;
+                if ($prodiName) {
+                    $institusi .= ' / ' . $prodiName;
                 }
             } elseif ($user->profile?->institusi) {
                 $institusi = $user->profile->institusi;
@@ -253,8 +255,8 @@ class PengusulController extends Controller
 
         $defaultKetuaInstansi = $ketuaMember?->institusi_fakultas;
         if (empty($defaultKetuaInstansi) && $submission->user?->profile) {
-            $prodi = $submission->user->profile->prodi?->name;
-            $fakultas = $submission->user->profile->fakultas?->name;
+            $prodi = $submission->user->profile->prodi?->name ?? $submission->user->profile->prodi_name;
+            $fakultas = $submission->user->profile->fakultas?->name ?? $submission->user->profile->fakultas_name;
             $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
             $defaultKetuaInstansi = implode(' / ', $parts);
         }
@@ -479,8 +481,8 @@ class PengusulController extends Controller
 
         $defaultKetuaInstansi = $ketuaMember?->institusi_fakultas;
         if (empty($defaultKetuaInstansi) && $submission->user?->profile) {
-            $prodi = $submission->user->profile->prodi?->name;
-            $fakultas = $submission->user->profile->fakultas?->name;
+            $prodi = $submission->user->profile->prodi?->name ?? $submission->user->profile->prodi_name;
+            $fakultas = $submission->user->profile->fakultas?->name ?? $submission->user->profile->fakultas_name;
             $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
             $defaultKetuaInstansi = implode(' / ', $parts);
         }
@@ -554,8 +556,8 @@ class PengusulController extends Controller
 
         $defaultKetuaInstansi = $ketuaMember?->institusi_fakultas;
         if (empty($defaultKetuaInstansi) && $submission->user?->profile) {
-            $prodi = $submission->user->profile->prodi?->name;
-            $fakultas = $submission->user->profile->fakultas?->name;
+            $prodi = $submission->user->profile->prodi?->name ?? $submission->user->profile->prodi_name;
+            $fakultas = $submission->user->profile->fakultas?->name ?? $submission->user->profile->fakultas_name;
             $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
             $defaultKetuaInstansi = implode(' / ', $parts);
         }
@@ -673,8 +675,8 @@ class PengusulController extends Controller
 
         $defaultInstansi = $ketuaMember?->institusi_fakultas;
         if (empty($defaultInstansi) && $submission->user?->profile) {
-            $prodi = $submission->user->profile->prodi?->name;
-            $fakultas = $submission->user->profile->fakultas?->name;
+            $prodi = $submission->user->profile->prodi?->name ?? $submission->user->profile->prodi_name;
+            $fakultas = $submission->user->profile->fakultas?->name ?? $submission->user->profile->fakultas_name;
             $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
             $defaultInstansi = implode(' / ', $parts);
         }
@@ -733,8 +735,8 @@ class PengusulController extends Controller
 
         $defaultInstansi = $ketuaMember?->institusi_fakultas;
         if (empty($defaultInstansi) && $submission->user?->profile) {
-            $prodi = $submission->user->profile->prodi?->name;
-            $fakultas = $submission->user->profile->fakultas?->name;
+            $prodi = $submission->user->profile->prodi?->name ?? $submission->user->profile->prodi_name;
+            $fakultas = $submission->user->profile->fakultas?->name ?? $submission->user->profile->fakultas_name;
             $parts = array_filter([$prodi, $fakultas, 'Universitas Negeri Jakarta']);
             $defaultInstansi = implode(' / ', $parts);
         }
@@ -807,8 +809,8 @@ class PengusulController extends Controller
         $user = Auth::user()->load('profile.fakultas', 'profile.prodi');
         $submission->load(['session', 'identitas', 'members.user.profile.fakultas', 'members.user.profile.prodi']);
 
-        $fakultasName = $user->profile?->fakultas?->name ?? '-';
-        $prodiName    = $user->profile?->prodi?->name ?? '-';
+        $fakultasName = $user->profile?->fakultas?->name ?? $user->profile?->fakultas_name ?? '-';
+        $prodiName    = $user->profile?->prodi?->name ?? $user->profile?->prodi_name ?? '-';
         $ketuaName    = $submission->user?->name ?? $user->name;
 
         $session = $submission->session;

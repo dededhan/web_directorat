@@ -79,7 +79,7 @@
                                     </span>
                                 </td>
                                 <td class="p-4 text-xs text-gray-600">
-                                    {{ $u->profile?->fakultas?->name ?? ($u->profile?->institusi ?? '-') }}
+                                    {{ $u->profile?->fakultas?->name ?? $u->profile?->fakultas_name ?? ($u->profile?->institusi ?? '-') }}
                                 </td>
                                 <td class="p-4 text-center text-xs text-gray-500">
                                     {{ $u->created_at?->format('d M Y') ?? '-' }}
