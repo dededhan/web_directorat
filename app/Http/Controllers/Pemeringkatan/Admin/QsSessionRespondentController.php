@@ -411,7 +411,7 @@ class QsSessionRespondentController extends Controller
     }
 
     /**
-     * Import respondents from Excel into bank AND assign to session.
+     * Import respondents from Excel/CSV into bank AND assign/sync to session.
      */
     public function import(Request $request, QsSession $session)
     {
@@ -420,12 +420,18 @@ class QsSessionRespondentController extends Controller
         }
 
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls|max:10240',
+            'file' => 'required|mimes:xlsx,xls,csv,txt|max:10240',
             'category' => 'required|in:academic,employee',
+            'import_mode' => 'nullable|in:add_only,sync_all,update_existing_only',
         ]);
 
+        $importMode = $request->input('import_mode', 'add_only');
+        if (!Auth::user()->isDirectorateAdmin()) {
+            $importMode = 'add_only';
+        }
+
         try {
-            $import = new SessionRespondentImport($session->id, $request->category);
+            $import = new SessionRespondentImport($session->id, $request->category, $importMode);
             Excel::import($import, $request->file('file'));
 
             $summary = $import->getSummaryMessage();

@@ -1063,7 +1063,7 @@
         </div>
     </div>
 
-    {{-- MODAL 5: Import Excel --}}
+    {{-- MODAL 5: Import Excel / CSV --}}
     <div x-show="openImportModal" x-cloak 
          class="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div @click.away="openImportModal = false" 
@@ -1071,7 +1071,7 @@
             <div class="px-6 py-4 bg-emerald-600 text-white flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-file-excel text-lg"></i>
-                    <h3 class="font-bold text-lg">Import Responden ke Sesi</h3>
+                    <h3 class="font-bold text-lg">Import / Sync Responden (Excel & CSV)</h3>
                 </div>
                 <button @click="openImportModal = false" class="text-white/80 hover:text-white text-lg">
                     <i class="fas fa-times"></i>
@@ -1083,19 +1083,55 @@
                 <div class="p-6 space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
-                            Kategori Responden <span class="text-red-500">*</span>
+                            Kategori Default / Fallback <span class="text-red-500">*</span>
                         </label>
                         <select name="category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
                             <option value="academic">Academic Respondent</option>
                             <option value="employee">Employer Respondent</option>
                         </select>
+                        <p class="text-[11px] text-gray-500 mt-1">
+                            <i class="fas fa-info-circle text-emerald-600 mr-0.5"></i> Jika file memiliki kolom <code class="bg-gray-100 px-1 rounded">Category</code> (Academic / Employer), sistem otomatis menggunakan kategori pada baris file tersebut.
+                        </p>
                     </div>
+
+                    @if(Auth::user()->isDirectorateAdmin())
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+                            Mode Import & Sinkronisasi Kategori
+                        </label>
+                        <div class="space-y-2">
+                            <label class="flex items-start p-2.5 border rounded-xl cursor-pointer hover:bg-gray-50 transition border-gray-200">
+                                <input type="radio" name="import_mode" value="add_only" checked class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <div class="ml-2.5">
+                                    <div class="text-xs font-semibold text-gray-800">Tambah Responden Baru Saja (Default)</div>
+                                    <div class="text-[11px] text-gray-500">Lewati email yang sudah terdaftar di sesi ini.</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start p-2.5 border rounded-xl cursor-pointer hover:bg-amber-50/40 transition border-amber-200 bg-amber-50/20">
+                                <input type="radio" name="import_mode" value="update_existing_only" class="mt-0.5 text-amber-600 focus:ring-amber-500">
+                                <div class="ml-2.5">
+                                    <div class="text-xs font-semibold text-amber-900">Hanya Perbarui / Timpa Kategori Email yang Sudah Ada di Sesi Ini</div>
+                                    <div class="text-[11px] text-amber-700">Hanya mengubah kategori (Academic ↔ Employer) berdasarkan email yang cocok di sesi ini. Data lain & baris baru tidak diubah/ditambahkan.</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start p-2.5 border rounded-xl cursor-pointer hover:bg-gray-50 transition border-gray-200">
+                                <input type="radio" name="import_mode" value="sync_all" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <div class="ml-2.5">
+                                    <div class="text-xs font-semibold text-gray-800">Tambah Baru & Perbarui Kategori yang Sudah Ada (Sync All)</div>
+                                    <div class="text-[11px] text-gray-500">Menambahkan responden baru sekaligus menimpa kategori untuk email yang sudah ada di sesi ini.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    @endif
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
-                            Pilih File Excel (.xlsx / .xls) <span class="text-red-500">*</span>
+                            Pilih File Excel / CSV (.xlsx, .xls, .csv) <span class="text-red-500">*</span>
                         </label>
-                        <input type="file" name="file" accept=".xlsx,.xls" required
+                        <input type="file" name="file" accept=".xlsx,.xls,.csv" required
                                class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-gray-200 rounded-lg p-1.5 cursor-pointer">
                     </div>
 
@@ -1117,9 +1153,9 @@
                     </div>
 
                     <div class="bg-gray-50 rounded-lg p-3 text-xs text-gray-500 space-y-1">
-                        <div class="font-semibold text-gray-700">Format Kolom Excel:</div>
-                        <div>Kolom wajib: <code class="bg-gray-200 px-1 rounded">email</code>, <code class="bg-gray-200 px-1 rounded">first_name</code></div>
-                        <div>Kolom opsional: <code class="bg-gray-200 px-1 rounded">last_name</code>, <code class="bg-gray-200 px-1 rounded">institution</code>, <code class="bg-gray-200 px-1 rounded">phone</code>, <code class="bg-gray-200 px-1 rounded">job_title</code></div>
+                        <div class="font-semibold text-gray-700">Format Kolom Excel / CSV:</div>
+                        <div>Kolom wajib: <code class="bg-gray-200 px-1 rounded">email</code>, <code class="bg-gray-200 px-1 rounded">first_name</code> (atau <code class="bg-gray-200 px-1 rounded">fullname</code>)</div>
+                        <div>Kolom opsional: <code class="bg-gray-200 px-1 rounded">category</code>, <code class="bg-gray-200 px-1 rounded">last_name</code>, <code class="bg-gray-200 px-1 rounded">institution</code> / <code class="bg-gray-200 px-1 rounded">instansi</code>, <code class="bg-gray-200 px-1 rounded">phone</code>, <code class="bg-gray-200 px-1 rounded">job_title</code> / <code class="bg-gray-200 px-1 rounded">jabatan</code></div>
                         @if(count($schema) > 0)
                             <div class="pt-1 text-teal-700 font-semibold">Custom fields sesi juga otomatis dikenali:</div>
                             <div class="text-[11px] text-teal-600">
@@ -1138,7 +1174,7 @@
                     </button>
                     <button type="submit" 
                             class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition">
-                        <i class="fas fa-upload mr-1"></i> Mulai Import
+                        <i class="fas fa-upload mr-1"></i> Mulai Import / Sync
                     </button>
                 </div>
             </form>
