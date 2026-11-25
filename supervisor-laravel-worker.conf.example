@@ -1,0 +1,20 @@
+# Contoh Konfigurasi Supervisor untuk Worker Antrean Email Laravel
+# Simpan file ini di server Linux pada: /etc/supervisor/conf.d/laravel-worker.conf
+# Lalu jalankan:
+#   sudo supervisorctl reread
+#   sudo supervisorctl update
+#   sudo supervisorctl start laravel-worker:*
+
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /path-to-your-project/web_directorat/artisan queue:work database --sleep=3 --tries=3 --timeout=60 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/path-to-your-project/web_directorat/storage/logs/worker.log
+stopwaitsecs=3600
+

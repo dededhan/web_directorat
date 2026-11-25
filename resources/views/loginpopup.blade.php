@@ -112,7 +112,7 @@
 
 <body class="bg-gray-100">
     <!-- Modal -->
-    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="loginModal">
+    <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="loginModal">
         <div class="modal-dialog w-full max-w-4xl mx-auto">
             <div class="modal-content bg-white rounded-3xl overflow-hidden shadow-2xl">
                 <div class="modal-container">
@@ -175,10 +175,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // First, make sure the modal is hidden by default
             const modal = document.getElementById('loginModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('block');
+            // If on standalone /login page, keep it visible
+            if (window.location.pathname.includes('/login')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
 
             // Only show login modal when login buttons are clicked
             const loginButtons = document.querySelectorAll('.login');
@@ -186,7 +188,7 @@
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     modal.classList.remove('hidden');
-                    modal.classList.add('block');
+                    modal.classList.add('flex');
                 });
             });
 

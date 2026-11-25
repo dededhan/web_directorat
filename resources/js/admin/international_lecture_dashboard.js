@@ -312,8 +312,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Handle save button click
-    document.getElementById('saveEditDosen').addEventListener('click', function() {
+    // Handle save button click for legacy modal only
+    const saveEditDosen = document.getElementById('saveEditDosen');
+    if (saveEditDosen) saveEditDosen.addEventListener('click', function() {
         const form = document.getElementById('editDosenForm');
         const formData = new FormData(form);
 

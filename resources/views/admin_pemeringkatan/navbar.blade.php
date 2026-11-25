@@ -1,5 +1,5 @@
 <header class="h-16 bg-gray-100 shadow-md flex items-center justify-between px-6">
-    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none lg:hidden">
+    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 hover:text-gray-900 focus:outline-none p-2 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Sidebar">
         <i class="fas fa-bars text-xl"></i>
     </button>
     
