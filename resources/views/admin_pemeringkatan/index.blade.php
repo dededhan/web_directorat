@@ -59,39 +59,57 @@
 
     <script>
         window.Alert = {
-            success(message) {
+            success(message, timer = 3500) {
                 Swal.fire({
                     title: 'Berhasil!',
                     text: message,
                     icon: 'success',
-                    timer: 3000,
+                    timer: timer,
+                    timerProgressBar: true,
+                    showCloseButton: true,
                     showConfirmButton: false,
                     toast: true,
-                    position: 'top-end'
+                    position: 'top-end',
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
             },
 
-            error(message) {
+            error(message, timer = 10000) {
                 Swal.fire({
                     title: 'Gagal!',
                     text: message,
                     icon: 'error',
-                    timer: 3000,
+                    timer: timer,
+                    timerProgressBar: true,
+                    showCloseButton: true,
                     showConfirmButton: false,
                     toast: true,
-                    position: 'top-end'
+                    position: 'top-end',
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
             },
 
-            warning(message) {
+            warning(message, timer = 7000) {
                 Swal.fire({
                     title: 'Peringatan!',
                     text: message,
                     icon: 'warning',
-                    timer: 3000,
+                    timer: timer,
+                    timerProgressBar: true,
+                    showCloseButton: true,
                     showConfirmButton: false,
                     toast: true,
-                    position: 'top-end'
+                    position: 'top-end',
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
             },
 

@@ -15,6 +15,8 @@ use App\Http\Controllers\Pemeringkatan\Admin\InternationalStudentController;
 use App\Http\Controllers\Pemeringkatan\IndikatorController;
 use App\Http\Controllers\Pemeringkatan\RankingController;
 use App\Http\Controllers\Pemeringkatan\Admin\DosenInternasionalController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalLectureEmailRecapController;
+use App\Http\Controllers\Pemeringkatan\Admin\InternationalLectureReportController;
 use App\Http\Controllers\Pemeringkatan\InternationalFacultyStaffController;
 use App\Http\Controllers\Pemeringkatan\Admin\InternationalFacultyStaffActivitiesController;
 use App\Http\Controllers\Pemeringkatan\Admin\AdminRespondenController;
@@ -101,6 +103,13 @@ Route::prefix('pemeringkatan')->name('pemeringkatan.')->group(function () {
         return view('pemeringkatan.data-responden.index');
     })->name('data-responden.index');
     
+    // Public International Lecture Consent Routes (no auth)
+    Route::prefix('international-lecture/consent')->name('international-lecture.consent.')->group(function () {
+        Route::get('/{token}', [DosenInternasionalController::class, 'showConsent'])->name('show');
+        Route::post('/{token}/agree', [DosenInternasionalController::class, 'agreeConsent'])->name('agree');
+        Route::post('/{token}/decline', [DosenInternasionalController::class, 'declineConsent'])->name('decline');
+    });
+
     // UNJ Sustain Quest landing page
     Route::get('/unj-sustain-quest', function () {
         return view('pemeringkatan.sulitest.index');
@@ -223,6 +232,46 @@ Route::prefix('admin_pemeringkatan')->name('admin_pemeringkatan.')
         Route::resource('/ranking', RankingController::class)->except(['show']);
 
         // International Lecture routes
+        Route::get('/international-lecture/template', [DosenInternasionalController::class, 'downloadTemplate'])
+            ->name('international-lecture.template');
+        Route::get('/international-lecture/export', [DosenInternasionalController::class, 'exportExcel'])
+            ->name('international-lecture.export');
+        Route::post('/international-lecture/import', [DosenInternasionalController::class, 'importExcel'])
+            ->name('international-lecture.import');
+        Route::get('/international-lecture/email', [DosenInternasionalController::class, 'emailIndex'])
+            ->name('international-lecture.email.index');
+        Route::get('/international-lecture/email-recap', [InternationalLectureEmailRecapController::class, 'index'])
+            ->name('international-lecture.email-recap.index');
+        Route::post('/international-lecture/email-recap/reset-bulk', [InternationalLectureEmailRecapController::class, 'resetBulk'])
+            ->name('international-lecture.email-recap.reset-bulk');
+        Route::post('/international-lecture/email-recap/reset/{id}', [InternationalLectureEmailRecapController::class, 'reset'])
+            ->name('international-lecture.email-recap.reset');
+        Route::get('/international-lecture/report', [InternationalLectureReportController::class, 'index'])
+            ->name('international-lecture.report.index');
+        Route::get('/international-lecture/report/consent-detail', [InternationalLectureReportController::class, 'consentDetail'])
+            ->name('international-lecture.report.consent-detail');
+        Route::get('/international-lecture/recap', [\App\Http\Controllers\Pemeringkatan\Admin\InternationalLectureRecapController::class, 'index'])
+            ->name('international-lecture.recap.index');
+        Route::post('/international-lecture/email/send', [DosenInternasionalController::class, 'sendBulkEmail'])
+            ->name('international-lecture.email.send')
+            ->middleware(\App\Http\Middleware\PreventInternationalLectureDuplicateSend::class);
+        Route::post('/international-lecture/templates', [DosenInternasionalController::class, 'storeTemplate'])
+            ->name('international-lecture.templates.store');
+        Route::delete('/international-lecture/templates/{id}', [DosenInternasionalController::class, 'destroyTemplate'])
+            ->name('international-lecture.templates.destroy');
+        Route::get('/international-lecture/greeting', [\App\Http\Controllers\Pemeringkatan\Admin\InternationalLectureGreetingController::class, 'index'])
+            ->name('international-lecture.greeting.index');
+        Route::post('/international-lecture/greeting', [\App\Http\Controllers\Pemeringkatan\Admin\InternationalLectureGreetingController::class, 'store'])
+            ->name('international-lecture.greeting.store');
+        Route::post('/international-lecture/{id}/send-email', [DosenInternasionalController::class, 'sendEmail'])
+            ->name('international-lecture.send-email')
+            ->middleware(\App\Http\Middleware\PreventInternationalLectureDuplicateSend::class);
+        Route::post('/international-lecture/{id}/activities', [DosenInternasionalController::class, 'addActivity'])
+            ->name('international-lecture.activities.store');
+        Route::delete('/international-lecture/{id}/activities/{activityId}', [DosenInternasionalController::class, 'deleteActivity'])
+            ->name('international-lecture.activities.destroy');
+        Route::put('/international-lecture/{id}/activities/{activityId}', [DosenInternasionalController::class, 'updateActivity'])
+            ->name('international-lecture.activities.update');
         Route::get('/international-lecture/{id}/detail', [DosenInternasionalController::class, 'getDosenDetail'])
             ->name('international-lecture.detail');
         Route::resource('/international-lecture', DosenInternasionalController::class);

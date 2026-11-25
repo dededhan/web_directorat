@@ -1,253 +1,288 @@
 @extends('admin_pemeringkatan.index')
 
 @section('contentadmin_pemeringkatan')
-    <!-- Main container with progressive padding and zoom standards -->
-    <div class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12">
-        <div class="max-w-[1920px] mx-auto">
-            
-            <!-- Header with responsive layout -->
-            <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">International Lecture</h1>
-                    <p class="mt-1 text-sm text-gray-600">Manage international visiting lecturers and professors</p>
-                </div>
-                <a href="{{ route('admin_pemeringkatan.international-lecture.create') }}" 
-                   class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-150 w-full sm:w-auto">
-                    <i class='bx bx-plus text-lg mr-2'></i>
-                    Add New Lecturer
-                </a>
-            </div>
-
-            <!-- Alert Messages -->
-            @if(session('success'))
-                <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
-                    <div class="flex items-start">
-                        <i class='bx bx-check-circle text-green-500 text-xl mr-3 mt-0.5'></i>
-                        <p class="text-green-700 whitespace-pre-line">{{ session('success') }}</p>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
-                    <div class="flex items-start">
-                        <i class='bx bx-error-circle text-red-500 text-xl mr-3 mt-0.5'></i>
-                        <p class="text-red-700 whitespace-pre-line">{{ session('error') }}</p>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Filter Card -->
-            <div class="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-semibold text-gray-800 flex items-center">
-                        <i class='bx bx-filter text-xl mr-2 text-blue-600'></i>
-                        Filter Data
-                    </h2>
-                    @if(request()->hasAny(['search', 'fakultas', 'status']))
-                    <a href="{{ route('admin_pemeringkatan.international-lecture.index') }}" 
-                       class="text-sm text-gray-600 hover:text-gray-800 flex items-center">
-                        <i class='bx bx-x text-lg mr-1'></i>
-                        Reset Filter
-                    </a>
-                    @endif
-                </div>
-                
-                <div>
-                    <form method="GET" action="{{ route('admin_pemeringkatan.international-lecture.index') }}" class="space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <!-- Search -->
-                            <div>
-                                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
-                                <input type="text" 
-                                       name="search" 
-                                       id="search" 
-                                       value="{{ request('search') }}" 
-                                       placeholder="Name, country, university..."
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            </div>
-
-                            <!-- Fakultas Filter -->
-                            <div>
-                                <label for="fakultas" class="block text-sm font-medium text-gray-700 mb-1">Fakultas</label>
-                                <select name="fakultas" 
-                                        id="fakultas" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="">Semua Fakultas</option>
-                                    <option value="pascasarjana" {{ request('fakultas') == 'pascasarjana' ? 'selected' : '' }}>PASCASARJANA</option>
-                                    <option value="fip" {{ request('fakultas') == 'fip' ? 'selected' : '' }}>FIP</option>
-                                    <option value="fmipa" {{ request('fakultas') == 'fmipa' ? 'selected' : '' }}>FMIPA</option>
-                                    <option value="fppsi" {{ request('fakultas') == 'fppsi' ? 'selected' : '' }}>FPPsi</option>
-                                    <option value="fbs" {{ request('fakultas') == 'fbs' ? 'selected' : '' }}>FBS</option>
-                                    <option value="ft" {{ request('fakultas') == 'ft' ? 'selected' : '' }}>FT</option>
-                                    <option value="fik" {{ request('fakultas') == 'fik' ? 'selected' : '' }}>FIK</option>
-                                    <option value="fis" {{ request('fakultas') == 'fis' ? 'selected' : '' }}>FIS</option>
-                                    <option value="fe" {{ request('fakultas') == 'fe' ? 'selected' : '' }}>FE</option>
-                                    <option value="profesi" {{ request('fakultas') == 'profesi' ? 'selected' : '' }}>PROFESI</option>
-                                </select>
-                            </div>
-
-                            <!-- Status Filter -->
-                            <div>
-                                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                                <select name="status" 
-                                        id="status" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="">Semua Status</option>
-                                    <option value="fulltime" {{ request('status') == 'fulltime' ? 'selected' : '' }}>Full Time</option>
-                                    <option value="parttime" {{ request('status') == 'parttime' ? 'selected' : '' }}>Part Time</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-2 sm:justify-end">
-                            <button type="submit" 
-                                    class="inline-flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 w-full sm:w-auto">
-                                <i class='bx bx-search text-lg mr-2'></i>
-                                Filter
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Data Table Card -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">No</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Lecturer Name</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Fakultas</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Program Studi</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Country</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">University</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider">Expertise</th>
-                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-200 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($lecturers as $index => $lecturer)
-                                <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $lecturers->firstItem() + $index }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">{{ $lecturer->nama }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ strtoupper($lecturer->fakultas) }}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ $lecturer->prodi }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $lecturer->negara }}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ $lecturer->universitas_asal }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($lecturer->status === 'fulltime')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                                <i class='bx bx-briefcase text-sm mr-1'></i>
-                                                Full Time
-                                            </span>
-                                        @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                <i class='bx bx-time text-sm mr-1'></i>
-                                                Part Time
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ $lecturer->bidang_keahlian }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                        <div class="flex items-center justify-center gap-2">
-                                            <a href="{{ route('admin_pemeringkatan.international-lecture.edit', $lecturer->id) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium rounded-lg transition-colors duration-150">
-                                                <i class='bx bx-edit text-base mr-1'></i>
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('admin_pemeringkatan.international-lecture.destroy', $lecturer->id) }}" 
-                                                  method="POST" 
-                                                  class="inline-block delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" 
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition-colors duration-150 delete-btn">
-                                                    <i class='bx bx-trash text-base mr-1'></i>
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="px-6 py-12 text-center">
-                                        <i class='bx bx-data text-gray-400 text-5xl mb-3'></i>
-                                        <p class="text-gray-500 text-sm">No lecturers found</p>
-                                        <a href="{{ route('admin_pemeringkatan.international-lecture.create') }}" 
-                                           class="inline-block mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-150">
-                                            Add First Lecturer
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                @if($lecturers->hasPages())
-                    <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                        <div class="flex items-center justify-between flex-wrap gap-3">
-                            <div class="text-sm text-gray-700">
-                                Showing <span class="font-medium">{{ $lecturers->firstItem() }}</span> to 
-                                <span class="font-medium">{{ $lecturers->lastItem() }}</span> of 
-                                <span class="font-medium">{{ $lecturers->total() }}</span> results
-                            </div>
-                            <div>
-                                {{ $lecturers->appends(request()->query())->links() }}
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            </div>
-
-        </div>
-    </div>
-
-    <!-- SweetAlert2 for Delete Confirmation -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Delete confirmation
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const form = this.closest('.delete-form');
-                    
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "This lecturer data will be permanently deleted!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#EF4444',
-                        cancelButtonColor: '#6B7280',
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
+<div x-data="{ 
+    showTable: ({{ request()->hasAny(['table', 'show_table', 'search', 'sesi', 'fakultas', 'subject', 'status', 'kelengkapan_data', 'email_status', 'email_belum_fix', 'page']) ? 'true' : 'false' }}) || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('intl_lecture_show_table') === 'true'),
+    toggleTable() {
+        this.showTable = !this.showTable;
+        try {
+            sessionStorage.setItem('intl_lecture_show_table', this.showTable ? 'true' : 'false');
+        } catch(e) {}
+        if (this.showTable) {
+            this.$nextTick(() => {
+                document.getElementById('dosenTableSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
+        } else {
+            if (window.history && window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete('table');
+                url.searchParams.delete('show_table');
+                window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+            }
+        }
+    },
+    hideTable() {
+        this.showTable = false;
+        try {
+            sessionStorage.setItem('intl_lecture_show_table', 'false');
+        } catch(e) {}
+        if (window.history && window.history.replaceState) {
+            const url = new URL(window.location);
+            url.searchParams.delete('table');
+            url.searchParams.delete('show_table');
+            window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    init() {
+        try {
+            const stored = sessionStorage.getItem('intl_lecture_show_table');
+            const hasUrlParam = {{ request()->hasAny(['table', 'show_table', 'search', 'sesi', 'fakultas', 'subject', 'status', 'kelengkapan_data', 'email_status', 'email_belum_fix', 'page']) ? 'true' : 'false' }};
+            if (hasUrlParam) {
+                this.showTable = true;
+                sessionStorage.setItem('intl_lecture_show_table', 'true');
+            } else if (stored === 'true') {
+                this.showTable = true;
+            } else if (stored === 'false') {
+                this.showTable = false;
+            }
+        } catch(e) {}
+
+        if (this.showTable) {
+            this.$nextTick(() => {
+                const referrer = document.referrer || '';
+                const isFromSub = referrer.includes('/create') || referrer.includes('/recap') || referrer.includes('/edit');
+                const hasUrlParam = {{ request()->hasAny(['table', 'show_table']) ? 'true' : 'false' }};
+                if (hasUrlParam || isFromSub || window.location.hash === '#dosenTableSection') {
+                    setTimeout(() => {
+                        document.getElementById('dosenTableSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50);
+                }
+            });
+        }
+
+        window.addEventListener('pageshow', (event) => {
+            try {
+                if (sessionStorage.getItem('intl_lecture_show_table') === 'true') {
+                    this.showTable = true;
+                }
+            } catch(e) {}
         });
-    </script>
+    }
+}" class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 xl:p-10">
+    <div class="max-w-[1920px] mx-auto space-y-6">
+
+        {{-- ================= HEADER ================= --}}
+        <div class="rounded-2xl bg-blue-600 p-6 sm:p-8 text-white shadow-md">
+            <div class="max-w-3xl">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
+                    International Lecture Dashboard
+                </h1>
+                <p class="mt-2 text-sm sm:text-base text-blue-50 leading-relaxed">
+                    Pusat tata kelola data dosen asing, korespondensi email, dan administrasi akademik internasional Universitas Negeri Jakarta.
+                </p>
+            </div>
+        </div>
+
+        {{-- ================= FITUR UTAMA / ACTION BUTTON CARDS (FULL TOMBOL) ================= --}}
+        <div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                {{-- TOMBOL 1: Tabel Data Dosen (Toggle Dinamis) --}}
+                <button type="button" @click="toggleTable()"
+                        class="text-left group relative overflow-hidden rounded-2xl border-2 p-5 sm:p-6 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+                        :class="showTable ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-200' : 'border-gray-200 bg-white hover:border-blue-400 hover:bg-gray-50/80'">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-base font-bold text-gray-900 group-hover:text-blue-700 transition">
+                                    Tabel Data Dosen
+                                </span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                                    {{ $lecturers->total() }} Dosen
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md group-hover:scale-105 transition-transform">
+                            <i class="fas fa-table-list text-2xl"></i>
+                        </div>
+                    </div>
+                </button>
+
+                {{-- TOMBOL 2: Kirim Email --}}
+                <a :href="showTable ? '{{ route('admin_pemeringkatan.international-lecture.email.index', ['from_table' => 1]) }}' : '{{ route('admin_pemeringkatan.international-lecture.email.index') }}'"
+                   @click="try { sessionStorage.setItem('intl_lecture_show_table', showTable ? 'true' : 'false'); } catch(e) {}"
+                   class="group relative overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-5 sm:p-6 transition-all duration-200 shadow-sm hover:border-blue-400 hover:shadow-md hover:bg-gray-50/80">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="text-base font-bold text-gray-900 group-hover:text-blue-700 transition">
+                                Kirim Email
+                            </div>
+                        </div>
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-md group-hover:scale-105 transition-transform">
+                            <i class="fas fa-paper-plane text-2xl"></i>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        {{-- ================= TABEL DATA DOSEN (DYNAMIC ACCORDION / TOGGLE) ================= --}}
+        {{-- ================= NOTIFIKASI DATA KOSONG ================= --}}
+        @if(($stats['incomplete'] ?? 0) > 0)
+            <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="min-w-0">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-sm font-bold text-amber-900">Data Dosen Belum Lengkap</span>
+                            <span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800">{{ $stats['incomplete'] }} dosen</span>
+                        </div>
+                        <div class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-amber-800">
+                            @foreach([
+                                ['Nama Dosen', $stats['missing']['nama'] ?? 0],
+                                ['Jabatan', $stats['missing']['jabatan'] ?? 0],
+                                ['Gender', $stats['missing']['jenis_kelamin'] ?? 0],
+                                ['Institusi', $stats['missing']['universitas_asal'] ?? 0],
+                                ['Negara', $stats['missing']['negara'] ?? 0],
+                                ['Subject', $stats['missing']['subject_1'] ?? 0],
+                                ['Email Kosong', $stats['missing']['email'] ?? 0],
+                                ['Email Belum Fix', $stats['missing']['email_belum_fix'] ?? 0],
+                                ['Tahun', $stats['missing']['tahun'] ?? 0],
+                                ['Kegiatan', $stats['missing']['kegiatan'] ?? 0],
+                            ] as $item)
+                                @if($item[1] > 0)
+                                    <span><strong>{{ $item[1] }}</strong> {{ $item[0] }}</span>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                    <a href="{{ route('admin_pemeringkatan.international-lecture.index', ['table' => 1, 'kelengkapan_data' => 'incomplete']) }}#dosenTableSection"
+                       onclick="try{sessionStorage.setItem('intl_lecture_show_table','true')}catch(e){}"
+                       class="inline-flex shrink-0 items-center justify-center rounded-lg bg-amber-500 px-3.5 py-2 text-xs font-semibold text-white hover:bg-amber-600 transition">
+                        Lihat Data Kosong
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        <section id="dosenTableSection" x-show="showTable" x-transition.duration.300ms x-cloak class="pt-4 border-t border-gray-200 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-2xs">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-table-list text-blue-600"></i>
+                        <span>Tabel Data Dosen Internasional</span>
+                    </h2>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('admin_pemeringkatan.international-lecture.create') }}"
+                       onclick="try{sessionStorage.setItem('intl_lecture_show_table', 'true')}catch(e){}"
+                       class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition">
+                        <i class="fas fa-user-plus text-xs"></i>
+                        <span>Tambah Dosen Baru</span>
+                    </a>
+                    <button type="button" onclick="document.getElementById('importModal').classList.remove('hidden')"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-xs transition cursor-pointer">
+                        <i class="fas fa-file-excel text-xs"></i>
+                        <span>Import Data Excel</span>
+                    </button>
+                    <a href="{{ route('admin_pemeringkatan.international-lecture.export', request()->query()) }}"
+                       class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-xs transition cursor-pointer">
+                        <i class="fas fa-file-export text-xs"></i>
+                        <span>Export Data</span>
+                    </a>
+                    <a href="{{ route('admin_pemeringkatan.international-lecture.template') }}"
+                       class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-2xs transition">
+                        <i class="fas fa-download text-xs text-gray-500"></i>
+                        <span>Unduh Template Excel</span>
+                    </a>
+                    <a href="{{ route('admin_pemeringkatan.international-lecture.recap.index') }}" id="btn-rekapan-data"
+                       onclick="try{sessionStorage.setItem('intl_lecture_show_table', 'true')}catch(e){}"
+                       class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs transition">
+                        <i class="fas fa-chart-pie text-xs"></i>
+                        <span>Rekapan Data</span>
+                    </a>
+                    <button type="button" @click="hideTable()"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition cursor-pointer">
+                        <i class="fas fa-eye-slash text-xs"></i>
+                        <span>Sembunyikan Tabel</span>
+                    </button>
+                </div>
+            </div>
+
+            {{-- Filter --}}
+            @include('admin_pemeringkatan.international-lecture.partials.filter', [
+                'filterRoute' => 'admin_pemeringkatan.international-lecture.index',
+                'persistQuery' => ['table' => 1],
+                'filterAnchor' => 'dosenTableSection'
+            ])
+
+            {{-- Table --}}
+            @include('admin_pemeringkatan.international-lecture.partials.table', [
+                'showActions' => true,
+                'selectable' => false,
+                'persistQuery' => ['table' => 1],
+                'filterAnchor' => 'dosenTableSection'
+            ])
+        </section>
+
+    </div>
+</div>
+
+{{-- Modal Import Excel --}}
+<div id="importModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-gray-100">
+        <div class="p-5 sm:p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/70">
+            <div>
+                <h3 class="font-bold text-lg text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-file-excel text-emerald-600"></i>
+                    <span>Import Data Excel Dosen</span>
+                </h3>
+                <p class="text-xs text-gray-500 mt-1">Kolom akan dipetakan otomatis berdasarkan nama header pada berkas Excel.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('importModal').classList.add('hidden')" class="h-8 w-8 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-200 flex items-center justify-center transition">&times;</button>
+        </div>
+        <form action="{{ route('admin_pemeringkatan.international-lecture.import') }}" method="POST" enctype="multipart/form-data" class="p-5 sm:p-6 space-y-4">
+            @csrf
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Pilih Berkas Excel / CSV</label>
+                <input type="file" name="file" accept=".xlsx,.xls,.csv" required
+                       class="w-full text-sm border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div class="text-xs text-gray-600 bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 leading-relaxed">
+                <div class="font-bold text-blue-900 mb-1">Panduan Kolom:</div>
+                Nama Dosen, Lecturer Name, Job Title, Gender, Institution, University, Country, Email, Subject, Faculty, Department.
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="document.getElementById('importModal').classList.add('hidden')"
+                        class="px-4 py-2.5 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition">Batal</button>
+                <button type="submit"
+                        class="px-5 py-2.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                    <i class="fas fa-upload"></i> Upload & Import Data
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', function(e){
+        e.preventDefault(); 
+        const form = this.closest('form');
+        Swal.fire({
+            title: 'Hapus data dosen?',
+            text: 'Data dosen beserta seluruh kegiatan terkait akan dihapus secara permanen.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444'
+        }).then(r => {
+            if (r.isConfirmed) form.submit();
+        });
+    }));
+});
+</script>
 @endsection
