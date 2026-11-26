@@ -92,18 +92,18 @@
                         @enderror
                     </div>
 
-                    {{-- Link ScimagoJR --}}
+                    {{-- Link Scopus --}}
                     <div>
                         <label for="link_scimagojr" class="block text-sm font-bold text-gray-700 mb-2 flex items-center">
                             <i class='bx bx-link-external text-green-500 mr-2'></i>
-                            Link Scimagojr <span class="text-red-500 ml-1">*</span>
+                            Link Scopus <span class="text-red-500 ml-1">*</span>
                         </label>
                         <input type="url" 
                                name="link_scimagojr" 
                                id="link_scimagojr" 
                                required 
                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 text-gray-900 placeholder-gray-400 shadow-sm" 
-                               placeholder="https://www.scimagojr.com/..."
+                               placeholder="https://www.scopus.com/..."
                                value="{{ old('link_scimagojr') }}">
                         @error('link_scimagojr')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

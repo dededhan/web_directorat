@@ -130,7 +130,7 @@ if (!function_exists('getStatusInfoAdmin')) {
                         <p class="text-gray-800 font-semibold leading-relaxed">{{ $report->nama_jurnal }}</p>
                     </div>
                     <div class="lg:col-span-2">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Link ScimagoJR</label>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Link Scopus</label>
                         <a href="{{ $report->link_scimagojr }}" 
                            target="_blank"
                            class="text-teal-600 hover:text-teal-800 hover:underline break-all text-sm">{{ $report->link_scimagojr }}</a>
